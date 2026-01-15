@@ -1,5 +1,5 @@
 import React from "react";
-import Hero from "../Home/hero";
+import Hero from "../Home/Hero";
 import DoctorTabs from "../Home/DoctorTabs";
 import HealthyMindSection from "../Home/HealthyMindSection";
 import Testimonials from "./Testimonials";
