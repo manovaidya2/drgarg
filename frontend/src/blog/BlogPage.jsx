@@ -31,15 +31,26 @@ export default function BlogPage() {
   return (
     <div className="bg-gray-50">
       {/* Hero */}
-      <section
-        className="relative h-50 bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: `url(${img})` }}
-      >
-        <div className="absolute inset-0 bg-[#1d5a57]/70"></div>
-        <div className="relative text-center text-white">
-          <h1 className="text-4xl font-bold">BLOGS & ARTICLES</h1>
-        </div>
-      </section>
+     <section
+  className="
+    relative 
+    h-36 sm:h-44 md:h-50 
+    bg-cover bg-center 
+    flex items-center justify-center
+  "
+  style={{ backgroundImage: `url(${img})` }}
+>
+  {/* Overlay */}
+  <div className="absolute inset-0 bg-[#1d5a57]/70"></div>
+
+  {/* Text */}
+  <div className="relative text-center text-white px-4">
+    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+      BLOGS & ARTICLES
+    </h1>
+  </div>
+</section>
+
 
       {/* Blog Grid */}
       <section className="py-10 px-6">

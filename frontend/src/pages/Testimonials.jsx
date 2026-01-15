@@ -5,8 +5,6 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 
-
-
 export default function Testimonials() {
   const testimonials = [
     {
@@ -36,17 +34,15 @@ export default function Testimonials() {
   ];
 
   return (
-    <section className="py-10 bg-white">
-      <div className="container mx-auto px-12">
+    <section className="py-8 sm:py-10 bg-white">
+      <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12">
+
         {/* Heading */}
-        <div className="text-center mb-12">
-          {/* <img
-            src={logo}
-            alt="Eagle Icon"
-            className="mx-auto mb-4 w-10"
-          /> */}
-          <h2 className="text-3xl font-bold mb-4">What’s our Patients says</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
+            What’s our Patients says
+          </h2>
+          <p className="text-gray-600 text-sm sm:text-base max-w-2xl mx-auto">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -72,27 +68,30 @@ export default function Testimonials() {
             1024: { slidesPerView: 3 },
           }}
           modules={[Pagination, Navigation]}
-          className="pb-12"
+          className="pb-10 sm:pb-12"
         >
           {testimonials.map((testimonial) => (
             <SwiperSlide key={testimonial.id}>
-              <div className="bg-white border rounded-lg shadow-md p-6 text-left">
+              <div className="bg-white border rounded-lg shadow-md p-4 sm:p-6 text-left h-full">
                 {/* Profile */}
-                <div className="flex items-center mb-4">
+                <div className="flex items-center mb-3 sm:mb-4">
                   <img
                     src={testimonial.image}
                     alt={testimonial.name}
-                    className="w-12 h-12 rounded-full mr-4"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full mr-3 sm:mr-4"
                   />
                   <div>
-                    <h4 className="font-semibold text-gray-800">
+                    <h4 className="font-semibold text-gray-800 text-sm sm:text-base">
                       {testimonial.name}
                     </h4>
-                    <p className="text-sm text-gray-500">{testimonial.role}</p>
+                    <p className="text-xs sm:text-sm text-gray-500">
+                      {testimonial.role}
+                    </p>
                   </div>
                 </div>
+
                 {/* Feedback */}
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">
                   {testimonial.feedback}
                 </p>
               </div>
@@ -100,18 +99,21 @@ export default function Testimonials() {
           ))}
         </Swiper>
 
-        {/* Custom Controls Below */}
-       {/* Custom Controls in a single row */}
-<div className="flex justify-end items-center mt-6 space-x-4">
-  {/* Pagination Dots */}
-  <div className="custom-pagination flex space-x-2"></div>
+        {/* Custom Controls */}
+        <div className="flex justify-end items-center mt-4 sm:mt-6 space-x-4">
+          {/* Pagination Dots */}
+          <div className="custom-pagination flex space-x-2"></div>
 
-  {/* Navigation Arrows */}
-  <div className="flex space-x-2">
-    <button className="custom-prev px-3 py-1 bg-gray-200 rounded">←</button>
-    <button className="custom-next px-3 py-1 bg-gray-200 rounded">→</button>
-  </div>
-</div>
+          {/* Navigation Arrows */}
+          <div className="flex space-x-2">
+            <button className="custom-prev px-3 py-1 bg-gray-200 rounded">
+              ←
+            </button>
+            <button className="custom-next px-3 py-1 bg-gray-200 rounded">
+              →
+            </button>
+          </div>
+        </div>
 
       </div>
     </section>

@@ -26,47 +26,47 @@ export default function CaseStudyList() {
     <div>
       {/* Hero Section */}
       <section
-        className="relative h-60 w-full bg-cover bg-center flex items-center justify-center"
+        className="relative h-48 sm:h-56 md:h-60 w-full bg-cover bg-center flex items-center justify-center"
         style={{ backgroundImage: `url(${img})` }}
       >
         <div className="absolute inset-0 bg-[#1d5a57]/80"></div>
 
         <div className="relative text-center text-white px-4">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
             Dr. Ankush Garg's Case Studies
           </h1>
-          <p className="uppercase tracking-widest text-sm">
+          <p className="uppercase tracking-widest text-xs sm:text-sm">
             Ayurvedacharya & Senior Ayurvedic Consultant
           </p>
         </div>
       </section>
 
       {/* Case Studies */}
-      <div className="max-w-7xl mx-auto px-10 py-10">
-        <h1 className="text-3xl font-bold mb-8 text-center text-[#8b43ba]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 py-8 md:py-10">
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center text-[#8b43ba]">
           Case Studies
         </h1>
 
         {loading ? (
           <p className="text-center">Loading...</p>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {caseStudies.map((item) => (
               <Link
                 key={item._id}
                 to={`/case-study/${item.slug}`}
-                className="border border-[#8b43ba] rounded-xl overflow-hidden shadow hover:shadow-lg transition"
+                className="border border-[#8b43ba] rounded-xl overflow-hidden shadow hover:shadow-lg transition bg-white"
               >
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-44 sm:h-48 object-cover"
                 />
                 <div className="p-4">
-                  <h2 className="font-semibold text-lg text-[#8b43ba]">
+                  <h2 className="font-semibold text-base md:text-lg text-[#8b43ba]">
                     {item.title}
                   </h2>
-                  <p className="text-gray-600 mt-2 text-sm">
+                  <p className="text-gray-600 mt-2 text-sm leading-relaxed">
                     {item.shortDescription}
                   </p>
                 </div>
