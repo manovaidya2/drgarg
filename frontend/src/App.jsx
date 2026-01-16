@@ -15,6 +15,7 @@ import MindwellnessPage from "./pages/MindwellnessPage.jsx";
 import CaseStudyList from "./pages/CaseStudyList.jsx";
 import CaseStudyDetails from "./pages/CaseStudyDetails.jsx";
 import ScrollToTop from "./components/ScrollToTop"; // import here
+import MediaCoverage from "./pages/MediaCoverage.jsx";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -41,7 +42,7 @@ export default function App() {
         <Route path="/mindwellness" element={<MindwellnessPage />} />
         <Route path="/case-study" element={<CaseStudyList />} />
         <Route path="/case-study/:slug" element={<CaseStudyDetails />} />
-
+        <Route path="/media-coverage" element={<MediaCoverage />} />
         </Routes>
       </main>
 

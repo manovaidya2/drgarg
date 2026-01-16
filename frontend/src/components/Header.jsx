@@ -69,6 +69,7 @@ export default function Header() {
               <NavLink to="/" className="hover:text-[#8b43ba]">Home</NavLink>
               <NavLink to="/about" className="hover:text-[#8b43ba]">About</NavLink>
               <NavLink to="/blog" className="hover:text-[#8b43ba]">Blogs</NavLink>
+               <NavLink to="/media-coverage" className="hover:text-[#8b43ba]">Media Coverage</NavLink>
 
               {[{
                 title: "Psychological",
@@ -143,6 +144,14 @@ export default function Header() {
           <NavLink to="/" onClick={() => setOpen(false)} className="block px-4 py-2 rounded-lg hover:bg-purple-50">Home</NavLink>
           <NavLink to="/about" onClick={() => setOpen(false)} className="block px-4 py-2 rounded-lg hover:bg-purple-50">About</NavLink>
           <NavLink to="/blog" onClick={() => setOpen(false)} className="block px-4 py-2 rounded-lg hover:bg-purple-50">Blogs</NavLink>
+          <NavLink
+  to="/media-coverage"
+  onClick={() => setOpen(false)}
+  className="block px-4 py-2 rounded-lg hover:bg-purple-50"
+>
+  Media Coverage
+</NavLink>
+
 
           {/* PSYCHOLOGICAL */}
           <button onClick={() => setPsyOpen(!psyOpen)} className="w-full flex justify-between px-4 py-2 rounded-lg hover:bg-purple-50">
