@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 
 const defaultSEO = {
   title: "Dr. Ankush Garg | Ayurvedic Mental Wellness Expert",
@@ -15,14 +15,22 @@ const defaultSEO = {
 
 export const GlobalSEO = ({ seo = {} }) => {
   const meta = { ...defaultSEO, ...seo };
+
   return (
     <Helmet>
+      {/* Primary SEO */}
       <title>{meta.title}</title>
       <meta name="description" content={meta.description} />
       <meta name="keywords" content={meta.keywords} />
       <meta name="author" content={meta.author} />
       <meta name="robots" content="index, follow" />
       <link rel="canonical" href={meta.canonical} />
+
+      {/* Google Search Console Verification */}
+      <meta
+        name="google-site-verification"
+        content="5acEd1KPOOIksbZSX304eZ7gRhL17V07OhAZvbCHKZs"
+      />
 
       {/* Open Graph */}
       <meta property="og:title" content={meta.title} />
@@ -37,6 +45,18 @@ export const GlobalSEO = ({ seo = {} }) => {
       <meta name="twitter:title" content={meta.title} />
       <meta name="twitter:description" content={meta.description} />
       <meta name="twitter:image" content={meta.image} />
+
+      {/* Google Analytics (GA4) */}
+      <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-2KLEJ7N8WS"
+      />
+      <script>{`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){window.dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-2KLEJ7N8WS');
+      `}</script>
     </Helmet>
   );
 };
