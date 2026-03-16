@@ -41,13 +41,13 @@ const Sidebar = () => {
             </li>
 
             <li className="mb-2">
-              <Link to="/add-blog" className="flex items-center gap-2 px-2 py-2 rounded hover:bg-gray-700">
-                <FaBook /> ADD BLOG
+              <Link to="/blog-list" className="flex items-center gap-2 px-2 py-2 rounded hover:bg-gray-700">
+                <FaBook /> BLOGS
               </Link>
             </li>
              <li className="mb-2">
-              <Link to="/add-casestudy" className="flex items-center gap-2 px-2 py-2 rounded hover:bg-gray-700">
-                <FaBook /> ADD CASE STUDY
+              <Link to="/case-studies" className="flex items-center gap-2 px-2 py-2 rounded hover:bg-gray-700">
+                <FaBook /> CASE STUDIES
               </Link>
             </li>
              <li className="mb-2">

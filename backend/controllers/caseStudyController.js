@@ -65,3 +65,48 @@ export const deleteCaseStudy = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+/* ✅ UPDATE CASE STUDY */
+export const updateCaseStudy = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, slug, shortDescription, image, content } = req.body;
+
+    // Check if case study exists
+    const caseStudy = await CaseStudy.findById(id);
+    if (!caseStudy) {
+      return res.status(404).json({ message: "Case Study not found" });
+    }
+
+    // Check if slug is being changed and if it already exists
+    if (slug && slug !== caseStudy.slug) {
+      const exists = await CaseStudy.findOne({ slug, _id: { $ne: id } });
+      if (exists) {
+        return res.status(400).json({ message: "Slug already exists" });
+      }
+    }
+
+    // Update case study
+    const updatedCaseStudy = await CaseStudy.findByIdAndUpdate(
+      id,
+      {
+        title,
+        slug,
+        shortDescription,
+        image,
+        content,
+      },
+      { new: true, runValidators: true }
+    );
+
+    res.json({
+      success: true,
+      message: "Case Study updated successfully",
+      data: updatedCaseStudy,
+    });
+  } catch (error) {
+    console.error("Update CaseStudy Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
