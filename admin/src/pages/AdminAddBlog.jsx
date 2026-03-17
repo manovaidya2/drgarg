@@ -588,11 +588,15 @@ export default function AdminAddBlog() {
         parentAnchor.target = '_blank';
         parentAnchor.rel = 'noopener noreferrer';
       } else {
+        // Remove resize handles and container before wrapping
+        removeResizeHandles();
+        
         // Create new anchor tag around the image
         const anchor = document.createElement('a');
         anchor.href = url;
         anchor.target = '_blank';
         anchor.rel = 'noopener noreferrer';
+        anchor.className = 'linked-image';
         
         // Replace the image with the anchor containing the image
         selectedImage.parentNode.replaceChild(anchor, selectedImage);
@@ -601,7 +605,6 @@ export default function AdminAddBlog() {
 
       // Keep image selected
       selectedImage.classList.add('selected-image');
-      addResizeHandles(selectedImage);
       
       alert('Link added successfully!');
     } catch (error) {
@@ -638,12 +641,14 @@ export default function AdminAddBlog() {
 
     const parentAnchor = selectedImage.closest('a');
     if (parentAnchor) {
+      // Remove resize handles first
+      removeResizeHandles();
+      
       // Replace anchor with just the image
       parentAnchor.parentNode.replaceChild(selectedImage, parentAnchor);
       
       // Keep image selected
       selectedImage.classList.add('selected-image');
-      addResizeHandles(selectedImage);
       
       alert('Link removed successfully!');
     } else {
@@ -681,9 +686,6 @@ export default function AdminAddBlog() {
           
           // Add click handler
           lastImage.addEventListener('click', handleImageClick);
-          
-          // Add resize handles
-          addResizeHandles(lastImage);
           
           // Ask if user wants to add link
           if (window.confirm("Do you want to add a link to this image?")) {
@@ -844,6 +846,7 @@ export default function AdminAddBlog() {
                 <li>Resize by dragging the circular handles</li>
                 <li>Hold Shift key while resizing to maintain aspect ratio</li>
                 <li>Use preset sizes below</li>
+                <li>Use Image Link Tools to add/edit/remove links</li>
               </ul>
             </div>
           )}
@@ -1131,11 +1134,17 @@ export default function AdminAddBlog() {
           }
           
           /* Linked Image Styles */
-          div[contenteditable="true"] a img {
+          div[contenteditable="true"] a.linked-image {
+            text-decoration: none;
+            border: none;
+            display: inline-block;
+          }
+          
+          div[contenteditable="true"] a.linked-image img {
             border: 3px solid transparent;
           }
           
-          div[contenteditable="true"] a:hover img {
+          div[contenteditable="true"] a.linked-image:hover img {
             border: 3px solid #2563eb;
             opacity: 0.8;
           }
