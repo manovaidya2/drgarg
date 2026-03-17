@@ -58,7 +58,7 @@ const Sidebar = () => {
 
 
             {/* 🔽 FORMS DROPDOWN */}
-            <li>
+            {/* <li>
               <button
                 onClick={() => setOpenForms(!openForms)}
                 className="w-full flex items-center justify-between px-2 py-2 rounded hover:bg-gray-700"
@@ -68,9 +68,9 @@ const Sidebar = () => {
                   <span>Forms</span>
                 </div>
                 {openForms ? <FaChevronUp /> : <FaChevronDown />}
-              </button>
+              </button> */}
 
-              {openForms && (
+              {/* {openForms && (
                 <ul className="ml-6 mt-2 space-y-2 text-sm">
                   <li><Link to="/admin-admission-list" className="block hover:text-blue-400">Student Admission Form</Link></li>
                   <li><Link to="/examination-data" className="block hover:text-blue-400">Exam Form</Link></li>
@@ -78,8 +78,8 @@ const Sidebar = () => {
                   <li><Link to="/reissue-form" className="block hover:text-blue-400">Certificate Reissue Form</Link></li>
                   <li><Link to="/internship-form" className="block hover:text-blue-400">Internship Form</Link></li>
                   <li><Link to="/instruction-form" className="block hover:text-blue-400">Instruction Form</Link></li>
-                  <li>
-                    <a
+                  <li> */}
+                    {/* <a
                       href="/form-upload"
                       target="_blank"
                       className="block hover:text-green-400"
@@ -89,12 +89,12 @@ const Sidebar = () => {
                   </li>
                 </ul>
               )}
-            </li>
+            </li> */}
           </ul>
         </div>
 
         {/* ================= ADMIN ================= */}
-        <div className="mb-6">
+        {/* <div className="mb-6">
           <h3 className="text-gray-400 font-semibold mb-2 border-b border-gray-600 pb-1">
             Admin
           </h3>
@@ -124,7 +124,7 @@ const Sidebar = () => {
               </Link>
             </li>
           </ul>
-        </div>
+        </div> */}
 
       </div>
     </div>
