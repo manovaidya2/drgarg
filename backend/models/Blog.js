@@ -9,6 +9,12 @@ const blogSchema = new mongoose.Schema(
     image: String,
     shortDescription: String,
     content: String,
+    faq: [
+  {
+    question: { type: String },
+    answer: { type: String }
+  }
+],
   },
   { timestamps: true }
 );
