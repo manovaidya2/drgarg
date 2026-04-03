@@ -153,22 +153,33 @@
 // }
 
 
+
+
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInstance";
-import { Plus } from "lucide-react";
+import { Plus, ChevronDown, ChevronUp } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 
 export default function CaseStudyDetails() {
   const { slug } = useParams();
   const [caseStudy, setCaseStudy] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   useEffect(() => {
     const fetchCaseStudy = async () => {
       try {
         const res = await axiosInstance.get(`/case-studies/${slug}`);
         console.log("✅ Fetched case study:", res.data);
+        
+        // Log FAQ data
+        if (res.data.faqs && res.data.faqs.length > 0) {
+          console.log("📋 FAQs found:", res.data.faqs.length);
+          console.log("FAQ details:", res.data.faqs);
+        } else {
+          console.log("📋 No FAQs found for this case study");
+        }
         
         // Log the content to check if it contains links
         console.log("📝 Content HTML:", res.data.content);
@@ -185,6 +196,11 @@ export default function CaseStudyDetails() {
 
     fetchCaseStudy();
   }, [slug]);
+
+  // Toggle FAQ accordion
+  const toggleFaq = (index) => {
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
 
   // Process content to ensure links open in new tab and have proper security attributes
   const processContent = (content) => {
@@ -261,6 +277,9 @@ export default function CaseStudyDetails() {
 
   // Process the content
   const processedContent = processContent(caseStudy.content);
+  
+  // Get FAQs from case study data
+  const faqs = caseStudy.faqs || [];
 
   return (
     <>
@@ -315,6 +334,24 @@ export default function CaseStudyDetails() {
         {/* Article Meta */}
         <meta property="article:published_time" content={caseStudy.createdAt} />
         <meta property="article:author" content="Dr. Ankush Garg" />
+        
+        {/* FAQ Schema Markup for SEO */}
+        {faqs.length > 0 && (
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": faqs.map(faq => ({
+                "@type": "Question",
+                "name": faq.question,
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": faq.answer
+                }
+              }))
+            })}
+          </script>
+        )}
       </Helmet>
 
       {/* PAGE CONTENT */}
@@ -331,7 +368,7 @@ export default function CaseStudyDetails() {
         )}
 
         {/* Header Section */}
-        <div className="max-w-1xl mx-auto px-4 sm:px-6 lg:px-10 mt-6 sm:mt-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 mt-6 sm:mt-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#8b43ba] leading-snug">
@@ -362,7 +399,7 @@ export default function CaseStudyDetails() {
         </div>
 
         {/* Content - Processed for linked images */}
-        <div className="max-w-1xl mx-auto px-4 sm:px-6 lg:px-10 mt-10 sm:mt-14 pb-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 mt-10 sm:mt-14 pb-16">
           <div
             className="prose prose-base sm:prose-lg max-w-none
                        prose-headings:text-gray-800 prose-headings:font-bold prose-headings:mt-8 prose-headings:mb-4
@@ -377,6 +414,60 @@ export default function CaseStudyDetails() {
             dangerouslySetInnerHTML={{ __html: processedContent }}
           />
         </div>
+
+        {/* FAQ SECTION - Display if FAQs exist */}
+        {faqs.length > 0 && (
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 pb-16">
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-purple-100">
+              <div className="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-4">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                  <span className="text-3xl">❓</span>
+                  Frequently Asked Questions
+                </h2>
+                <p className="text-purple-100 text-sm mt-1">
+                  Common questions about this case study
+                </p>
+              </div>
+              
+              <div className="divide-y divide-gray-200">
+                {faqs.map((faq, index) => (
+                  <div key={index} className="faq-item">
+                    <button
+                      onClick={() => toggleFaq(index)}
+                      className="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-purple-50 transition-colors duration-200 group"
+                    >
+                      <div className="flex-1 pr-4">
+                        <span className="text-purple-600 font-semibold text-sm mr-2">
+                          Q{index + 1}.
+                        </span>
+                        <span className="text-gray-800 font-medium text-base sm:text-lg group-hover:text-purple-700 transition-colors">
+                          {faq.question}
+                        </span>
+                      </div>
+                      <div className="flex-shrink-0">
+                        {openFaqIndex === index ? (
+                          <ChevronUp className="w-5 h-5 text-purple-600" />
+                        ) : (
+                          <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
+                        )}
+                      </div>
+                    </button>
+                    
+                    {openFaqIndex === index && (
+                      <div className="px-6 pb-4 pt-0 animate-fadeIn">
+                        <div className="border-l-4 border-purple-400 pl-4 ml-4">
+                          <p className="text-gray-700 leading-relaxed">
+                            {faq.answer}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Share Section */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-10 pb-16">
@@ -426,6 +517,31 @@ export default function CaseStudyDetails() {
           .prose {
             max-width: 100%;
             color: #374151;
+          }
+
+          /* FAQ Animation */
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+              transform: translateY(-10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          
+          .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out;
+          }
+
+          /* FAQ Item hover effect */
+          .faq-item {
+            transition: all 0.2s ease;
+          }
+          
+          .faq-item:hover {
+            background-color: #faf5ff;
           }
 
           /* Linked image styles */

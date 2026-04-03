@@ -1,5 +1,16 @@
 import mongoose from "mongoose";
 
+const faqSchema = new mongoose.Schema({
+  question: {
+    type: String,
+    required: true,
+  },
+  answer: {
+    type: String,
+    required: true,
+  },
+});
+
 const caseStudySchema = new mongoose.Schema(
   {
     title: {
@@ -26,6 +37,11 @@ const caseStudySchema = new mongoose.Schema(
     content: {
       type: String, // HTML from editor
       required: true,
+    },
+
+    faqs: {
+      type: [faqSchema],
+      default: [],
     },
   },
   { timestamps: true }

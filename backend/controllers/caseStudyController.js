@@ -3,7 +3,7 @@ import CaseStudy from "../models/CaseStudy.js";
 /* ✅ CREATE CASE STUDY */
 export const createCaseStudy = async (req, res) => {
   try {
-    const { title, slug, shortDescription, image, content } = req.body;
+    const { title, slug, shortDescription, image, content, faqs } = req.body;
 
     if (!title || !slug || !content) {
       return res.status(400).json({ message: "Required fields missing" });
@@ -20,6 +20,7 @@ export const createCaseStudy = async (req, res) => {
       shortDescription,
       image,
       content,
+      faqs: faqs || [],
     });
 
     res.status(201).json({
@@ -66,12 +67,11 @@ export const deleteCaseStudy = async (req, res) => {
   }
 };
 
-
 /* ✅ UPDATE CASE STUDY */
 export const updateCaseStudy = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, slug, shortDescription, image, content } = req.body;
+    const { title, slug, shortDescription, image, content, faqs } = req.body;
 
     // Check if case study exists
     const caseStudy = await CaseStudy.findById(id);
@@ -96,6 +96,7 @@ export const updateCaseStudy = async (req, res) => {
         shortDescription,
         image,
         content,
+        faqs: faqs || [],
       },
       { new: true, runValidators: true }
     );

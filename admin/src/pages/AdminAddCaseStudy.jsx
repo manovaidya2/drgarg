@@ -276,8 +276,6 @@
 
 
 
-
-
 import React, { useRef, useState, useEffect } from "react";
 import axiosInstance from "../api/axiosInstance";
 
@@ -292,7 +290,13 @@ export default function AdminAddCaseStudy() {
     shortDescription: "",
     image: "",
     content: "",
+    faqs: [], // Added FAQs array
   });
+
+  // FAQ states
+  const [faqs, setFaqs] = useState([]);
+  const [currentFaq, setCurrentFaq] = useState({ question: "", answer: "" });
+  const [editingIndex, setEditingIndex] = useState(null);
 
   // Image link states
   const [selectedImage, setSelectedImage] = useState(null);
@@ -344,6 +348,69 @@ export default function AdminAddCaseStudy() {
   const formatText = (command, value = null) => {
     editorRef.current.focus();
     document.execCommand(command, false, value);
+  };
+
+  /* 🔹 FAQ Functions */
+  const handleAddFaq = () => {
+    if (!currentFaq.question.trim()) {
+      alert("Please enter a question");
+      return;
+    }
+    if (!currentFaq.answer.trim()) {
+      alert("Please enter an answer");
+      return;
+    }
+
+    if (editingIndex !== null) {
+      // Update existing FAQ
+      const updatedFaqs = [...faqs];
+      updatedFaqs[editingIndex] = { ...currentFaq };
+      setFaqs(updatedFaqs);
+      setEditingIndex(null);
+    } else {
+      // Add new FAQ
+      setFaqs([...faqs, { ...currentFaq }]);
+    }
+    
+    // Reset current FAQ
+    setCurrentFaq({ question: "", answer: "" });
+  };
+
+  const handleEditFaq = (index) => {
+    setCurrentFaq(faqs[index]);
+    setEditingIndex(index);
+  };
+
+  const handleDeleteFaq = (index) => {
+    if (window.confirm("Are you sure you want to delete this FAQ?")) {
+      const updatedFaqs = faqs.filter((_, i) => i !== index);
+      setFaqs(updatedFaqs);
+      if (editingIndex === index) {
+        setCurrentFaq({ question: "", answer: "" });
+        setEditingIndex(null);
+      }
+    }
+  };
+
+  const handleMoveFaqUp = (index) => {
+    if (index > 0) {
+      const updatedFaqs = [...faqs];
+      [updatedFaqs[index], updatedFaqs[index - 1]] = [updatedFaqs[index - 1], updatedFaqs[index]];
+      setFaqs(updatedFaqs);
+    }
+  };
+
+  const handleMoveFaqDown = (index) => {
+    if (index < faqs.length - 1) {
+      const updatedFaqs = [...faqs];
+      [updatedFaqs[index], updatedFaqs[index + 1]] = [updatedFaqs[index + 1], updatedFaqs[index]];
+      setFaqs(updatedFaqs);
+    }
+  };
+
+  const cancelEdit = () => {
+    setCurrentFaq({ question: "", answer: "" });
+    setEditingIndex(null);
   };
 
   /* 🔹 Handle image click in editor */
@@ -770,6 +837,7 @@ export default function AdminAddCaseStudy() {
     const payload = {
       ...formData,
       content: editorRef.current.innerHTML,
+      faqs: faqs, // Include FAQs in payload
     };
 
     try {
@@ -782,8 +850,12 @@ export default function AdminAddCaseStudy() {
         shortDescription: "",
         image: "",
         content: "",
+        faqs: [],
       });
 
+      setFaqs([]); // Reset FAQs
+      setCurrentFaq({ question: "", answer: "" });
+      setEditingIndex(null);
       editorRef.current.innerHTML = "";
       setSelectedImage(null);
     } catch (error) {
@@ -884,6 +956,131 @@ export default function AdminAddCaseStudy() {
                 className="mt-2 w-48 rounded-lg"
               />
             )}
+          </div>
+
+          {/* FAQ SECTION */}
+          <div className="border-2 border-purple-200 rounded-xl p-6 bg-purple-50">
+            <h2 className="text-xl font-bold text-purple-800 mb-4 flex items-center gap-2">
+              ❓ Frequently Asked Questions (FAQs)
+              <span className="text-sm font-normal text-gray-600">(Optional)</span>
+            </h2>
+            
+            {/* FAQ Form */}
+            <div className="bg-white rounded-lg p-4 mb-4">
+              <h3 className="font-semibold text-gray-700 mb-3">
+                {editingIndex !== null ? "Edit FAQ" : "Add New FAQ"}
+              </h3>
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  value={currentFaq.question}
+                  onChange={(e) => setCurrentFaq({ ...currentFaq, question: e.target.value })}
+                  placeholder="Enter question"
+                  className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400"
+                />
+                <textarea
+                  value={currentFaq.answer}
+                  onChange={(e) => setCurrentFaq({ ...currentFaq, answer: e.target.value })}
+                  placeholder="Enter answer"
+                  rows="3"
+                  className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-400"
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={handleAddFaq}
+                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium"
+                  >
+                    {editingIndex !== null ? "✏️ Update FAQ" : "➕ Add FAQ"}
+                  </button>
+                  {editingIndex !== null && (
+                    <button
+                      type="button"
+                      onClick={cancelEdit}
+                      className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 font-medium"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* FAQs List */}
+            {faqs.length > 0 && (
+              <div className="mt-4">
+                <h3 className="font-semibold text-gray-700 mb-3">
+                  Added FAQs ({faqs.length})
+                </h3>
+                <div className="space-y-3">
+                  {faqs.map((faq, index) => (
+                    <div key={index} className="bg-white rounded-lg p-4 border border-purple-200">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex-1">
+                          <p className="font-semibold text-purple-700">
+                            Q{index + 1}: {faq.question}
+                          </p>
+                          <p className="text-gray-600 mt-1 ml-4">
+                            A: {faq.answer}
+                          </p>
+                        </div>
+                        <div className="flex gap-2 ml-4">
+                          <button
+                            type="button"
+                            onClick={() => handleMoveFaqUp(index)}
+                            disabled={index === 0}
+                            className={`px-2 py-1 rounded ${index === 0 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-purple-100 text-purple-600 hover:bg-purple-200'}`}
+                            title="Move Up"
+                          >
+                            ↑
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleMoveFaqDown(index)}
+                            disabled={index === faqs.length - 1}
+                            className={`px-2 py-1 rounded ${index === faqs.length - 1 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-purple-100 text-purple-600 hover:bg-purple-200'}`}
+                            title="Move Down"
+                          >
+                            ↓
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleEditFaq(index)}
+                            className="px-2 py-1 bg-yellow-100 text-yellow-600 rounded hover:bg-yellow-200"
+                            title="Edit"
+                          >
+                            ✏️
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteFaq(index)}
+                            className="px-2 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200"
+                            title="Delete"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Add More Button */}
+            <div className="mt-4 text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setCurrentFaq({ question: "", answer: "" });
+                  setEditingIndex(null);
+                  document.querySelector('.faq-form')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
+              >
+                + Add More FAQ
+              </button>
+            </div>
           </div>
 
           {/* Selected Image Indicator */}
