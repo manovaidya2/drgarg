@@ -1,5 +1,5 @@
 import React from "react";
-import doctorImg from "../images/doctor 2.webp";
+import doctorImg from "../images/White coat (3).webp";
 
 export default function AboutSection() {
   return (

@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { FaStar, FaShareAlt } from "react-icons/fa";
-import doctorImage from "../images/20260113_150634 (1).webp";
+import doctorImage from "../images/sirimg.webp";
 
 export default function Hero() {
   return (

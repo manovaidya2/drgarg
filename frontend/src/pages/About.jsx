@@ -1,7 +1,7 @@
 import React from "react";
 import { FaCheck, FaChartLine, FaHandsHelping } from "react-icons/fa";
 import img from "../images/banner-aayurveda.jpg";
-import img2 from "../images/20260113_150634 (1).webp";
+import img2 from "../images/sirimg.webp";
 import DrGargExpertiseSection from "./DrGargExpertiseSection";
 
 export default function About() {
