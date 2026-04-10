@@ -19,7 +19,7 @@ export default function About() {
             Dr. Ankush Garg
           </h1>
           <p className="uppercase tracking-widest text-xs sm:text-sm md:text-base">
-            Ayurvedacharya & Senior Ayurvedic Consultant at Manovaidya
+            Ayurvedic Neurologist | Founder – Neuro-Ayurveda System
           </p>
         </div>
       </section>
@@ -33,24 +33,24 @@ export default function About() {
             <ul className="space-y-6 sm:space-y-7">
               {[
                 {
-                  title: "Professional Experience:",
-                  desc: "Founder & Chief Consultant at Shri Vrinda Ayurveda, LokAyur & Manovaidya Ayurvedic Clinics.",
+                  title: "Experience & Expertise:",
+                  desc: "7+ years of experience in Teen Mental Wellness, Autism, ADHD, Anxiety, Depression, OCD, and Neurodevelopmental conditions.",
                 },
                 {
-                  title: "Specializations:",
-                  desc: "Expertise in Nadi Parikshan, Agni Karma, Viddha Karma and Panchakarma.",
+                  title: "Neuro-Ayurveda Approach:",
+                  desc: "Founder of the Neuro-Ayurveda System focusing on Brain–Gut–Behaviour integration for long-term improvement.",
                 },
                 {
-                  title: "Training and Mentorship:",
-                  desc: "Trained under renowned Gurus of classical Ayurveda.",
+                  title: "PhD Research (Gut–Brain Axis):",
+                  desc: "Extensive research on how gut health directly impacts brain development, emotional regulation, and behaviour patterns.",
                 },
                 {
-                  title: "Recognitions and Awards:",
-                  desc: "Received prestigious awards for contributions in Ayurveda.",
+                  title: "Clinical Experience:",
+                  desc: "Worked with Thousands of children and adults dealing with focus issues, anxiety, behavioural challenges, and mental health conditions.",
                 },
                 {
-                  title: "Expertise in Mental Health:",
-                  desc: "Successfully treated Autism, ADHD, OCD, Anxiety, Depression, Alzheimer’s and more.",
+                  title: "Root Cause Treatment:",
+                  desc: "Focus on treating internal biology (brain, gut, hormones) along with behaviour — not just symptom management.",
                 },
               ].map((item, index) => (
                 <li key={index} className="flex gap-4 items-start">
@@ -84,19 +84,19 @@ export default function About() {
               </div>
               <div>
                 <h4 className="font-semibold text-base sm:text-lg">
-                  Consult doctor
+                  Book Consultation
                 </h4>
                 <p className="text-xs sm:text-sm text-white/90">
-                  Mental health expert in Ayurveda
+                  Get expert guidance for your teen’s mental wellness
                 </p>
               </div>
             </div>
-<img
-  src={img2}
-  alt="Doctor"
-  className="rounded-xl w-full h-auto max-h-[350px] object-cover"
-/>
 
+            <img
+              src={img2}
+              alt="Dr Ankush Garg - Teen Mental Health Expert"
+              className="rounded-xl w-full h-auto max-h-[350px] object-cover"
+            />
 
             <div className="bg-emerald-700 text-white rounded-xl p-5 sm:p-6 flex gap-4 items-center">
               <div className="w-10 h-10 flex items-center justify-center bg-white/20 rounded-lg">
@@ -104,10 +104,10 @@ export default function About() {
               </div>
               <div>
                 <h4 className="font-semibold text-base sm:text-lg">
-                  You are in safe hands
+                  Safe & Scientific Approach
                 </h4>
                 <p className="text-xs sm:text-sm text-white/90">
-                  Expert in Ayurvedic pharmacy & formulations
+                  Structured system based on brain, gut & behaviour science
                 </p>
               </div>
             </div>

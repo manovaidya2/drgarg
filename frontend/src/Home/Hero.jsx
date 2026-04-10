@@ -22,30 +22,40 @@ export default function Hero() {
           </h1>
 
           <p className="text-purple-700 font-semibold text-base sm:text-lg">
-            B.A.M.S , M.P.H , Ph.D.
+            Ayurvedic Neurologist | Founder – Neuro-Ayurveda System
           </p>
 
           {/* STATS */}
           <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-3">
             <div className="flex items-center gap-2 bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm sm:text-base font-medium shadow-sm">
-              <FaStar /> 4.9 (55 Reviews)
+              <FaStar /> 4.9 (10,000+ Families)
             </div>
 
             <div className="bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm sm:text-base font-medium shadow-sm">
-              8+ Years Experience
+              7+ Years Experience
             </div>
 
             <div className="bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm sm:text-base font-medium shadow-sm">
-              Mental Health Expert
+              Teen Mental Health Expert
             </div>
           </div>
 
           {/* BIO */}
           <p className="text-gray-700 mt-3 sm:mt-4 leading-relaxed text-sm sm:text-base">
-            Dr. Ankush Garg is an Ayurvedic Neurologist and founder of Manovaidya,
-            a Neuro-Ayurveda clinic specializing in Autism and Mental Health.
-            He combines traditional Ayurveda with modern insights to support
-            long-term brain, gut, and nervous system wellness.
+            Dr. Ankush Garg is an Ayurvedic Neurologist specializing in Teen Mental Wellness,
+            Autism, ADHD, Anxiety, and Neurodevelopmental conditions. His approach focuses on
+            the <strong>Brain–Gut–Behaviour connection</strong> to create real and long-term improvement.
+          </p>
+
+          <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
+            He has completed advanced PhD research on the <strong>Gut–Brain Axis</strong>,
+            exploring how gut health directly impacts brain development, emotional stability,
+            and behaviour patterns in teens.
+          </p>
+
+          <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
+            His system is designed to treat the <strong>root cause</strong> — not just symptoms —
+            by working on brain function, gut health, hormones, and behaviour together.
           </p>
 
           {/* BUTTONS */}
@@ -58,7 +68,7 @@ export default function Hero() {
               to="/contact"
               className="bg-purple-700 text-white px-6 py-3 rounded-xl shadow text-center hover:scale-105 transition-transform"
             >
-              Contact
+              Book Consultation
             </Link>
           </div>
         </motion.div>

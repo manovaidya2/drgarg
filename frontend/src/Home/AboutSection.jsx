@@ -41,7 +41,7 @@ export default function AboutSection() {
           {/* Doctor image */}
           <img
             src={doctorImg}
-            alt="Doctor"
+            alt="Dr Ankush Garg - Teen Mental Health Expert"
             className="
               relative z-30 
               w-56 sm:w-64 md:w-80 lg:w-96 
@@ -53,14 +53,30 @@ export default function AboutSection() {
         {/* TEXT SIDE */}
         <div className="w-full md:w-1/2 text-center md:text-left">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            About Us
+            About Teen Mental Wellness
           </h2>
 
+          <p className="text-gray-600 text-sm sm:text-base md:text-lg leading-relaxed mb-4">
+            <strong>Dr. Ankush Garg</strong> is an Ayurvedic Neurologist and the founder of the 
+            <strong> Neuro-Ayurveda System</strong>, specializing in Teen Mental Wellness, Autism, ADHD, 
+            Anxiety, Depression, OCD, and Neurodevelopmental conditions.
+          </p>
+
+          <p className="text-gray-600 text-sm sm:text-base md:text-lg leading-relaxed mb-4">
+            With 7+ years of experience, he focuses on the <strong>Brain–Gut–Behaviour connection</strong>, 
+            helping improve focus, emotional stability, and overall mental development in teenagers.
+          </p>
+
+          <p className="text-gray-600 text-sm sm:text-base md:text-lg leading-relaxed mb-4">
+            He has also completed advanced <strong>PhD research on the Gut–Brain Axis</strong>, 
+            where he studied how gut health directly impacts brain function, behaviour, and 
+            mental health conditions like anxiety, ADHD, and depression.
+          </p>
+
           <p className="text-gray-600 text-sm sm:text-base md:text-lg leading-relaxed">
-            Dr. Ankush Garg is an Ayurvedic Neurologist and founder of Manovaidya,
-            a Neuro-Ayurveda clinic specializing in Autism and Mental Health.
-            He combines traditional Ayurveda with modern insights to support
-            long-term brain, gut, and nervous system wellness.
+            His approach is not just symptom-based — it focuses on identifying and treating 
+            the <strong>root cause</strong> by working on internal biology (brain, gut, hormones) 
+            along with behaviour correction, leading to long-term and real improvement.
           </p>
         </div>
 
