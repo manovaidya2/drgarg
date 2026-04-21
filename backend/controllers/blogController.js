@@ -18,10 +18,18 @@ export const createBlog = async (req, res) => {
 // GET ALL
 export const getBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find().sort({ createdAt: -1 });
-    res.json(blogs);
+    const blogs = await Blog.find({})
+      .select("title slug category date image shortDescription createdAt")
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.status(200).json(blogs);
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    console.error("❌ getBlogs error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
