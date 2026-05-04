@@ -11,7 +11,7 @@ const questions = [
 export default function CoreProblemSection() {
   return (
     <section className="w-full bg-white py-12 md:py-16">
-      <div className="max-w-[1200px] mx-auto px-5 md:px-6">
+      <div className=" mx-auto px-5 md:px-10">
         <div className="max-w-[720px]">
           <p className="text-[#d98923] text-[12px] uppercase tracking-[0.36em] font-medium mb-4">
             The Core Problem

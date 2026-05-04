@@ -21,7 +21,7 @@ export default function HowItConnects() {
     <section className="w-full bg-white py-10 md:py-12">
 
       {/* FULL WIDTH CONTAINER */}
-      <div className="w-full px-4 sm:px-6 md:px-10 lg:px-16">
+      <div className="w-full px-4 sm:px-6 md:px-10 lg:px-10">
 
         {/* HEADER */}
         <p className="text-[#d98923] text-[11px] uppercase tracking-[0.4em] mb-4">

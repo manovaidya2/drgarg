@@ -5,7 +5,7 @@ export default function NeuroAyurvedaSystemSections() {
     <>
       {/* SECTION 1: THE SYSTEM */}
       <section className="w-full bg-white py-8 md:py-10">
-        <div className="max-w-6xl mx-auto px-4 md:px-6">
+        <div className="mx-auto px-4 md:px-10">
           <p className="text-[#d98923] text-[10px] uppercase tracking-[0.35em] mb-4">
             The System
           </p>
@@ -27,7 +27,7 @@ export default function NeuroAyurvedaSystemSections() {
 
       {/* SECTION 2: THE FOUNDATION */}
       <section className="w-full bg-[#f9faf7] py-8 md:py-10">
-        <div className="max-w-6xl mx-auto px-4 md:px-6">
+        <div className=" mx-auto px-4 md:px-10">
           <p className="text-[#d98923] text-[10px] uppercase tracking-[0.35em] mb-4">
             The Foundation
           </p>

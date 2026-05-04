@@ -3,7 +3,7 @@ import React from "react";
 export default function BigTruthSection() {
   return (
     <section className="w-full bg-[#f8f3ea] py-10 md:py-12">
-      <div className="max-w-[1200px] mx-auto px-4 md:px-6">
+      <div className=" mx-auto px-4 md:px-10">
         <div className="max-w-[820px]">
           <p className="text-[#d98923] text-[11px] uppercase tracking-[0.32em] font-medium mb-4">
             The Big Truth

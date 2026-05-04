@@ -30,7 +30,7 @@ export default function DomainExpertiseSection() {
 
   return (
     <section className="w-full bg-white py-8 md:py-10">
-      <div className="w-full px-4 md:px-8 lg:px-12">
+      <div className="w-full px-4 md:px-8 lg:px-10">
         
         {/* TEXT */}
         <div className="max-w-[800px]">

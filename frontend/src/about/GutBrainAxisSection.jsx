@@ -3,7 +3,7 @@ import React from "react";
 export default function GutBrainAxisSection() {
   return (
     <section className="w-full bg-[#f7f1e8] py-8 md:py-10">
-      <div className="max-w-[980px] px-5 md:px-[58px]">
+      <div className=" px-5 md:px-10">
         <p className="text-[#d98923] text-[12px] uppercase tracking-[0.42em] mb-5">
           Research Focus
         </p>

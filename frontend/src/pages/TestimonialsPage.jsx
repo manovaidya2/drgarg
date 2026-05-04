@@ -46,7 +46,7 @@ export default function TestimonialsPage() {
       <section className="relative w-full overflow-hidden bg-[#fbfaf6]">
         <div className="absolute -top-20 -right-20 h-[220px] w-[220px] rounded-full bg-[#eadfca]/40 blur-2xl" />
 
-        <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-10 pt-8 sm:pt-10 md:pt-12 pb-10 sm:pb-12 md:pb-14">
+        <div className="mx-auto  px-4 sm:px-6 lg:px-10 pt-8 sm:pt-10 md:pt-12 pb-10 sm:pb-12 md:pb-14">
           <div className="max-w-[850px]">
             <div className="inline-flex items-center gap-2 rounded-full border border-[#c8d5cf] bg-white/70 px-4 py-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-[#d8a63b]" />

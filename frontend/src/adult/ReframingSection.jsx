@@ -21,8 +21,8 @@ const reframingCards = [
 
 export default function ReframingSection() {
   return (
-    <section className="w-full bg-[#f8f4ed] px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
-      <div className="max-w-[1200px] mx-auto">
+    <section className="w-full bg-[#f8f4ed] px-4 sm:px-6 lg:px-10 py-10 sm:py-12">
+      <div className=" mx-auto">
         
         {/* Top */}
         <div className="mb-8 sm:mb-10">

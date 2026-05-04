@@ -214,7 +214,7 @@ const patientNames = [
   return (
     <>
     <section className="relative w-full overflow-hidden bg-[#fbfaf7]">
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-[42px] py-8 sm:py-10 md:py-12">
+      <div className="mx-auto px-4 sm:px-6 lg:px-[42px] py-8 sm:py-10 md:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-[1.12fr_0.88fr] items-center gap-8 lg:gap-12">
           {/* LEFT CONTENT */}
           <motion.div

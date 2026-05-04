@@ -18,7 +18,7 @@ const carePoints = [
 export default function DifferentStandardCare() {
   return (
     <section className="w-full bg-[#f7f1e8] py-6 md:py-8">
-      <div className="max-w-[1200px] mx-auto px-4 md:px-6">
+      <div className="mx-auto px-4 md:px-10">
 
         {/* TOP TEXT */}
         <p className="text-[#d98923] text-[13px] uppercase tracking-[0.3em] mb-3">

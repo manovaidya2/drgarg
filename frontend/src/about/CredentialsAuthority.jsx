@@ -22,7 +22,7 @@ const credentials = [
 export default function CredentialsAuthority() {
   return (
     <section className="w-full bg-white py-7 md:py-9">
-      <div className="max-w-[1300px] mx-auto px-4 md:px-[50px]">
+      <div className=" mx-auto px-4 md:px-10">
         
         {/* TOP */}
         <p className="text-[#d98923] text-[11px] uppercase tracking-[0.38em] mb-4">

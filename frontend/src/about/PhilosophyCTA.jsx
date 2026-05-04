@@ -11,7 +11,7 @@ export default function PhilosophyCTA() {
       <section className="w-full bg-white py-10 md:py-14">
 
         {/* PHILOSOPHY */}
-        <div className="max-w-[1400px] mx-auto px-5 md:px-[70px]">
+        <div className=" mx-auto px-5 md:px-10">
           <p className="text-[#d98923] text-[10px] uppercase tracking-[0.42em] mb-9">
             Philosophy
           </p>

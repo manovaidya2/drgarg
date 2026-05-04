@@ -9,7 +9,7 @@ export default function AutismADHDSection() {
       <section className="w-full bg-white">
         {/* SECTION 1: HERO */}
         <div className="w-full bg-[#f7f1e8] py-8 md:py-10">
-          <div className="w-full px-4 sm:px-6 md:px-10 lg:px-16">
+          <div className="w-full px-4 sm:px-6 md:px-10 lg:px-10">
             <p className="text-[#d98923] text-[11px] uppercase tracking-[0.4em] mb-3">
               Autism & ADHD
             </p>
@@ -28,7 +28,7 @@ export default function AutismADHDSection() {
 
         {/* SECTION 2: UNDERSTANDING */}
         <div className="w-full bg-white py-8 md:py-10">
-          <div className="w-full px-4 sm:px-6 md:px-10 lg:px-16">
+          <div className="w-full px-4 sm:px-6 md:px-10 lg:px-10">
             <p className="text-[#d98923] text-[11px] uppercase tracking-[0.4em] mb-4">
               Understanding
             </p>

@@ -42,7 +42,7 @@ export default function ResearchAndMethod() {
 
       {/* ===== METHOD SECTION (WHITE) ===== */}
       <div className="w-full bg-white py-10 md:py-14">
-        <div className="max-w-[1400px] mx-auto px-5 md:px-[70px]">
+        <div className=" mx-auto px-5 md:px-10">
 
           <p className="text-[#d98923] text-[11px] uppercase tracking-[0.42em] mb-4">
             The Method
@@ -81,7 +81,7 @@ export default function ResearchAndMethod() {
 
       {/* ===== PATIENT REACH SECTION (BEIGE) ===== */}
       <div className="w-full bg-[#efe8dc] py-10 md:py-14">
-        <div className="max-w-[1400px] mx-auto px-5 md:px-[70px]">
+        <div className=" mx-auto px-5 md:px-10">
 
           <p className="text-[#d98923] text-[11px] uppercase tracking-[0.42em] mb-4">
             Patient Reach

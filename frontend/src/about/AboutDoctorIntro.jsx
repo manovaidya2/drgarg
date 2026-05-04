@@ -3,7 +3,7 @@ import React from "react";
 export default function AboutDoctorIntro() {
   return (
     <section className="w-full bg-[#f8f3ea] py-10 md:py-12">
-      <div className="w-full px-5 md:px-10 lg:px-16">
+      <div className="w-full px-5 md:px-10 lg:px-10">
         <div className="max-w-[980px]">
           <p className="text-[#d98923] text-[11px] uppercase tracking-[0.36em] font-medium mb-3">
             About the Doctor

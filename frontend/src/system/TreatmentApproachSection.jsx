@@ -16,7 +16,7 @@ const approachCards = [
 export default function TreatmentApproachSection() {
   return (
     <section className="w-full bg-white py-8 md:py-10">
-      <div className="max-w-[1380px] mx-auto px-4 md:px-[44px]">
+      <div className=" mx-auto px-4 md:px-10">
 
         {/* LABEL */}
         <p className="text-[#d98923] text-[12px] uppercase tracking-[0.38em] mb-4">

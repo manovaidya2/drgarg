@@ -47,7 +47,7 @@ return (
 
     {/* HERO */}
     <section className="w-full border-b border-[#e6e0d6]">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10 py-10 sm:py-14">
+      <div className="mx-auto px-4 sm:px-6 lg:px-10 py-10 sm:py-14">
 
         {/* BADGE */}
         <div className="inline-flex items-center gap-2 rounded-full border border-[#cfd6d2] bg-white px-4 py-1.5">
@@ -71,8 +71,8 @@ return (
     </section>
 
     {/* MAIN */}
-    <section className="py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-8">
+    <section className="py-10 px-4 sm:px-6 lg:px-10">
+      <div className="mx-auto grid md:grid-cols-2 gap-8">
 
         {/* LEFT SIDE */}
         <div className="space-y-6">

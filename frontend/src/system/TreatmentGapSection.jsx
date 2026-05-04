@@ -26,7 +26,7 @@ const gapItems = [
 export default function TreatmentGapSection() {
   return (
     <section className="w-full bg-[#f7f1e8] py-6 md:py-8">
-      <div className="max-w- mx-auto px-4 md:px-15">
+      <div className=" mx-auto px-4 md:px-10">
         
         {/* LABEL */}
         <p className="text-[#d98923] text-[13px] uppercase tracking-[0.35em] mb-4">

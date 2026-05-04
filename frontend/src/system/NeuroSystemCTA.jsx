@@ -11,7 +11,7 @@ export default function NeuroSystemCTA() {
       <section className="w-full bg-white px-3 sm:px-5 lg:px-10 py-4">
         <div className="w-full rounded-[24px] bg-gradient-to-r from-[#004226] via-[#003f25] to-[#1b4e24] px-5 sm:px-8 md:px-12 lg:px-16 py-10 md:py-12">
 
-          <div className="max-w-[900px]">
+          <div className="">
 
             {/* HEADING */}
             <h2 className="font-serif text-white text-[26px] sm:text-[32px] md:text-[36px] lg:text-[38px] leading-[1.2] tracking-[-0.03em]">

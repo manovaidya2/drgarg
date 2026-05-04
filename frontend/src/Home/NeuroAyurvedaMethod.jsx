@@ -37,7 +37,7 @@ const methods = [
 export default function NeuroAyurvedaMethod() {
   return (
     <section className="w-full bg-white py-10 md:py-12">
-      <div className="max-w-[1250px] mx-auto px-4 md:px-6">
+      <div className=" mx-auto px-4 md:px-10">
 
         {/* TOP TEXT */}
         <div className="max-w-[820px]">

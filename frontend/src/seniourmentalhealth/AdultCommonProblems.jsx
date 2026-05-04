@@ -16,7 +16,7 @@ const problems = [
 
 export default function AdultCommonProblems() {
   return (
-    <section className="w-full bg-[#fbfaf7] px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+    <section className="w-full bg-[#fbfaf7] px-4 sm:px-6 lg:px-10 py-8 sm:py-10">
       <div className="mx-auto ">
         
         {/* Label */}

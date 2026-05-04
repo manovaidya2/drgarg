@@ -43,7 +43,7 @@ export default function BlogPage() {
     <div className="bg-[#f6f4ef]">
       {/* HERO */}
       <section className="w-full bg-[#f6f4ef]">
-        <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-10 pt-10 sm:pt-14 md:pt-16 pb-8 sm:pb-10">
+        <div className="mx-auto  px-4 sm:px-6 lg:px-10 pt-10 sm:pt-14 md:pt-16 pb-8 sm:pb-10">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#cfd6d2] bg-white px-4 py-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-[#d8a63b]" />
             <span className="text-[#0b3b2e] text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.25em]">
@@ -66,8 +66,8 @@ export default function BlogPage() {
       </section>
 
       {/* WHY THIS BLOG EXISTS */}
-      <section className="w-full bg-[#f6f4ef] px-4 sm:px-6 lg:px-8 py-6">
-        <div className="mx-auto max-w-[1400px] rounded-[6px] border border-[#efd59d] bg-[#fbf7ef] px-5 sm:px-6 lg:px-7 py-6">
+      <section className="w-full bg-[#f6f4ef] px-4 sm:px-6 lg:px-10 py-6">
+        <div className="mx-auto  rounded-[6px] border border-[#efd59d] bg-[#fbf7ef] px-5 sm:px-6 lg:px-7 py-6">
           <p className="text-[#c37a12] text-[11px] sm:text-[12px] font-serif uppercase tracking-[0.35em]">
             WHY THIS BLOG EXISTS
           </p>
@@ -87,8 +87,8 @@ export default function BlogPage() {
       </section>
 
       {/* BLOG SECTION */}
-      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-[#f6f4ef]">
-        <div className="max-w-[1400px] mx-auto">
+      <section className="py-8 px-4 sm:px-6 lg:px-10 bg-[#f6f4ef]">
+        <div className=" mx-auto">
           {/* DYNAMIC FILTER */}
           <div className="flex flex-wrap gap-3 mb-8">
             {categories.map((category) => (

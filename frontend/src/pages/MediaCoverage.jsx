@@ -47,7 +47,7 @@ export default function MediaCoverage() {
     <>
     {/* NEW MEDIA & PR HERO */}
 <section className="w-full bg-[#f6f4ef]">
-  <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-10 pt-10 sm:pt-14 md:pt-16 pb-8 sm:pb-10">
+  <div className="mx-auto  px-4 sm:px-6 lg:px-10 pt-10 sm:pt-14 md:pt-16 pb-8 sm:pb-10">
 
     {/* BADGE */}
     <div className="inline-flex items-center gap-2 rounded-full border border-[#cfd6d2] bg-white px-4 py-1.5">
@@ -74,7 +74,7 @@ export default function MediaCoverage() {
   </div>
 </section>
     <section className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100 py-10 px-4">
-      <div className="max-w-6xl mx-auto">
+      <div className=" mx-auto">
 
         {/* Header
         <div className="text-center mb-14">
@@ -135,7 +135,7 @@ export default function MediaCoverage() {
       </div>
     </section>
     <section className="w-full bg-[#f6f4ef] px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8">
-  <div className="mx-auto max-w-[1600px] rounded-[22px] bg-gradient-to-r from-[#004225] via-[#053f24] to-[#1f5027] px-6 sm:px-10 lg:px-16 py-10 sm:py-12 lg:py-14">
+  <div className="mx-auto  rounded-[22px] bg-gradient-to-r from-[#004225] via-[#053f24] to-[#1f5027] px-6 sm:px-10 lg:px-10 py-10 sm:py-12 lg:py-14">
     
     <div className="max-w-[700px]">
       

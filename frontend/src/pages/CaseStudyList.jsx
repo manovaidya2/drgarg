@@ -28,7 +28,7 @@ export default function CaseStudyList() {
 <section className="relative w-full overflow-hidden bg-[#fbfaf6]">
   <div className="absolute -top-20 -right-20 h-[220px] w-[220px] rounded-full bg-[#eadfca]/40 blur-2xl"></div>
 
-  <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10 pt-8 sm:pt-10 md:pt-12 pb-12 sm:pb-14 md:pb-16">
+  <div className=" mx-auto px-4 sm:px-6 lg:px-10 pt-8 sm:pt-10 md:pt-12 pb-12 sm:pb-14 md:pb-16">
     <div className="max-w-[900px]">
 
       {/* Tag */}
@@ -54,7 +54,7 @@ export default function CaseStudyList() {
   </div>
 </section>
       {/* Case Studies */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 py-8 md:py-10">
+      <div className=" mx-auto px-4 sm:px-6 md:px-10 py-8 md:py-10">
         <h2 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center text-[#8b43ba]">
           Case Studies
         </h2>

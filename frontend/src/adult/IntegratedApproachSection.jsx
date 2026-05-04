@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function IntegratedApproachSection() {
   return (
     <section className="w-full bg-white px-4 sm:px-6 lg:px-8 py-8 sm:py-9">
-      <div className="max-w-[1000px]">
+      <div className="">
 
         {/* Label */}
         <p className="text-[#d99b2f] uppercase tracking-[0.35em] text-[11px] sm:text-[12px] font-medium mb-3">
