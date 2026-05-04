@@ -18,7 +18,7 @@ import CaseStudyDetails from "./pages/CaseStudyDetails";
 import MediaCoverage from "./pages/MediaCoverage";
 
 import { GlobalSEO } from "./components/SEOProvider";
-import System from "./pages/system";
+import System from "./pages/System";
 import AutismADHDSection from "./autism/AutismADHDSection";
 import Adult from "./pages/Adult";
 import Teenage from "./pages/Teenage";
