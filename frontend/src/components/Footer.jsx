@@ -1,98 +1,89 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaTwitter, FaFacebookF, FaLinkedinIn, FaInstagram } from "react-icons/fa";
+import { MapPin, Phone, Mail } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#1d5a57] text-white pt-16 pb-8 mt-20">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
+    <footer className="bg-[#003f25] text-[#b9c9bf]">
+      <div className="max-w-[1360px] mx-auto px-5 sm:px-8 lg:px-12 pt-10 sm:pt-12 pb-10">
+        <div className="grid grid-cols-1 md:grid-cols-[1.6fr_0.8fr_0.9fr] gap-8 lg:gap-16">
+          
+          <div>
+            <h2 className="font-serif text-white text-[22px] leading-tight mb-2">
+              Dr. Ankush Garg
+            </h2>
 
-        {/* ABOUT */}
-        <div>
-          <h3 className="font-semibold text-lg mb-4 border-b-2 border-purple-600 inline-block pb-1">
-            About
-          </h3>
-          <p className="text-sm text-gray-200 leading-6">
-            Ayurvedic medicine focuses on treating the root cause of disease.
-            Consult with an experienced Ayurveda specialist for personalized care.
-          </p>
+            <p className="text-[13px] font-semibold mb-4">
+              BAMS, MPH, PhD (Gut-Brain Axis Research)
+            </p>
 
-          <div className="flex gap-3 mt-4">
-            <a href="#" className="social-icon"><FaTwitter size={14} /></a>
-            <a href="#" className="social-icon"><FaFacebookF size={14} /></a>
-            <a href="#" className="social-icon"><FaLinkedinIn size={14} /></a>
-            <a href="#" className="social-icon"><FaInstagram size={14} /></a>
+            <p className="max-w-[560px] text-[15px] leading-[1.55] font-semibold">
+              Ayurvedacharya, Neuro-Ayurveda Specialist, and developer of the
+              Neuro-Ayurveda System — a root-cause Brain–Gut–Behaviour treatment
+              model for autism, ADHD, and mental health across all ages.
+            </p>
+
+            <div className="mt-6 space-y-2 text-[14px] font-semibold">
+              <div className="flex items-start gap-2.5">
+                <MapPin size={15} className="text-[#d5b33d] mt-1 flex-shrink-0" />
+                <span>
+                  Manovaidya, near Vinayak Hospital, Atta Market, Pocket E,
+                  Sector 27, Noida, UP 201301
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <Phone size={15} className="text-[#d5b33d] flex-shrink-0" />
+                <a href="tel:07823838638" className="hover:text-white">
+                  078238 38638
+                </a>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <Mail size={15} className="text-[#d5b33d] flex-shrink-0" />
+                <a href="mailto:hello@manovaidya.in" className="hover:text-white">
+                  hello@manovaidya.in
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-white text-[11px] tracking-[0.32em] uppercase font-serif mb-4">
+              Explore
+            </h3>
+
+            <ul className="space-y-2 text-[14px] font-semibold">
+              <li><Link to="/about" className="hover:text-white">About Dr. Ankush</Link></li>
+              <li><Link to="/neuro-ayurveda-system" className="hover:text-white">Neuro-Ayurveda System</Link></li>
+              <li><Link to="/autism-adhd" className="hover:text-white">Autism & ADHD</Link></li>
+              <li><Link to="/case-study" className="hover:text-white">Case Studies</Link></li>
+              <li><Link to="/blog" className="hover:text-white">Blog</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-white text-[11px] tracking-[0.32em] uppercase font-serif mb-4">
+              Care
+            </h3>
+
+            <ul className="space-y-2 text-[14px] font-semibold">
+              <li><Link to="/adult-mental-health" className="hover:text-white">Adult Mental Health</Link></li>
+              <li><Link to="/teenage-mental-health" className="hover:text-white">Teenage Mental Health</Link></li>
+              <li><Link to="/senior-mental-health" className="hover:text-white">Senior Mental Health</Link></li>
+              <li><Link to="/testimonials" className="hover:text-white">Testimonials</Link></li>
+              <li><Link to="/appointment" className="hover:text-white">Book Consultation</Link></li>
+            </ul>
           </div>
         </div>
-
-        {/* QUICK LINKS */}
-        <div>
-          <h3 className="font-semibold text-lg mb-4 border-b-2 border-purple-600 inline-block pb-1">
-            Quick Links
-          </h3>
-          <ul className="text-sm text-gray-200 space-y-2">
-            <li><Link to="/about" className="hover:text-white">About Dr. Ankush Garg</Link></li>
-            <li><Link to="/blog" className="hover:text-white">Blogs</Link></li>
-            <li><Link to="/case-study" className="hover:text-white">Case Studies</Link></li>
-            <li><Link to="/media-coverage" className="hover:text-white">Media Coverage</Link></li>
-            <li><Link to="/appointment" className="hover:text-white">Book Consultation</Link></li>
-          </ul>
-        </div>
-
-        {/* TREATMENTS */}
-        <div>
-          <h3 className="font-semibold text-lg mb-4 border-b-2 border-purple-600 inline-block pb-1">
-            Treatments
-          </h3>
-          <ul className="text-sm text-gray-200 space-y-2">
-            <li><a href="https://manovaidya.in/depression-treatment.php" target="_blank" rel="noreferrer">Depression</a></li>
-            <li><a href="https://manovaidya.in/anxiety-disorder-treatment.php" target="_blank" rel="noreferrer">Anxiety</a></li>
-            <li><a href="https://manovaidya.in/autism-treatment.php" target="_blank" rel="noreferrer">Autism</a></li>
-            <li><a href="https://manovaidya.in/ocd-treatment.php" target="_blank" rel="noreferrer">OCD</a></li>
-            <li><a href="https://manovaidya.in/schizophrenia.php" target="_blank" rel="noreferrer">Schizophrenia</a></li>
-          </ul>
-        </div>
-
-        {/* CONTACT */}
-        <div>
-          <h3 className="font-semibold text-lg mb-4 border-b-2 border-purple-600 inline-block pb-1">
-            Contact
-          </h3>
-          <ul className="text-sm text-gray-200 space-y-2">
-            <li>India</li>
-            <li>📞 +91-7823838638</li>
-            <li>📞 +91-8860247763</li>
-            <li>📧 manovaidya2gmail.com</li>
-            {/* <li>📧 dr.ankush@gmail.com</li> */}
-          </ul>
-        </div>
       </div>
 
-      {/* BOTTOM */}
-      <div className="mt-10 border-t border-gray-400 pt-6 text-center text-gray-300 text-sm">
-        © {new Date().getFullYear()} Dr. Ankush Garg. All Rights Reserved
+      <div className="border-t border-white/10">
+        <div className="max-w-[1360px] mx-auto px-5 sm:px-8 lg:px-12 py-5 flex flex-col md:flex-row justify-between gap-2 text-[12px] font-semibold text-[#91a79b]">
+          <p>© 2026 Dr. Ankush Garg · Manovaidya. All rights reserved.</p>
+          <p>Online & In-clinic consultations available across India.</p>
+        </div>
       </div>
-
-      {/* REUSABLE STYLE */}
-      <style>
-        {`
-          .social-icon {
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 9999px;
-            background: white;
-            color: #7e22ce;
-            transition: all .3s;
-          }
-          .social-icon:hover {
-            background: #7e22ce;
-            color: white;
-          }
-        `}
-      </style>
     </footer>
   );
 }
