@@ -267,9 +267,9 @@ const patientNames = [
               {/* Google Review Card */}
               <div className="flex items-center gap-4 rounded-[18px] border border-[#ded6c9] bg-white px-5 py-4 shadow-sm">
                 <div className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full bg-[#f3f1ea]">
-                  <span className="text-[30px] font-bold text-[#4285F4]">
+                  {/* <span className="text-[30px] font-bold text-[#4285F4]">
                     G
-                  </span>
+                  </span> */}
                 </div>
 
                 <div>
@@ -291,7 +291,7 @@ const patientNames = [
                   </div>
 
                   <p className="mt-1 text-[15px] font-semibold text-[#0b3322]">
-                    10,000+ Google Reviews{" "}
+                    1,000+ Reviews{" "}
                     <span className="font-normal text-[#5d625b]">· Live</span>
                   </p>
                 </div>
