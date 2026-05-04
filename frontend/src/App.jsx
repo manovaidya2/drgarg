@@ -18,6 +18,13 @@ import CaseStudyDetails from "./pages/CaseStudyDetails";
 import MediaCoverage from "./pages/MediaCoverage";
 
 import { GlobalSEO } from "./components/SEOProvider";
+import System from "./pages/system";
+import AutismADHDSection from "./autism/AutismADHDSection";
+import Adult from "./pages/Adult";
+import Teenage from "./pages/Teenage";
+import Seniour from "./pages/Seniour";
+
+import TestimonialsPage from "./pages/TestimonialsPage";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -46,6 +53,12 @@ export default function App() {
           <Route path="/case-study" element={<CaseStudyList />} />
           <Route path="/case-study/:slug" element={<CaseStudyDetails />} />
           <Route path="/media-coverage" element={<MediaCoverage />} />
+          <Route path="/neuro-ayurveda-system" element={<System />} />
+          <Route path="/autism-adhd" element={<AutismADHDSection />} />
+          <Route path="/adult-mental-health" element={<Adult />} />
+          <Route path="/teenage-mental-health" element={<Teenage />} />
+          <Route path="/seniour-mental-health" element={<Seniour />} />
+          <Route path="/testimonials" element={<TestimonialsPage />} />
         </Routes>
       </main>
       <Footer />

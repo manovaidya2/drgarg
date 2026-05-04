@@ -5,18 +5,20 @@ const appointmentSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
+      trim: true,
     },
     phone: {
       type: String,
       required: true,
+      trim: true,
     },
-    location: {
+    email: {
       type: String,
-      required: true,
+      trim: true,
     },
-    date: {
-      type: Date,
-      required: true,
+    concern: {
+      type: String,
+      default: "Autism / ADHD",
     },
     message: {
       type: String,

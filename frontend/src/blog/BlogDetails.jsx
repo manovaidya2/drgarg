@@ -1,24 +1,100 @@
-
-import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import axiosInstance from "../api/axiosInstance";
+import {
+  Calendar,
+  ArrowLeft,
+  Heart,
+  Eye,
+  Share2,
+  Facebook,
+  Twitter,
+  Linkedin,
+  BookOpen,
+  ChevronRight,
+  HelpCircle,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 
 export default function BlogDetails() {
   const { slug } = useParams();
+  const navigate = useNavigate();
+
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeFaq, setActiveFaq] = useState(null);
+  const [liked, setLiked] = useState(false);
+  const [relatedPosts, setRelatedPosts] = useState([]);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [openFaqs, setOpenFaqs] = useState([]);
+
+  const sidebarRef = useRef(null);
+  const mainContentRef = useRef(null);
 
   const toggleFaq = (index) => {
-  setActiveFaq(activeFaq === index ? null : index);
-};
+    setOpenFaqs((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
+  };
+
+  const parseHtmlContent = (htmlContent) => {
+    if (!htmlContent) return "";
+
+    try {
+      let cleanedContent = htmlContent
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&amp;/g, "&")
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, "")
+
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+        .replace(/on\w+="[^"]*"/g, "")
+        .replace(/on\w+='[^']*'/g, "")
+        .replace(/javascript:/gi, "")
+
+        // ✅ mobile image bottom gap fix
+        .replace(/<p>\s*<\/p>/gi, "")
+        .replace(/<div>\s*<\/div>/gi, "")
+        .replace(/(<br\s*\/?>\s*){2,}/gi, "<br/>")
+        .replace(/<p>\s*(<img[^>]+>)\s*<\/p>/gi, "$1")
+        .replace(/(<img[^>]+>)\s*(<p>\s*<\/p>|<br\s*\/?>|\s)*/gi, "$1")
+        .replace(/<\/figure>\s*(<p>\s*<\/p>|<br\s*\/?>|\s)*/gi, "</figure>")
+        .trim();
+
+      return cleanedContent;
+    } catch (error) {
+      console.error("Error parsing HTML content:", error);
+      return "<p>Error loading content</p>";
+    }
+  };
 
   useEffect(() => {
     const fetchBlog = async () => {
       try {
+        setLoading(true);
+
         const res = await axiosInstance.get(`/blogs/${slug}`);
-        setBlog(res.data);
+        const parsedHtml = parseHtmlContent(res.data.content);
+
+        setBlog({ ...res.data, content: parsedHtml });
+
+        if (res.data?.category) {
+          try {
+            const allBlogsRes = await axiosInstance.get(`/blogs`);
+            const related = allBlogsRes.data
+              .filter(
+                (post) => post.category === res.data.category && post.slug !== slug
+              )
+              .slice(0, 4);
+
+            setRelatedPosts(related);
+          } catch (error) {
+            console.error("Error fetching related posts:", error);
+          }
+        }
       } catch (error) {
         console.error("Blog not found", error);
       } finally {
@@ -29,83 +105,122 @@ export default function BlogDetails() {
     fetchBlog();
   }, [slug]);
 
-  // Process content to ensure links open in new tab and have proper security attributes
-  const processContent = (content) => {
-    if (!content) return '';
-    
-    // Create a temporary div to parse the content
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = content;
-    
-    // Find all anchor tags and add target="_blank" and rel="noopener noreferrer"
-    const anchors = tempDiv.querySelectorAll('a');
-    anchors.forEach(anchor => {
-      anchor.setAttribute('target', '_blank');
-      anchor.setAttribute('rel', 'noopener noreferrer');
-      
-      // Check if anchor contains an image
-      if (anchor.querySelector('img')) {
-        anchor.classList.add('linked-image');
-        // Remove any selection classes that might have been added in the editor
-        const img = anchor.querySelector('img');
-        if (img) {
-          img.classList.remove('selected-image');
-          // Remove any resize container artifacts
-          img.style.removeProperty('width');
-          img.style.removeProperty('height');
-        }
+  useEffect(() => {
+    const handleScroll = () => {
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.scrollY;
+      const progress = (scrollTop / (documentHeight - windowHeight)) * 100;
+      setScrollProgress(progress || 0);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleLike = async () => {
+    if (!blog) return;
+
+    try {
+      if (!liked) {
+        await axiosInstance.post(`/blogs/${blog._id}/like`);
+        setBlog({ ...blog, likes: (blog.likes || 0) + 1 });
       } else {
-        // Regular text link
-        anchor.classList.add('external-link');
+        await axiosInstance.delete(`/blogs/${blog._id}/like`);
+        setBlog({ ...blog, likes: (blog.likes || 0) - 1 });
       }
-    });
-    
-    // Also find any images that might not be wrapped in anchors
-    const images = tempDiv.querySelectorAll('img:not(a img)');
-    images.forEach(img => {
-      img.classList.remove('selected-image');
-      img.style.removeProperty('width');
-      img.style.removeProperty('height');
-    });
-    
-    // Remove any resize containers
-    const containers = tempDiv.querySelectorAll('.image-resize-container');
-    containers.forEach(container => {
-      const img = container.querySelector('img');
-      if (img && container.parentNode) {
-        container.parentNode.insertBefore(img, container);
-        container.remove();
-      }
-    });
-    
-    return tempDiv.innerHTML;
+
+      setLiked(!liked);
+    } catch (error) {
+      console.error("Error updating like:", error);
+    }
+  };
+
+  const handleShare = async (platform) => {
+    const url = window.location.href;
+    const title = blog.title;
+
+    let shareUrl = "";
+
+    switch (platform) {
+      case "facebook":
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+          url
+        )}`;
+        break;
+
+      case "twitter":
+        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+          title
+        )}&url=${encodeURIComponent(url)}`;
+        break;
+
+      case "linkedin":
+        shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
+          url
+        )}&title=${encodeURIComponent(title)}`;
+        break;
+
+      default:
+        if (navigator.share) {
+          await navigator.share({ title, url });
+        } else {
+          navigator.clipboard.writeText(url);
+          alert("Link copied to clipboard!");
+        }
+    }
+
+    if (shareUrl) {
+      window.open(shareUrl, "_blank", "width=600,height=400");
+    }
+  };
+
+  const handleRelatedPostClick = (relatedPost) => {
+    navigate(`/blog/${relatedPost.slug}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700"></div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-green-700 border-t-transparent"></div>
+          <p className="mt-4 text-gray-600 font-medium">
+            Loading amazing content...
+          </p>
+        </div>
       </div>
     );
   }
 
   if (!blog) {
     return (
-      <div className="text-center py-16">
-        <p className="text-lg text-gray-600 mb-3">Blog not found</p>
-        <Link to="/blog" className="text-green-700 underline font-medium">
-          Back to blogs
-        </Link>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+        <div className="text-center bg-white rounded-2xl shadow-xl p-8 max-w-md mx-4">
+          <div className="text-6xl mb-4">🔍</div>
+
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            Blog Not Found
+          </h2>
+
+          <p className="text-gray-600 mb-6">
+            The article you're looking for doesn't exist or has been moved.
+          </p>
+
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-2 bg-green-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-800 transition-all duration-300"
+          >
+            <ArrowLeft size={18} />
+            Explore Other Blogs
+          </Link>
+        </div>
       </div>
     );
   }
 
-  // Process the content
-  const processedContent = processContent(blog.content);
-
   return (
     <>
-      {/* 🔥 BLOG SEO */}
       <Helmet>
         <title>{blog.title} | Dr. Ankush Garg</title>
 
@@ -120,15 +235,13 @@ export default function BlogDetails() {
 
         <meta
           name="keywords"
-          content={`Dr Ankush Garg, mental wellness, Ayurveda, ${blog.category || "mental health blog"}`}
+          content={`Dr Ankush Garg, mental wellness, Ayurveda, ${
+            blog.category || "mental health blog"
+          }`}
         />
 
-        <link
-          rel="canonical"
-          href={`https://drankushgarg.com/blog/${slug}`}
-        />
+        <link rel="canonical" href={`https://drankushgarg.com/blog/${slug}`} />
 
-        {/* Open Graph */}
         <meta property="og:title" content={blog.title} />
         <meta
           property="og:description"
@@ -138,13 +251,9 @@ export default function BlogDetails() {
           }
         />
         <meta property="og:type" content="article" />
-        <meta
-          property="og:url"
-          content={`https://drankushgarg.com/blog/${slug}`}
-        />
+        <meta property="og:url" content={`https://drankushgarg.com/blog/${slug}`} />
         <meta property="og:image" content={blog.image} />
 
-        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={blog.title} />
         <meta
@@ -156,305 +265,486 @@ export default function BlogDetails() {
         />
         <meta name="twitter:image" content={blog.image} />
 
-        {/* Article Meta */}
         <meta property="article:published_time" content={blog.date} />
         <meta property="article:author" content="Dr. Ankush Garg" />
       </Helmet>
 
-      {/* PAGE CONTENT */}
-      <section className="bg-[#f9faf7] px-4 sm:px-6 py-10 sm:py-14">
-        <div className="max-w-1xl mx-auto">
+      <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
+        <div
+          className="h-full bg-green-700 transition-all duration-300"
+          style={{ width: `${scrollProgress}%` }}
+        ></div>
+      </div>
 
-          {/* Back link */}
+      <div className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 py-3">
           <Link
             to="/blog"
-            className="inline-block text-green-700 font-semibold mb-5 hover:text-green-800 transition-colors"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-green-700 transition-colors group"
           >
-            ← Back to Blog
+            <ArrowLeft
+              size={18}
+              className="group-hover:-translate-x-1 transition-transform"
+            />
+            <span>Back to Blog</span>
           </Link>
+        </div>
+      </div>
 
-          {/* Blog Image */}
+      <div className="relative h-[280px] sm:h-[380px] md:h-[500px] overflow-hidden bg-gray-500">
+        <div className="absolute inset-0">
           {blog.image && (
             <img
               src={blog.image}
               alt={blog.title}
-              className="w-full h-[220px] sm:h-[320px] md:h-[420px] object-cover rounded-2xl shadow-lg"
+              className="w-full h-full object-cover opacity-60"
             />
           )}
 
-          {/* Content Card */}
-          <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-12 mt-6 md:-mt-20 relative shadow-sm">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+        </div>
 
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-snug text-gray-800">
+        <div className="relative h-full flex items-end max-w-7xl mx-auto px-4 pb-8 sm:pb-12">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3 mb-3 flex-wrap">
+              <span className="bg-green-700 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                {blog.category || "Mental Wellness"}
+              </span>
+
+              <span className="text-white/80 text-xs flex items-center gap-1">
+                <Eye size={14} /> {blog.views || "0"} views
+              </span>
+
+              <span className="text-white/80 text-xs flex items-center gap-1">
+                <Heart size={14} /> {blog.likes || "0"} likes
+              </span>
+            </div>
+
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 leading-tight">
               {blog.title}
             </h1>
 
-            <div className="flex items-center gap-3 text-sm text-gray-500 mt-2">
-              <span>Published on {new Date(blog.date).toDateString()}</span>
-              {blog.category && (
-                <>
-                  <span>•</span>
-                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full">
-                    {blog.category}
-                  </span>
-                </>
-              )}
-            </div>
-
-            {/* Short Description */}
-            {blog.shortDescription && (
-              <p className="text-gray-600 italic border-l-4 border-green-500 pl-4 my-4">
-                {blog.shortDescription}
-              </p>
-            )}
-
-            {/* Blog Content - with linked images support */}
-            <div
-              className="prose prose-base sm:prose-lg max-w-none mt-8
-                         prose-img:rounded-xl prose-img:shadow-md prose-img:mx-auto
-                         prose-headings:text-gray-800 prose-headings:font-bold
-                         prose-p:text-gray-700 prose-p:leading-relaxed
-                         prose-a:text-green-700 prose-a:font-medium prose-a:no-underline hover:prose-a:underline
-                         prose-strong:text-gray-800
-                         prose-ul:list-disc prose-ol:list-decimal
-                         prose-blockquote:border-l-4 prose-blockquote:border-green-500 prose-blockquote:pl-4 prose-blockquote:italic"
-              dangerouslySetInnerHTML={{ __html: processedContent }}
-            />
-
-            {/* Share Section */}
-            <div className="mt-10 pt-6 border-t border-gray-200">
-              <p className="text-sm text-gray-500 mb-3">Share this article:</p>
-              <div className="flex gap-3">
-                <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://drankushgarg.com/blog/${slug}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors"
-                >
-                  Facebook
-                </a>
-                <a
-                  href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://drankushgarg.com/blog/${slug}`)}&text=${encodeURIComponent(blog.title)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-sky-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-sky-600 transition-colors"
-                >
-                  Twitter
-                </a>
-                <a
-                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://drankushgarg.com/blog/${slug}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-blue-700 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-800 transition-colors"
-                >
-                  LinkedIn
-                </a>
-              </div>
-            </div>
-
-            {/* FAQ Section */}
-{blog.faq && blog.faq.length > 0 && (
-  <div className="mt-12 pt-8 border-t border-gray-200">
-    <h2 className="text-2xl font-bold text-gray-800 mb-6">
-      Frequently Asked Questions
-    </h2>
-
-    <div className="space-y-4">
-      {blog.faq.map((item, index) => (
-        <div
-          key={index}
-          className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm"
-        >
-          {/* Question */}
-          <button
-            onClick={() => toggleFaq(index)}
-            className="w-full flex justify-between items-center px-5 py-4 text-left font-medium text-gray-800 hover:bg-gray-50 transition"
-          >
-            <span>{item.question}</span>
-            <span className="text-green-600 text-xl">
-              {activeFaq === index ? "−" : "+"}
-            </span>
-          </button>
-
-          {/* Answer */}
-          <div
-            className={`px-5 transition-all duration-300 ease-in-out ${
-              activeFaq === index ? "max-h-40 py-3" : "max-h-0 overflow-hidden"
-            }`}
-          >
-            <p className="text-gray-600 leading-relaxed">
-              {item.answer}
+            <p className="text-white/80 mt-2 line-clamp-3 leading-relaxed text-sm sm:text-base">
+              {blog.shortDescription}
             </p>
           </div>
         </div>
-      ))}
-    </div>
-  </div>
-)}
+      </div>
+
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-6 md:py-12">
+        <div
+          className="flex flex-col lg:flex-row gap-8 relative"
+          ref={mainContentRef}
+        >
+          <div className="lg:w-2/3 w-full min-w-0">
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 sm:p-5 shadow-sm border border-green-100 mb-5 sm:mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-md">
+                  {blog.author?.charAt(0) || "A"}
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-gray-900">
+                    About the Author
+                  </h3>
+
+                  <p className="text-sm font-medium text-green-700">
+                    {blog.author || "Dr. Ankush Garg"}
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-sm text-gray-600 mb-3">
+                Expert in {blog.category || "mental wellness"} with 9+ years of
+                experience helping individuals achieve better mental health and
+                holistic well-being.
+              </p>
+
+              <div className="flex gap-2 pt-2 border-t border-green-100">
+                <span className="text-xs text-gray-500 flex items-center gap-1">
+                  <Calendar size={12} /> Joined 2020
+                </span>
+
+                <span className="text-xs text-gray-500 flex items-center gap-1">
+                  <BookOpen size={12} /> Expert Guide
+                </span>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-2 sm:p-6 md:p-8 shadow-sm border border-gray-100 overflow-hidden">
+              <div
+                className="blog-content prose max-w-none w-full overflow-hidden break-words"
+                dangerouslySetInnerHTML={{ __html: blog.content }}
+              />
+            </div>
+
+            {blog.faq && blog.faq.length > 0 && (
+              <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-sm border border-gray-100 mt-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 bg-green-100 rounded-lg">
+                    <HelpCircle className="text-green-700" size={24} />
+                  </div>
+
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+                      Frequently Asked Questions
+                    </h2>
+
+                    <p className="text-gray-600 text-sm mt-1">
+                      Find answers to common questions about this topic
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  {blog.faq.map((faq, index) => (
+                    <div
+                      key={index}
+                      className="border border-gray-200 rounded-lg overflow-hidden hover:border-green-200 transition-colors"
+                    >
+                      <button
+                        onClick={() => toggleFaq(index)}
+                        className="w-full px-4 sm:px-5 py-4 text-left flex justify-between items-center bg-white hover:bg-gray-50 transition-colors"
+                      >
+                        <span className="font-semibold text-gray-800 pr-4">
+                          {faq.question}
+                        </span>
+
+                        {openFaqs.includes(index) ? (
+                          <ChevronUp
+                            size={20}
+                            className="text-green-700 flex-shrink-0"
+                          />
+                        ) : (
+                          <ChevronDown
+                            size={20}
+                            className="text-gray-400 flex-shrink-0"
+                          />
+                        )}
+                      </button>
+
+                      {openFaqs.includes(index) && (
+                        <div className="px-4 sm:px-5 pb-4 pt-2 bg-gray-50 border-t border-gray-100">
+                          <p className="text-gray-600 leading-relaxed">
+                            {faq.answer}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 mt-6">
+              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <Share2 size={16} />
+                Share this article
+              </h3>
+
+              <div className="flex flex-col sm:flex-row gap-2">
+                <button
+                  onClick={() => handleShare("facebook")}
+                  className="flex-1 bg-[#1877f2] text-white p-2.5 rounded-lg hover:bg-[#0c63d4] transition-colors flex items-center justify-center gap-2 text-sm"
+                >
+                  <Facebook size={16} />
+                  Facebook
+                </button>
+
+                <button
+                  onClick={() => handleShare("twitter")}
+                  className="flex-1 bg-[#1da1f2] text-white p-2.5 rounded-lg hover:bg-[#0d8bec] transition-colors flex items-center justify-center gap-2 text-sm"
+                >
+                  <Twitter size={16} />
+                  Twitter
+                </button>
+
+                <button
+                  onClick={() => handleShare("linkedin")}
+                  className="flex-1 bg-[#0077b5] text-white p-2.5 rounded-lg hover:bg-[#006396] transition-colors flex items-center justify-center gap-2 text-sm"
+                >
+                  <Linkedin size={16} />
+                  LinkedIn
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:w-1/3 w-full">
+            <div
+              ref={sidebarRef}
+              className="lg:sticky lg:top-24"
+              style={{
+                maxHeight: "calc(100vh - 8rem)",
+                overflowY: "auto",
+              }}
+            >
+              {relatedPosts.length > 0 && (
+                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <BookOpen size={18} />
+                    Related Articles
+                  </h3>
+
+                  <div className="space-y-4">
+                    {relatedPosts.map((relatedPost) => (
+                      <div
+                        key={relatedPost._id}
+                        onClick={() => handleRelatedPostClick(relatedPost)}
+                        className="group cursor-pointer bg-gray-50 rounded-lg overflow-hidden hover:shadow-md transition-all duration-300"
+                      >
+                        <div className="flex gap-3">
+                          {relatedPost.image && (
+                            <div className="w-20 h-20 flex-shrink-0 overflow-hidden">
+                              <img
+                                src={relatedPost.image}
+                                alt={relatedPost.title}
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                              />
+                            </div>
+                          )}
+
+                          <div className="flex-1 p-2 pr-3">
+                            {relatedPost.category && (
+                              <span className="text-[10px] font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded-full inline-block mb-1">
+                                {relatedPost.category}
+                              </span>
+                            )}
+
+                            <h4 className="text-sm font-bold text-gray-900 mb-1 line-clamp-2 group-hover:text-green-700 transition-colors">
+                              {relatedPost.title}
+                            </h4>
+
+                            <div className="flex items-center justify-between mt-1">
+                              <span className="text-[10px] text-gray-500">
+                                {new Date(relatedPost.date).toLocaleDateString()}
+                              </span>
+
+                              <div className="flex items-center gap-1 text-gray-400">
+                                <Eye size={10} />
+                                <span className="text-[10px]">
+                                  {relatedPost.views || 0}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-4 text-center">
+                    <Link
+                      to="/blog"
+                      className="text-sm text-green-700 hover:text-green-800 font-medium inline-flex items-center gap-1"
+                    >
+                      View All Articles
+                      <ChevronRight size={14} />
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-5 shadow-sm border border-green-100">
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  Subscribe to Newsletter
+                </h3>
+
+                <p className="text-sm text-gray-600 mb-3">
+                  Get the latest updates about mental wellness directly in your
+                  inbox.
+                </p>
+
+                <div className="flex gap-2">
+                  <input
+                    type="email"
+                    placeholder="Your email"
+                    className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 min-w-0"
+                  />
+
+                  <button className="bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-800 transition-colors whitespace-nowrap">
+                    Subscribe
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      <style>
-        {`
-          /* Main container styles */
-          .prose {
-            max-width: 100%;
-            color: #374151;
+      <style jsx>{`
+        .blog-content {
+          font-size: 1.125rem;
+          line-height: 1.75;
+          color: #374151;
+        }
+
+        .blog-content h1 {
+          font-size: 2.25rem;
+          font-weight: 700;
+          margin-top: 2rem;
+          margin-bottom: 1rem;
+          color: #111827;
+        }
+
+        .blog-content h2 {
+          font-size: 1.875rem;
+          font-weight: 600;
+          margin-top: 1.75rem;
+          margin-bottom: 0.875rem;
+          color: #111827;
+        }
+
+        .blog-content h3 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin-top: 1.5rem;
+          margin-bottom: 0.75rem;
+          color: #111827;
+        }
+
+        .blog-content p {
+          margin-bottom: 1.25rem;
+          line-height: 1.75;
+        }
+
+        .blog-content img {
+          display: block;
+          width: 100% !important;
+          max-width: 100% !important;
+          height: auto !important;
+          object-fit: contain;
+          border-radius: 0.75rem;
+          margin: 1rem auto !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-content ul,
+        .blog-content ol {
+          margin: 1rem 0;
+          padding-left: 2rem;
+        }
+
+        .blog-content li {
+          margin-bottom: 0.5rem;
+        }
+
+        .blog-content a {
+          color: #15803d;
+          text-decoration: underline;
+        }
+
+        .blog-content a:hover {
+          color: #166534;
+        }
+
+        .blog-content blockquote {
+          border-left: 4px solid #15803d;
+          background-color: #f3f4f6;
+          padding: 1rem 1.5rem;
+          margin: 1.5rem 0;
+          font-style: italic;
+          border-radius: 0.5rem;
+        }
+
+        .blog-content code {
+          background-color: #f3f4f6;
+          padding: 0.2rem 0.4rem;
+          border-radius: 0.375rem;
+          font-family: monospace;
+          font-size: 0.875rem;
+        }
+
+        .blog-content pre {
+          background-color: #1f2937;
+          color: #f3f4f6;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          overflow-x: auto;
+          margin: 1.5rem 0;
+        }
+
+        .blog-content table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 1.5rem 0;
+        }
+
+        .blog-content th,
+        .blog-content td {
+          border: 1px solid #e5e7eb;
+          padding: 0.75rem;
+          text-align: left;
+        }
+
+        .blog-content th {
+          background-color: #f3f4f6;
+          font-weight: 600;
+        }
+
+        .blog-content figure,
+        .blog-content iframe,
+        .blog-content video,
+        .blog-content table {
+          max-width: 100% !important;
+        }
+
+        .blog-content figure {
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+        }
+
+        .blog-content iframe,
+        .blog-content video {
+          width: 100% !important;
+        }
+
+        .blog-content * {
+          max-width: 100%;
+          box-sizing: border-box;
+        }
+
+        @media (max-width: 768px) {
+          .blog-content {
+            font-size: 1rem;
+            line-height: 1.6;
           }
 
-          /* Linked image styles */
-          .prose a.linked-image {
-            display: inline-block;
-            text-decoration: none;
-            border: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            z-index: 1;
-            margin: 1rem 0;
-          }
-          
-          .prose a.linked-image:hover {
-            transform: scale(1.02);
-            opacity: 0.95;
-          }
-          
-          .prose a.linked-image img {
-            transition: box-shadow 0.3s ease;
-            display: block;
-            margin: 0 auto;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-          }
-          
-          .prose a.linked-image:hover img {
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+          .blog-content h1 {
+            font-size: 1.75rem;
           }
 
-          /* 🚀 FORCE RESPONSIVE IMAGES (IMPORTANT FIX) */
-.prose img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+          .blog-content h2 {
+            font-size: 1.5rem;
+          }
 
-  max-width: 100% !important;
-  width: auto !important;
-  height: auto !important;
+          .blog-content h3 {
+            font-size: 1.25rem;
+          }
 
-  object-fit: contain;
- object-position: center !important;
-}
+          .blog-content img {
+            margin: 6px auto !important;
+          }
 
-/* Fix inline styles from editor */
-.prose img[style] {
-  max-width: 100% !important;
-  width: auto !important;   /* 🔥 CHANGE */
-  height: auto !important;
-}
+          .blog-content figure {
+            margin: 6px 0 !important;
+            padding: 0 !important;
+          }
 
-/* Prevent overflow */
-.prose {
-  overflow-x: hidden;
-}
+          .blog-content p {
+            margin-bottom: 10px !important;
+          }
 
-/* Mobile perfect centering */
-@media (max-width: 640px) {
-  .prose img {
-    display: block;
-    margin-left: auto !important;
-    margin-right: auto !important;
+          .blog-content p:empty,
+          .blog-content div:empty {
+            display: none !important;
+          }
 
-    max-width: 100% !important;
-    width: 100% !important;
-    height: auto !important;
-    object-fit: contain !important;        /* ← ADD THIS */
-    object-position: center !important;   /* ← ADD THIS */
-  }
-}
-          
-          /* Regular linked images without extra decoration */
-          .prose a.linked-image::after {
-            display: none;
+          .blog-content br + br {
+            display: none !important;
           }
-          
-          /* Regular image styles */
-          .prose img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-          }
-          
-          /* External link styles (for text links) */
-          .prose a.external-link:not(.linked-image) {
-            color: #059669;
-            text-decoration: none;
-            font-weight: 500;
-            position: relative;
-            padding-right: 0.25rem;
-          }
-          
-          .prose a.external-link:not(.linked-image):hover {
-            text-decoration: underline;
-            color: #047857;
-          }
-          
-          .prose a.external-link:not(.linked-image)::after {
-            content: "↗";
-            display: inline-block;
-            margin-left: 2px;
-            font-size: 0.75rem;
-            vertical-align: super;
-            line-height: 1;
-          }
-          
-          /* General link styles */
-          .prose a {
-            color: #059669;
-            transition: all 0.2s ease;
-          }
-          
-          .prose a:hover {
-            color: #047857;
-          }
-          
-          /* Remove any editor-specific classes */
-          .prose .selected-image {
-            border: none !important;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-          }
-          
-          /* Ensure images inside links don't have extra borders */
-          .prose a img {
-            border: none;
-            outline: none;
-          }
-          
-          /* Responsive images */
-          @media (max-width: 640px) {
-            .prose img {
-              max-width: 100%;
-              height: auto;
-            }
-            
-            .prose a.linked-image:hover {
-              transform: scale(1.01);
-            }
-          }
-          
-          /* Ensure linked images are clickable on mobile */
-          @media (max-width: 768px) {
-            .prose a.linked-image {
-              display: block;
-              text-align: center;
-            }
-          }
-        `}
-      </style>
+        }
+      `}</style>
     </>
   );
 }

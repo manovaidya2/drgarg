@@ -3,23 +3,26 @@ import Appointment from "../models/Appointment.js";
 /* CREATE APPOINTMENT */
 export const createAppointment = async (req, res) => {
   try {
-    const { name, phone, location, date, message } = req.body;
+    const { name, phone, email, concern, message } = req.body;
 
-    if (!name || !phone || !location || !date) {
-      return res.status(400).json({ message: "All required fields missing" });
+    if (!name || !phone) {
+      return res.status(400).json({
+        success: false,
+        message: "Name and phone are required",
+      });
     }
 
     const appointment = await Appointment.create({
       name,
       phone,
-      location,
-      date,
+      email,
+      concern,
       message,
     });
 
     res.status(201).json({
       success: true,
-      message: "Appointment booked successfully",
+      message: "Consultation request submitted successfully",
       appointment,
     });
   } catch (error) {

@@ -6,6 +6,13 @@ import DoctorTabs from "../Home/DoctorTabs";
 import HealthyMindSection from "../Home/HealthyMindSection";
 import Testimonials from "./Testimonials";
 import AboutSection from "../Home/AboutSection";
+import StatsSection from "../Home/StatsSection";
+import CoreProblemSection from "../Home/CoreProblemSection";
+import BigTruthSection from "../Home/BigTruthSection";
+import NeuroAyurvedaMethod from "../Home/NeuroAyurvedaMethod";
+import TrustSection from "../Home/TrustSection";
+import DomainExpertiseSection from "../Home/DomainExpertiseSection";
+import ClarityCTA from "../Home/ClarityCTA";
 
 function Homepage() {
   return (
@@ -59,10 +66,18 @@ function Homepage() {
       {/* PAGE CONTENT */}
       <div>
         <Hero />
-        <AboutSection />
+        <StatsSection />
+        <CoreProblemSection />
+        <BigTruthSection />
+        <NeuroAyurvedaMethod /> 
+        <TrustSection />
+        <DomainExpertiseSection />
+        <ClarityCTA />
+        
+        {/* <AboutSection />
         <DoctorTabs />
         <HealthyMindSection />
-        <Testimonials />
+        <Testimonials /> */}
       </div>
     </>
   );

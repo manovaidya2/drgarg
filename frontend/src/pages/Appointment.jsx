@@ -42,112 +42,196 @@ export default function Appointment() {
     }
   };
 
-  return (
-    <section className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100 flex items-center justify-center px-4 sm:px-6 py-8 sm:py-10">
-      <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+return (
+  <div className="bg-[#f6f4ef]">
 
-        {/* LEFT */}
-        <div className="flex flex-col justify-center text-center md:text-left">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#8b43ba] mb-4 md:mb-6">
-            Book Your Appointment
-          </h2>
+    {/* HERO */}
+    <section className="w-full border-b border-[#e6e0d6]">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10 py-10 sm:py-14">
 
-          <p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-6 md:mb-8">
-            Take the first step toward a healthier mind and body.
-          </p>
-
-          <div className="bg-white rounded-2xl shadow p-4 sm:p-6 space-y-3 sm:space-y-4 max-w-md mx-auto md:mx-0">
-            <div className="flex items-center gap-3 sm:gap-4 justify-center md:justify-start">
-              <Phone className="text-[#8b43ba]" />
-              <span className="text-gray-700 font-medium text-sm sm:text-base">
-                +91 7823838638
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3 sm:gap-4 justify-center md:justify-start">
-              <Calendar className="text-[#8b43ba]" />
-              <span className="text-gray-700 font-medium text-sm sm:text-base">
-                Mon – Sat | 11:00 AM – 7:00 PM
-              </span>
-            </div>
-          </div>
+        {/* BADGE */}
+        <div className="inline-flex items-center gap-2 rounded-full border border-[#cfd6d2] bg-white px-4 py-1.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#d8a63b]" />
+          <span className="text-[#0b3b2e] text-[11px] uppercase tracking-[0.25em]">
+            CONTACT
+          </span>
         </div>
 
-        {/* FORM */}
-        <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 md:p-10">
-          <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center md:text-left">
-            Appointment Details
+        {/* TITLE */}
+        <h1 className="mt-6 font-serif text-[#0b3b2e] text-[34px] sm:text-[44px] md:text-[52px] leading-[1.1]">
+          Book a Consultation
+        </h1>
+
+        {/* DESC */}
+        <p className="mt-4 max-w-[600px] text-[#4b5d57] text-[16px] leading-[1.7]">
+          Online and in-clinic consultations available. Begin with a structured Neuro-Ayurveda assessment.
+        </p>
+
+      </div>
+    </section>
+
+    {/* MAIN */}
+    <section className="py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-8">
+
+        {/* LEFT SIDE */}
+        <div className="space-y-6">
+
+          {/* CLINIC CARD */}
+          <div className="bg-[#fbfaf7] border border-[#e6e0d6] rounded-[10px] p-6">
+            <h3 className="font-serif text-[#0b3b2e] text-[18px] mb-4">
+              Manovaidya Clinic
+            </h3>
+
+            <div className="space-y-4 text-[#40514d] text-[14px]">
+
+              <p>
+                <strong>Address</strong><br />
+                Near Vinayak Hospital, Atta Market, Pocket E, Sector 27,<br />
+                Noida, Uttar Pradesh 201301
+              </p>
+
+              <p>
+                <strong>Phone</strong><br />
+                078238 38638
+              </p>
+
+              <p>
+                <strong>WhatsApp</strong><br />
+                Chat on WhatsApp
+              </p>
+
+              <p>
+                <strong>Email</strong><br />
+                hello@manovaidya.in
+              </p>
+
+              <p>
+                <strong>Clinic Hours</strong><br />
+                Mon–Sat · 10:00 AM – 7:00 PM
+              </p>
+
+            </div>
+          </div>
+
+          {/* MAP */}
+          <div className="rounded-[10px] overflow-hidden border border-[#e6e0d6]">
+            <iframe
+              title="map"
+              src="https://maps.google.com/maps?q=Noida&t=&z=13&ie=UTF8&iwloc=&output=embed"
+              className="w-full h-[220px]"
+            />
+          </div>
+
+        </div>
+
+        {/* RIGHT SIDE FORM */}
+        <div className="bg-[#fbfaf7] border border-[#e6e0d6] rounded-[10px] p-6 sm:p-8">
+
+          <h3 className="font-serif text-[#0b3b2e] text-[18px] mb-2">
+            Request a Consultation
           </h3>
 
-          {success && (
-            <p className="text-green-600 mb-4 text-sm sm:text-base">{success}</p>
-          )}
-          {error && (
-            <p className="text-red-600 mb-4 text-sm sm:text-base">{error}</p>
-          )}
+          <p className="text-[#6b7c76] text-[13px] mb-6">
+            Tell us a little about the concern. Our team will reach out with the next steps.
+          </p>
 
-          <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
-            {/* Name & Phone */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Full Name"
-                required
-                className="border rounded-xl px-4 py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-300"
-              />
-              <input
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="Phone Number"
-                required
-                className="border rounded-xl px-4 py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-300"
-              />
-            </div>
+         <form onSubmit={handleSubmit} className="space-y-4">
 
-            {/* Location & Date */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                placeholder="City"
-                required
-                className="border rounded-xl px-4 py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-300"
-              />
-              <input
-                type="date"
-                name="date"
-                value={formData.date}
-                onChange={handleChange}
-                required
-                className="border rounded-xl px-4 py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-300"
-              />
-            </div>
+  {/* NAME + PHONE */}
+  <div className="grid md:grid-cols-2 gap-4">
+    <div>
+      <label className="block text-[#0b3b2e] text-[12px] font-medium mb-1">
+        Full Name *
+      </label>
+      <input
+        name="name"
+        value={formData.name}
+        onChange={handleChange}
+        required
+        className="w-full border border-[#ddd8cd] bg-white rounded-[6px] px-4 py-3 text-sm"
+      />
+    </div>
 
-            {/* Message */}
-            <textarea
-              name="message"
-              rows="4"
-              value={formData.message}
-              onChange={handleChange}
-              placeholder="Describe your health issue"
-              className="border rounded-xl px-4 py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-300"
-            />
+    <div>
+      <label className="block text-[#0b3b2e] text-[12px] font-medium mb-1">
+        Phone *
+      </label>
+      <input
+        name="phone"
+        value={formData.phone}
+        onChange={handleChange}
+        required
+        className="w-full border border-[#ddd8cd] bg-white rounded-[6px] px-4 py-3 text-sm"
+      />
+    </div>
+  </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-[#8b43ba] text-white py-3 sm:py-4 rounded-xl text-sm sm:text-base disabled:opacity-60 transition"
-            >
-              {loading ? "Booking..." : "Confirm Appointment"}
-            </button>
-          </form>
+  {/* EMAIL + CONCERN */}
+  <div className="grid md:grid-cols-2 gap-4">
+    <div>
+      <label className="block text-[#0b3b2e] text-[12px] font-medium mb-1">
+        Email
+      </label>
+      <input
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        className="w-full border border-[#ddd8cd] bg-white rounded-[6px] px-4 py-3 text-sm"
+      />
+    </div>
+
+    <div>
+      <label className="block text-[#0b3b2e] text-[12px] font-medium mb-1">
+        Concern
+      </label>
+      <select
+        name="concern"
+        value={formData.concern}
+        onChange={handleChange}
+        className="w-full border border-[#ddd8cd] bg-white rounded-[6px] px-4 py-3 text-sm"
+      >
+        <option>Autism / ADHD</option>
+        <option>Adult Mental Health</option>
+        <option>Teenage Mental Health</option>
+      </select>
+    </div>
+  </div>
+
+  {/* FULL WIDTH MESSAGE */}
+  <div>
+    <label className="block text-[#0b3b2e] text-[12px] font-medium mb-1">
+      Brief Message
+    </label>
+    <textarea
+      name="message"
+      rows="4"
+      value={formData.message}
+      onChange={handleChange}
+      placeholder="Share what you'd like clarity on..."
+      className="w-full border border-[#ddd8cd] bg-white rounded-[6px] px-4 py-3 text-sm"
+    />
+  </div>
+
+  {/* BUTTON */}
+  <button
+    type="submit"
+    disabled={loading}
+    className="w-full bg-[#003f26] text-white py-3 rounded-full text-sm font-medium hover:opacity-90 transition"
+  >
+    {loading ? "Submitting..." : "Submit Request"}
+  </button>
+
+  <p className="text-[11px] text-[#6b7c76] text-center">
+    Online & in-clinic consultation available.
+  </p>
+
+</form>
         </div>
 
       </div>
     </section>
-  );
+
+  </div>
+);
 }
