@@ -192,10 +192,14 @@
 // }
 
 
+
+
+
 import { Link, NavLink } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { Menu, X, Phone, ChevronDown } from "lucide-react";
 import ConsultationPopup from "../components/ConsultationPopup";
+import logo from "../images/logo (2).png";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -252,21 +256,15 @@ export default function Header() {
       <header className="sticky top-0 z-[999] w-full border-b border-[#ece8df] bg-[#fffdf8]/95 backdrop-blur-md">
         <div className="w-full max-w-[1440px] mx-auto px-3 sm:px-4 lg:px-6 xl:px-8">
           <div className="flex items-center justify-between gap-2 py-2.5 sm:py-3">
-            <Link to="/" className="flex items-center gap-2 sm:gap-3 shrink min-w-0">
-              <div className="h-[44px] w-[45px] sm:h-[54px] sm:w-[56px] rounded-[5px] bg-[#002b18] grid place-items-center font-serif text-[21px] sm:text-[24px] shadow-sm border border-[#c7902f]/30 shrink-0">
-                <span className="text-[#d8a33d]">A</span>
-              </div>
+     <Link to="/" className="flex items-center gap-2 sm:gap-3 shrink min-w-0">
+  <img
+    src={logo}
+    alt="Dr Ankush Garg Logo"
+    className="h-[50px] w-auto sm:h-[54px] object-contain shrink-0"
+  />
 
-              <div className="leading-tight min-w-0">
-                <div className="font-serif text-[18px] sm:text-[22px] xl:text-[24px] text-[#002b18] tracking-tight truncate">
-                  Dr. Ankush Garg
-                </div>
-                <div className="mt-1 text-[8px] sm:text-[11px] xl:text-[12px] uppercase tracking-[0.2em] sm:tracking-[0.32em] text-[#c77700] font-medium truncate max-w-[210px] sm:max-w-none">
-                  Manovaidya · Neuro-Ayurveda
-                </div>
-              </div>
-            </Link>
-
+  
+</Link>
             <nav
               ref={menuRef}
               className="hidden xl:flex items-center gap-4 2xl:gap-6 text-[16px] 2xl:text-[18px] shrink-0"
