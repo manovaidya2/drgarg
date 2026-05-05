@@ -340,8 +340,7 @@ export default function Header() {
             <div className="hidden lg:flex items-center gap-3 shrink-0">
               <a
                 href="tel:07823838638"
-                className="hidden 2xl:inline-flex items-center gap-2 text-[14px] text-[#656b66] hover:text-[#002b18] whitespace-nowrap"
-              >
+className="hidden lg:inline-flex items-center gap-2 text-[14px] text-[#656b66] hover:text-[#002b18] whitespace-nowrap"              >
                 <Phone size={16} className="text-[#c77700]" />
                 078238 38638
               </a>
