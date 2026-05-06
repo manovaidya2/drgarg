@@ -139,57 +139,59 @@ import PhilosophyCTA from "../about/PhilosophyCTA";
 function About() {
   return (
     <>
-      <Helmet>
-        <title>
-          Dr. Ankush Garg | India’s No.1 Autism Doctor & Neuro-Ayurveda Specialist
-        </title>
+    <Helmet>
+  <title>
+    About Dr. Ankush Garg | Neuro-Ayurveda & Autism Specialist in India
+  </title>
 
-        <meta
-          name="description"
-          content="Dr. Ankush Garg is India’s leading Autism Doctor and Ayurvedic Neurologist. Founder of Manovaidya and developer of the Neuro-Ayurveda System, specializing in autism, ADHD, anxiety, OCD, and holistic brain health."
-        />
+  <meta
+    name="description"
+    content="Learn about Dr. Ankush Garg, founder of the Neuro-Ayurveda System and Manovaidya. Expert in Autism, ADHD, anxiety, OCD, gut-brain health, and holistic neurological care."
+  />
 
-        <meta
-          name="keywords"
-          content="Dr Ankush Garg, Autism Doctor India, ADHD treatment, Ayurvedic Neurologist, Neuro Ayurveda, Manovaidya, gut brain axis doctor, anxiety depression OCD treatment, autism specialist India"
-        />
+  <meta
+    name="keywords"
+    content="About Dr Ankush Garg, Neuro Ayurveda Doctor India, Autism Specialist India, ADHD Doctor, Ayurvedic Neurologist, Gut Brain Axis Expert, Manovaidya Founder, Holistic Brain Health"
+  />
 
-        <meta name="robots" content="index, follow" />
-        <meta name="author" content="Dr. Ankush Garg" />
-        <meta name="geo.region" content="IN" />
-        <meta name="geo.placename" content="India" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Dr. Ankush Garg" />
+  <meta name="geo.region" content="IN" />
+  <meta name="geo.placename" content="India" />
 
-        <link rel="canonical" href="https://drankushgarg.com/" />
+  <link rel="canonical" href="https://drankushgarg.com/about" />
 
-        <meta
-          property="og:title"
-          content="Dr. Ankush Garg | India’s No.1 Autism Doctor"
-        />
-        <meta
-          property="og:description"
-          content="Specialized Neuro-Ayurveda treatment for Autism, ADHD, Anxiety & Brain Health. Developed by Dr. Ankush Garg."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://drankushgarg.com/" />
-        <meta
-          property="og:image"
-          content="https://drankushgarg.com/og-image.jpg"
-        />
+  {/* Open Graph */}
+  <meta
+    property="og:title"
+    content="About Dr. Ankush Garg | Neuro-Ayurveda Specialist"
+  />
+  <meta
+    property="og:description"
+    content="Discover Dr. Ankush Garg’s journey, research, and Neuro-Ayurveda approach for Autism, ADHD, mental wellness, and brain health."
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://drankushgarg.com/about" />
+  <meta
+    property="og:image"
+    content="https://drankushgarg.com/og-image.jpg"
+  />
 
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content="Dr. Ankush Garg | Autism & Brain Health Specialist"
-        />
-        <meta
-          name="twitter:description"
-          content="India’s leading Autism Doctor using Neuro-Ayurveda system for brain, behaviour & gut health."
-        />
-        <meta
-          name="twitter:image"
-          content="https://drankushgarg.com/og-image.jpg"
-        />
-      </Helmet>
+  {/* Twitter */}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta
+    name="twitter:title"
+    content="About Dr. Ankush Garg | Autism & Brain Health Expert"
+  />
+  <meta
+    name="twitter:description"
+    content="Founder of the Neuro-Ayurveda System helping patients with Autism, ADHD, anxiety, OCD, and neurological conditions."
+  />
+  <meta
+    name="twitter:image"
+    content="https://drankushgarg.com/og-image.jpg"
+  />
+</Helmet>
 
       <div>
        <AboutDoctorIntro />
