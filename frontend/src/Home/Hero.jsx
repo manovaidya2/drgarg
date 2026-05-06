@@ -97,6 +97,15 @@
 
 
 
+
+
+
+
+
+
+
+
+
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -266,32 +275,53 @@ const patientNames = [
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[920px] mx-auto lg:mx-0">
               {/* Google Review Card */}
               <div className="flex items-center gap-4 rounded-[18px] border border-[#ded6c9] bg-white px-5 py-4 shadow-sm">
-                <div className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full bg-[#f3f1ea]">
-                  {/* <span className="text-[30px] font-bold text-[#4285F4]">
-                    G
-                  </span> */}
-                </div>
-
+               
                 <div>
                   <div className="flex items-center gap-3">
                     <h3 className="text-[30px] leading-none font-bold text-[#0b3322]">
                       4.9
                     </h3>
+<div className="flex items-center gap-[2px]">
+  {/* 4 Full Stars */}
+  {[1, 2, 3, 4].map((star) => (
+    <div key={star} className="relative w-[18px] h-[18px]">
+      <Star
+        size={18}
+        className="absolute inset-0 text-[#e4aa35]"
+        fill="#e4aa35"
+        strokeWidth={1.5}
+      />
+    </div>
+  ))}
 
-                    <div className="flex items-center gap-[1px] text-[#e4aa35]">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          size={18}
-                          strokeWidth={1.8}
-                          className="text-[#e4aa35]"
-                        />
-                      ))}
-                    </div>
-                  </div>
+  {/* 4.9 Star */}
+  <div className="relative w-[18px] h-[18px]">
+    
+    {/* Empty Star */}
+    <Star
+      size={18}
+      className="absolute inset-0 text-[#d6d6d6]"
+      fill="#d6d6d6"
+      strokeWidth={1.5}
+    />
+
+    {/* 90% Fill */}
+    <div
+      className="absolute left-0 top-0 h-full overflow-hidden"
+      style={{ width: "90%" }}
+    >
+      <Star
+        size={18}
+        className="text-[#e4aa35]"
+        fill="#e4aa35"
+        strokeWidth={1.5}
+      />
+    </div>
+  </div>
+</div>         </div>
 
                   <p className="mt-1 text-[15px] font-semibold text-[#0b3322]">
-                    1,000+ Reviews{" "}
+                    Ratings{" "}
                     <span className="font-normal text-[#5d625b]">· Live</span>
                   </p>
                 </div>
