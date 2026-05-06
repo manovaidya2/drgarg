@@ -229,7 +229,7 @@ export default function Header() {
         { to: "/media-coverage", label: "Media & Press", description: "Features & talks" },
       ],
     },
-    { to: "/blog", label: "Insights" },
+    { to: "/blog", label: "Blogs" },
     { to: "/appointment", label: "Contact" },
   ];
 
