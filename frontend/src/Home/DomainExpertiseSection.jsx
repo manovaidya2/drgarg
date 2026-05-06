@@ -21,7 +21,7 @@ const domains = [
   {
     title: "Senior Mental Health",
     desc: "Memory issues, sleep disorders, cognitive decline, anxiety, brain fog, age-related concerns.",
-    link: "/senior-mental-health",
+    link: "/seniour-mental-health",
   },
 ];
 
