@@ -1,5 +1,5 @@
 import React from "react";
-import doctorImg from "../images/White coat (3).webp";
+import doctorImg from "../images/White coat.webp";
 
 export default function DoctorAuthoritySection() {
   return (
