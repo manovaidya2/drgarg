@@ -6,6 +6,8 @@
 import blogRoutes from "./routes/blogRoutes.js";
 import caseStudyRoutes from "./routes/caseStudyRoutes.js";
 import appointmentRoutes from "./routes/appointmentRoutes.js";
+import sitemapRoute from "./routes/sitemap.js";
+
 
 
   const app = express();
@@ -31,6 +33,7 @@ import appointmentRoutes from "./routes/appointmentRoutes.js";
 app.use("/api/blogs", blogRoutes);
 app.use("/api/case-studies", caseStudyRoutes);
 app.use("/api/appointments", appointmentRoutes);
+app.use("/", sitemapRoute);
 
 
   app.get("/api/health", (req, res) => res.json({ status: "OK", mongodb: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected" }));

@@ -267,6 +267,36 @@ export default function BlogDetails() {
 
         <meta property="article:published_time" content={blog.date} />
         <meta property="article:author" content="Dr. Ankush Garg" />
+        <script type="application/ld+json">
+  {JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: blog.title,
+    description:
+      blog.metaDescription ||
+      blog.shortDescription ||
+      "Mental wellness and Ayurveda blog by Dr. Ankush Garg.",
+    image: blog.image ? [blog.image] : [],
+    author: {
+      "@type": "Person",
+      name: blog.author || "Dr. Ankush Garg",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Dr. Ankush Garg",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://drankushgarg.com/logo.png",
+      },
+    },
+    datePublished: blog.date,
+    dateModified: blog.updatedAt || blog.date,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://drankushgarg.com/blog/${slug}`,
+    },
+  })}
+</script>
       </Helmet>
 
       <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
