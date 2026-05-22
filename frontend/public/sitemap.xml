@@ -1,21 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
     <loc>https://drankushgarg.com/</loc>
+    <priority>1.00</priority>
   </url>
+
   <url>
     <loc>https://drankushgarg.com/about</loc>
+    <priority>0.90</priority>
   </url>
+
   <url>
     <loc>https://drankushgarg.com/blog</loc>
+    <priority>0.90</priority>
   </url>
+
   <url>
-    <loc>https://drankushgarg.com/media-coverage</loc>
+    <loc>https://drankushgarg.com/treatments</loc>
+    <priority>0.90</priority>
   </url>
-  <url>
-    <loc>https://drankushgarg.com/case-study</loc>
-  </url>
+
   <url>
     <loc>https://drankushgarg.com/appointment</loc>
+    <priority>0.95</priority>
   </url>
+
+  <url>
+    <loc>https://drankushgarg.com/mindwellness</loc>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://drankushgarg.com/case-study</loc>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://drankushgarg.com/media-coverage</loc>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://drankushgarg.com/neuro-ayurveda-system</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://drankushgarg.com/autism-adhd</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://drankushgarg.com/adult-mental-health</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://drankushgarg.com/teenage-mental-health</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://drankushgarg.com/seniour-mental-health</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://drankushgarg.com/testimonials</loc>
+    <priority>0.80</priority>
+  </url>
+
 </urlset>
