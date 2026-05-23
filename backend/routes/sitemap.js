@@ -3,9 +3,19 @@ import Blog from "../models/Blog.js";
 
 const router = express.Router();
 
+const SITE_URL = "https://drankushgarg.com";
+
+const escapeXml = (value = "") =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+
 router.get("/sitemap.xml", async (req, res) => {
   try {
-    const blogs = await Blog.find({}, "slug updatedAt");
+    const blogs = await Blog.find({}, "slug updatedAt createdAt");
 
     const staticPages = [
       "",
@@ -24,33 +34,35 @@ router.get("/sitemap.xml", async (req, res) => {
       "/testimonials",
     ];
 
-    let xml = `<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">`;
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+    xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
-    // Static pages
     staticPages.forEach((page) => {
       xml += `
-      <url>
-        <loc>https://drankushgarg.com${page}</loc>
-        <priority>0.9</priority>
-      </url>`;
+  <url>
+    <loc>${escapeXml(`${SITE_URL}${page}`)}</loc>
+    <priority>0.9</priority>
+  </url>`;
     });
 
-    // Dynamic blog pages
     blogs.forEach((blog) => {
+      if (!blog.slug) return;
+
+      const safeSlug = encodeURIComponent(blog.slug);
+      const lastmod = blog.updatedAt || blog.createdAt || new Date();
+
       xml += `
-      <url>
-        <loc>https://drankushgarg.com/blog/${blog.slug}</loc>
-        <lastmod>${blog.updatedAt.toISOString()}</lastmod>
-        <priority>0.8</priority>
-      </url>`;
+  <url>
+    <loc>${escapeXml(`${SITE_URL}/blog/${safeSlug}`)}</loc>
+    <lastmod>${new Date(lastmod).toISOString()}</lastmod>
+    <priority>0.8</priority>
+  </url>`;
     });
 
-    xml += `</urlset>`;
+    xml += `\n</urlset>`;
 
-    res.header("Content-Type", "application/xml");
+    res.set("Content-Type", "application/xml; charset=utf-8");
     res.send(xml);
-
   } catch (err) {
     console.log(err);
     res.status(500).send("Sitemap Error");
