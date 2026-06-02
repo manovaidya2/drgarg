@@ -23,6 +23,7 @@ import AutismADHDSection from "./autism/AutismADHDSection";
 import Adult from "./pages/Adult";
 import Teenage from "./pages/Teenage";
 import Seniour from "./pages/Seniour";
+import NotFound from "./pages/NotFound";
 
 import TestimonialsPage from "./pages/TestimonialsPage";
 
@@ -59,6 +60,7 @@ export default function App() {
           <Route path="/teenage-mental-health" element={<Teenage />} />
           <Route path="/seniour-mental-health" element={<Seniour />} />
           <Route path="/testimonials" element={<TestimonialsPage />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />
