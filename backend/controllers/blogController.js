@@ -1,4 +1,3 @@
-
 // controllers/blogController.js
 import Blog from "../models/Blog.js";
 import mongoose from "mongoose";
@@ -6,7 +5,14 @@ import mongoose from "mongoose";
 // CREATE
 export const createBlog = async (req, res) => {
   try {
-    const blog = new Blog(req.body);
+    const blogData = {
+      ...req.body,
+      // Ensure meta fields are properly set
+      publishedDate: req.body.publishedDate || req.body.date || new Date(),
+      modifiedDate: new Date()
+    };
+    
+    const blog = new Blog(blogData);
     await blog.save();
     res.status(201).json({ success: true, blog });
   } catch (error) {
@@ -19,7 +25,7 @@ export const createBlog = async (req, res) => {
 export const getBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find({})
-      .select("title slug category date image shortDescription createdAt")
+      .select("title slug category date image shortDescription createdAt metaTitle metaDescription")
       .sort({ createdAt: -1 })
       .lean();
 
@@ -43,6 +49,8 @@ export const getBlogBySlug = async (req, res) => {
       // If it's a valid ID, try to find by ID first
       const blogById = await Blog.findById(slug);
       if (blogById) {
+        // Increment view count
+        await Blog.findByIdAndUpdate(slug, { $inc: { views: 1 } });
         return res.json(blogById);
       }
     }
@@ -52,6 +60,10 @@ export const getBlogBySlug = async (req, res) => {
     if (!blog) {
       return res.status(404).json({ message: "Blog not found" });
     }
+    
+    // Increment view count
+    await Blog.findOneAndUpdate({ slug: slug }, { $inc: { views: 1 } });
+    
     res.json(blog);
   } catch (error) {
     console.error(error);
@@ -69,9 +81,14 @@ export const updateBlog = async (req, res) => {
       return res.status(400).json({ message: "Invalid blog ID format" });
     }
     
+    const updateData = {
+      ...req.body,
+      modifiedDate: new Date() // Always update modified date
+    };
+    
     const blog = await Blog.findByIdAndUpdate(
       id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     );
     
@@ -106,5 +123,16 @@ export const deleteBlog = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+// Add view tracking endpoint
+export const incrementViews = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Blog.findByIdAndUpdate(id, { $inc: { views: 1 } });
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false });
   }
 };

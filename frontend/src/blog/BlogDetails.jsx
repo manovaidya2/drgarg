@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+// BlogDetails.jsx - Complete SEO-optimized blog details page
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import axiosInstance from "../api/axiosInstance";
@@ -16,6 +17,16 @@ import {
   HelpCircle,
   ChevronDown,
   ChevronUp,
+  Clock,
+  User,
+  Tag,
+  Copy,
+  Check,
+  MessageCircle,
+  Award,
+  TrendingUp,
+  Printer,
+  Download
 } from "lucide-react";
 
 export default function BlogDetails() {
@@ -28,17 +39,39 @@ export default function BlogDetails() {
   const [relatedPosts, setRelatedPosts] = useState([]);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [openFaqs, setOpenFaqs] = useState([]);
+  const [copied, setCopied] = useState(false);
+  const [readingTime, setReadingTime] = useState(0);
+  const [tableOfContents, setTableOfContents] = useState([]);
 
   const sidebarRef = useRef(null);
   const mainContentRef = useRef(null);
+  const contentRef = useRef(null);
 
-  const toggleFaq = (index) => {
-    setOpenFaqs((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
-    );
+  // Calculate reading time
+  const calculateReadingTime = (content) => {
+    const wordsPerMinute = 200;
+    const text = content?.replace(/<[^>]*>/g, '') || '';
+    const words = text.trim().split(/\s+/).length;
+    const minutes = Math.max(1, Math.ceil(words / wordsPerMinute));
+    return minutes;
   };
 
-  const parseHtmlContent = (htmlContent) => {
+  // Generate table of contents from headings
+  const generateTableOfContents = (htmlContent) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlContent;
+    const headings = tempDiv.querySelectorAll('h2, h3');
+    const toc = Array.from(headings).map((heading, index) => ({
+      id: `heading-${index}`,
+      text: heading.textContent,
+      level: heading.tagName.toLowerCase(),
+      top: 0
+    }));
+    return toc;
+  };
+
+  // Parse and clean HTML content
+  const parseHtmlContent = useCallback((htmlContent) => {
     if (!htmlContent) return "";
 
     try {
@@ -49,13 +82,10 @@ export default function BlogDetails() {
         .replace(/&#39;/g, "'")
         .replace(/&amp;/g, "&")
         .replace(/[\u0000-\u001F\u007F-\u009F]/g, "")
-
         .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
         .replace(/on\w+="[^"]*"/g, "")
         .replace(/on\w+='[^']*'/g, "")
         .replace(/javascript:/gi, "")
-
-        // ✅ mobile image bottom gap fix
         .replace(/<p>\s*<\/p>/gi, "")
         .replace(/<div>\s*<\/div>/gi, "")
         .replace(/(<br\s*\/?>\s*){2,}/gi, "<br/>")
@@ -64,32 +94,52 @@ export default function BlogDetails() {
         .replace(/<\/figure>\s*(<p>\s*<\/p>|<br\s*\/?>|\s)*/gi, "</figure>")
         .trim();
 
+      // Add IDs to headings for table of contents
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = cleanedContent;
+      const headings = tempDiv.querySelectorAll('h2, h3');
+      headings.forEach((heading, index) => {
+        heading.id = `heading-${index}`;
+        heading.setAttribute('data-toc', 'true');
+      });
+      cleanedContent = tempDiv.innerHTML;
+
       return cleanedContent;
     } catch (error) {
       console.error("Error parsing HTML content:", error);
       return "<p>Error loading content</p>";
     }
-  };
+  }, []);
 
+  // Fetch blog data
   useEffect(() => {
     const fetchBlog = async () => {
       try {
         setLoading(true);
-
         const res = await axiosInstance.get(`/blogs/${slug}`);
-        const parsedHtml = parseHtmlContent(res.data.content);
+        const blogData = res.data;
+        
+        // Calculate reading time
+        const time = calculateReadingTime(blogData.content);
+        setReadingTime(time);
+        
+        // Parse content
+        const parsedHtml = parseHtmlContent(blogData.content);
+        setBlog({ ...blogData, content: parsedHtml });
+        
+        // Generate table of contents
+        const toc = generateTableOfContents(blogData.content);
+        setTableOfContents(toc);
 
-        setBlog({ ...res.data, content: parsedHtml });
-
-        if (res.data?.category) {
+        // Fetch related posts
+        if (blogData?.category) {
           try {
             const allBlogsRes = await axiosInstance.get(`/blogs`);
             const related = allBlogsRes.data
               .filter(
-                (post) => post.category === res.data.category && post.slug !== slug
+                (post) => post.category === blogData.category && post.slug !== slug
               )
               .slice(0, 4);
-
             setRelatedPosts(related);
           } catch (error) {
             console.error("Error fetching related posts:", error);
@@ -103,8 +153,73 @@ export default function BlogDetails() {
     };
 
     fetchBlog();
-  }, [slug]);
+  }, [slug, parseHtmlContent]);
 
+  // Update meta tags and document head
+  useEffect(() => {
+    if (blog) {
+      // Update document title with SEO meta title
+      document.title = `${blog.metaTitle || blog.title} | Dr. Ankush Garg`;
+      
+      // Update meta description
+      let metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.setAttribute('content', blog.metaDescription || blog.shortDescription);
+      }
+      
+      // Update meta keywords
+      if (blog.metaKeywords) {
+        let metaKeywords = document.querySelector('meta[name="keywords"]');
+        if (!metaKeywords) {
+          metaKeywords = document.createElement('meta');
+          metaKeywords.setAttribute('name', 'keywords');
+          document.head.appendChild(metaKeywords);
+        }
+        metaKeywords.setAttribute('content', blog.metaKeywords);
+      }
+      
+      // Update canonical URL
+      if (blog.canonicalUrl) {
+        let canonicalLink = document.querySelector('link[rel="canonical"]');
+        if (!canonicalLink) {
+          canonicalLink = document.createElement('link');
+          canonicalLink.setAttribute('rel', 'canonical');
+          document.head.appendChild(canonicalLink);
+        }
+        canonicalLink.setAttribute('href', blog.canonicalUrl);
+      }
+      
+      // Update Open Graph tags
+      const updateMetaTag = (attribute, name, content) => {
+        if (!content) return;
+        let meta = document.querySelector(`meta[${attribute}="${name}"]`);
+        if (!meta) {
+          meta = document.createElement('meta');
+          meta.setAttribute(attribute, name);
+          document.head.appendChild(meta);
+        }
+        meta.setAttribute('content', content);
+      };
+      
+      updateMetaTag('property', 'og:title', blog.ogTitle || blog.metaTitle || blog.title);
+      updateMetaTag('property', 'og:description', blog.ogDescription || blog.metaDescription || blog.shortDescription);
+      updateMetaTag('property', 'og:image', blog.ogImage || blog.image);
+      updateMetaTag('property', 'og:url', `https://drankushgarg.com/blog/${blog.slug}`);
+      updateMetaTag('property', 'og:type', 'article');
+      
+      updateMetaTag('name', 'twitter:title', blog.twitterTitle || blog.metaTitle || blog.title);
+      updateMetaTag('name', 'twitter:description', blog.twitterDescription || blog.metaDescription || blog.shortDescription);
+      updateMetaTag('name', 'twitter:image', blog.twitterImage || blog.image);
+      
+      // Update robots meta
+      let robotsContent = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
+      if (blog.noIndex) robotsContent = `noindex, ${robotsContent}`;
+      if (blog.noFollow) robotsContent = robotsContent.replace('follow', 'nofollow');
+      updateMetaTag('name', 'robots', robotsContent);
+    }
+  }, [blog]);
+
+  // Scroll progress tracking
   useEffect(() => {
     const handleScroll = () => {
       const windowHeight = window.innerHeight;
@@ -118,6 +233,12 @@ export default function BlogDetails() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const toggleFaq = (index) => {
+    setOpenFaqs((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
+  };
+
   const handleLike = async () => {
     if (!blog) return;
 
@@ -129,7 +250,6 @@ export default function BlogDetails() {
         await axiosInstance.delete(`/blogs/${blog._id}/like`);
         setBlog({ ...blog, likes: (blog.likes || 0) - 1 });
       }
-
       setLiked(!liked);
     } catch (error) {
       console.error("Error updating like:", error);
@@ -144,29 +264,27 @@ export default function BlogDetails() {
 
     switch (platform) {
       case "facebook":
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-          url
-        )}`;
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
         break;
-
       case "twitter":
-        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-          title
-        )}&url=${encodeURIComponent(url)}`;
+        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
         break;
-
       case "linkedin":
-        shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
-          url
-        )}&title=${encodeURIComponent(title)}`;
+        shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`;
         break;
-
+      case "whatsapp":
+        shareUrl = `https://wa.me/?text=${encodeURIComponent(`${title} - ${url}`)}`;
+        break;
+      case "email":
+        shareUrl = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(`Check out this article: ${url}`)}`;
+        break;
       default:
         if (navigator.share) {
           await navigator.share({ title, url });
         } else {
           navigator.clipboard.writeText(url);
-          alert("Link copied to clipboard!");
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
         }
     }
 
@@ -175,251 +293,380 @@ export default function BlogDetails() {
     }
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const scrollToHeading = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const handleRelatedPostClick = (relatedPost) => {
     navigate(`/blog/${relatedPost.slug}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Generate FAQ Schema
+  const generateFAQSchema = () => {
+    if (!blog?.faq || blog.faq.length === 0) return null;
+    
+    return {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": blog.faq.map(item => ({
+        "@type": "Question",
+        "name": item.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.answer
+        }
+      }))
+    };
+  };
+
+  // Generate BlogPosting Schema
+  const generateBlogPostingSchema = () => {
+    if (!blog) return null;
+    
+    return {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": blog.metaTitle || blog.title,
+      "description": blog.metaDescription || blog.shortDescription,
+      "image": blog.ogImage || blog.image ? [blog.ogImage || blog.image] : [],
+      "datePublished": blog.publishedDate || blog.date,
+      "dateModified": blog.modifiedDate || blog.updatedAt || blog.date,
+      "author": {
+        "@type": "Person",
+        "name": "Dr. Ankush Garg",
+        "url": "https://drankushgarg.com/about",
+        "sameAs": [
+          "https://twitter.com/drankushgarg",
+          "https://linkedin.com/in/drankushgarg"
+        ]
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Dr. Ankush Garg",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://drankushgarg.com/logo.png"
+        },
+        "sameAs": [
+          "https://www.facebook.com/drankushgarg",
+          "https://www.instagram.com/drankushgarg",
+          "https://www.youtube.com/c/drankushgarg"
+        ]
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": blog.canonicalUrl || `https://drankushgarg.com/blog/${slug}`
+      },
+      "keywords": blog.metaKeywords,
+      "articleSection": blog.category,
+      "inLanguage": "en-US",
+      "wordCount": blog.content?.length || 0,
+      "isAccessibleForFree": true,
+      "readingTime": `${readingTime} minutes`
+    };
+  };
+
+  // Generate Breadcrumb Schema
+  const generateBreadcrumbSchema = () => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://drankushgarg.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://drankushgarg.com/blog"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": blog?.title || "Article",
+          "item": `https://drankushgarg.com/blog/${slug}`
+        }
+      ]
+    };
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-green-700 border-t-transparent"></div>
-          <p className="mt-4 text-gray-600 font-medium">
-            Loading amazing content...
-          </p>
+      <>
+        <Helmet>
+          <title>Loading Article | Dr. Ankush Garg</title>
+          <meta name="robots" content="noindex, follow" />
+        </Helmet>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-green-700 border-t-transparent"></div>
+            <p className="mt-4 text-gray-600 font-medium">Loading expert insights...</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   if (!blog) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-        <div className="text-center bg-white rounded-2xl shadow-xl p-8 max-w-md mx-4">
-          <div className="text-6xl mb-4">🔍</div>
-
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            Blog Not Found
-          </h2>
-
-          <p className="text-gray-600 mb-6">
-            The article you're looking for doesn't exist or has been moved.
-          </p>
-
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-2 bg-green-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-800 transition-all duration-300"
-          >
-            <ArrowLeft size={18} />
-            Explore Other Blogs
-          </Link>
+      <>
+        <Helmet>
+          <title>Article Not Found | Dr. Ankush Garg</title>
+          <meta name="robots" content="noindex, follow" />
+        </Helmet>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+          <div className="text-center bg-white rounded-2xl shadow-xl p-8 max-w-md mx-4">
+            <div className="text-6xl mb-4">🔍</div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Article Not Found</h2>
+            <p className="text-gray-600 mb-6">The article you're looking for doesn't exist or has been moved.</p>
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-2 bg-green-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-800 transition-all duration-300"
+            >
+              <ArrowLeft size={18} />
+              Explore Other Articles
+            </Link>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
     <>
       <Helmet>
-        <title>{blog.title} | Dr. Ankush Garg</title>
-
-        <meta
-          name="description"
-          content={
-            blog.metaDescription ||
-            blog.shortDescription ||
-            "Read expert insights on mental wellness, Ayurveda, and holistic mind care by Dr. Ankush Garg."
-          }
-        />
-
-        <meta
-          name="keywords"
-          content={`Dr Ankush Garg, mental wellness, Ayurveda, ${
-            blog.category || "mental health blog"
-          }`}
-        />
-
-        <link rel="canonical" href={`https://drankushgarg.com/blog/${slug}`} />
-
-        <meta property="og:title" content={blog.title} />
-        <meta
-          property="og:description"
-          content={
-            blog.shortDescription ||
-            "Expert Ayurvedic insights on mental wellness by Dr. Ankush Garg."
-          }
-        />
+        {/* Primary Meta Tags */}
+        <title>{blog.metaTitle || blog.title} | Dr. Ankush Garg</title>
+        <meta name="description" content={blog.metaDescription || blog.shortDescription} />
+        {blog.metaKeywords && <meta name="keywords" content={blog.metaKeywords} />}
+        <meta name="author" content="Dr. Ankush Garg" />
+        
+        {/* Canonical URL */}
+        <link rel="canonical" href={blog.canonicalUrl || `https://drankushgarg.com/blog/${slug}`} />
+        
+        {/* Open Graph / Facebook */}
         <meta property="og:type" content="article" />
         <meta property="og:url" content={`https://drankushgarg.com/blog/${slug}`} />
-        <meta property="og:image" content={blog.image} />
-
+        <meta property="og:title" content={blog.ogTitle || blog.metaTitle || blog.title} />
+        <meta property="og:description" content={blog.ogDescription || blog.metaDescription || blog.shortDescription} />
+        <meta property="og:image" content={blog.ogImage || blog.image} />
+        <meta property="og:site_name" content="Dr. Ankush Garg" />
+        
+        {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={blog.title} />
-        <meta
-          name="twitter:description"
-          content={
-            blog.shortDescription ||
-            "Read this mental wellness article by Dr. Ankush Garg."
-          }
-        />
-        <meta name="twitter:image" content={blog.image} />
-
-        <meta property="article:published_time" content={blog.date} />
+        <meta name="twitter:url" content={`https://drankushgarg.com/blog/${slug}`} />
+        <meta name="twitter:title" content={blog.twitterTitle || blog.metaTitle || blog.title} />
+        <meta name="twitter:description" content={blog.twitterDescription || blog.metaDescription || blog.shortDescription} />
+        <meta name="twitter:image" content={blog.twitterImage || blog.image} />
+        
+        {/* Article Specific Meta Tags */}
+        <meta property="article:published_time" content={blog.publishedDate || blog.date} />
+        <meta property="article:modified_time" content={blog.modifiedDate || blog.updatedAt || blog.date} />
         <meta property="article:author" content="Dr. Ankush Garg" />
+        {blog.category && <meta property="article:section" content={blog.category} />}
+        
+        {/* Robots Meta */}
+        <meta name="robots" content={blog.noIndex || blog.noFollow ? 
+          `${blog.noIndex ? 'noindex' : 'index'}, ${blog.noFollow ? 'nofollow' : 'follow'}` : 
+          'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'} />
+        
+        {/* Structured Data */}
         <script type="application/ld+json">
-  {JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: blog.title,
-    description:
-      blog.metaDescription ||
-      blog.shortDescription ||
-      "Mental wellness and Ayurveda blog by Dr. Ankush Garg.",
-    image: blog.image ? [blog.image] : [],
-    author: {
-      "@type": "Person",
-      name: blog.author || "Dr. Ankush Garg",
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Dr. Ankush Garg",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://drankushgarg.com/logo.png",
-      },
-    },
-    datePublished: blog.date,
-    dateModified: blog.updatedAt || blog.date,
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `https://drankushgarg.com/blog/${slug}`,
-    },
-  })}
-</script>
+          {JSON.stringify(generateBlogPostingSchema())}
+        </script>
+        {blog.faq && blog.faq.length > 0 && (
+          <script type="application/ld+json">
+            {JSON.stringify(generateFAQSchema())}
+          </script>
+        )}
+        <script type="application/ld+json">
+          {JSON.stringify(generateBreadcrumbSchema())}
+        </script>
       </Helmet>
 
+      {/* Scroll Progress Bar */}
       <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
         <div
-          className="h-full bg-green-700 transition-all duration-300"
+          className="h-full bg-gradient-to-r from-green-600 to-emerald-600 transition-all duration-300"
           style={{ width: `${scrollProgress}%` }}
-        ></div>
+        />
       </div>
 
-      <div className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40">
+      {/* Sticky Header */}
+      <div className="bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-3">
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-green-700 transition-colors group"
-          >
-            <ArrowLeft
-              size={18}
-              className="group-hover:-translate-x-1 transition-transform"
-            />
-            <span>Back to Blog</span>
-          </Link>
-        </div>
-      </div>
-
-      <div className="relative h-[280px] sm:h-[380px] md:h-[500px] overflow-hidden bg-gray-500">
-        <div className="absolute inset-0">
-          {blog.image && (
-            <img
-              src={blog.image}
-              alt={blog.title}
-              className="w-full h-full object-cover opacity-60"
-            />
-          )}
-
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
-        </div>
-
-        <div className="relative h-full flex items-end max-w-7xl mx-auto px-4 pb-8 sm:pb-12">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-3 mb-3 flex-wrap">
-              <span className="bg-green-700 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                {blog.category || "Mental Wellness"}
-              </span>
-
-              <span className="text-white/80 text-xs flex items-center gap-1">
-                <Eye size={14} /> {blog.views || "0"} views
-              </span>
-
-              <span className="text-white/80 text-xs flex items-center gap-1">
-                <Heart size={14} /> {blog.likes || "0"} likes
-              </span>
-            </div>
-
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 leading-tight">
-              {blog.title}
-            </h1>
-
-            <p className="text-white/80 mt-2 line-clamp-3 leading-relaxed text-sm sm:text-base">
-              {blog.shortDescription}
-            </p>
+          <div className="flex items-center justify-between">
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-2 text-gray-600 hover:text-green-700 transition-colors group"
+            >
+              <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+              <span>Back to Blog</span>
+            </Link>
+            <button
+              onClick={handlePrint}
+              className="inline-flex items-center gap-2 text-gray-600 hover:text-green-700 transition-colors"
+            >
+              <Printer size={18} />
+              <span className="hidden sm:inline">Print</span>
+            </button>
           </div>
         </div>
       </div>
 
+      {/* Hero Section */}
+      <div className="relative h-[280px] sm:h-[380px] md:h-[500px] overflow-hidden bg-gray-800">
+        <div className="absolute inset-0">
+          {blog.image && (
+            <img
+              src={blog.image}
+              alt={blog.metaTitle || blog.title}
+              className="w-full h-full object-cover opacity-60"
+              loading="eager"
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+        </div>
+
+        <div className="relative h-full flex items-end max-w-7xl mx-auto px-4 pb-8 sm:pb-12">
+          <div className="max-w-3xl">
+            {/* Category and Meta Info */}
+            <div className="flex items-center gap-3 mb-3 flex-wrap">
+              {blog.category && (
+                <span className="bg-green-700 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  {blog.category}
+                </span>
+              )}
+              <span className="text-white/80 text-xs flex items-center gap-1">
+                <Eye size={14} /> {blog.views || 0} views
+              </span>
+              <span className="text-white/80 text-xs flex items-center gap-1">
+                <Heart size={14} /> {blog.likes || 0} likes
+              </span>
+              <span className="text-white/80 text-xs flex items-center gap-1">
+                <Clock size={14} /> {readingTime} min read
+              </span>
+            </div>
+
+            {/* Title */}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 leading-tight">
+              {blog.title}
+            </h1>
+
+            {/* Short Description */}
+            <p className="text-white/80 mt-2 line-clamp-3 leading-relaxed text-sm sm:text-base">
+              {blog.shortDescription}
+            </p>
+
+            {/* Author and Date */}
+            <div className="flex items-center gap-4 mt-4 text-white/70 text-sm">
+              <div className="flex items-center gap-2">
+                <User size={14} />
+                <span>Dr. Ankush Garg</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar size={14} />
+                <span>{new Date(blog.date).toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-6 md:py-12">
-        <div
-          className="flex flex-col lg:flex-row gap-8 relative"
-          ref={mainContentRef}
-        >
-          <div className="lg:w-2/3 w-full min-w-0">
+        <div className="flex flex-col lg:flex-row gap-8 relative">
+          {/* Left Sidebar - Table of Contents */}
+          {tableOfContents.length > 0 && (
+            <div className="lg:w-1/4 hidden lg:block">
+              <div className="sticky top-24 bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <BookOpen size={18} />
+                  Table of Contents
+                </h3>
+                <nav className="space-y-2">
+                  {tableOfContents.map((item, index) => (
+                    <button
+                      key={index}
+                      onClick={() => scrollToHeading(item.id)}
+                      className={`block text-left text-sm ${
+                        item.level === 'h2' ? 'pl-0 font-medium' : 'pl-4 text-gray-600'
+                      } hover:text-green-700 transition-colors w-full`}
+                    >
+                      {item.text}
+                    </button>
+                  ))}
+                </nav>
+              </div>
+            </div>
+          )}
+
+          {/* Main Article Content */}
+          <div className="lg:w-2/3 w-full min-w-0" ref={mainContentRef}>
+            {/* Author Bio */}
             <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 sm:p-5 shadow-sm border border-green-100 mb-5 sm:mb-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-md">
-                  {blog.author?.charAt(0) || "A"}
+                  A
                 </div>
-
                 <div>
-                  <h3 className="font-semibold text-gray-900">
-                    About the Author
-                  </h3>
-
-                  <p className="text-sm font-medium text-green-700">
-                    {blog.author || "Dr. Ankush Garg"}
-                  </p>
+                  <h3 className="font-semibold text-gray-900">About the Author</h3>
+                  <p className="text-sm font-medium text-green-700">Dr. Ankush Garg</p>
                 </div>
               </div>
-
               <p className="text-sm text-gray-600 mb-3">
-                Expert in {blog.category || "mental wellness"} with 9+ years of
-                experience helping individuals achieve better mental health and
-                holistic well-being.
+                Dr. Ankush Garg is India's No.1 autism doctor, leading Ayurvedic neurologist, 
+                and founder of Manovaidya. With over 9+ years of experience, he has helped 
+                thousands of patients achieve better mental health through his Neuro-Ayurveda System.
               </p>
-
               <div className="flex gap-2 pt-2 border-t border-green-100">
                 <span className="text-xs text-gray-500 flex items-center gap-1">
-                  <Calendar size={12} /> Joined 2020
+                  <Award size={12} /> Expert in Neuro-Ayurveda
                 </span>
-
                 <span className="text-xs text-gray-500 flex items-center gap-1">
-                  <BookOpen size={12} /> Expert Guide
+                  <TrendingUp size={12} /> 9+ Years Experience
                 </span>
               </div>
             </div>
 
-            <div className="bg-white rounded-xl p-2 sm:p-6 md:p-8 shadow-sm border border-gray-100 overflow-hidden">
+            {/* Article Body */}
+            <div 
+              ref={contentRef}
+              className="bg-white rounded-xl p-2 sm:p-6 md:p-8 shadow-sm border border-gray-100 overflow-hidden"
+            >
               <div
                 className="blog-content prose max-w-none w-full overflow-hidden break-words"
                 dangerouslySetInnerHTML={{ __html: blog.content }}
               />
             </div>
 
+            {/* FAQ Section */}
             {blog.faq && blog.faq.length > 0 && (
               <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-sm border border-gray-100 mt-6">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 bg-green-100 rounded-lg">
                     <HelpCircle className="text-green-700" size={24} />
                   </div>
-
                   <div>
                     <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                       Frequently Asked Questions
                     </h2>
-
                     <p className="text-gray-600 text-sm mt-1">
                       Find answers to common questions about this topic
                     </p>
@@ -439,25 +686,15 @@ export default function BlogDetails() {
                         <span className="font-semibold text-gray-800 pr-4">
                           {faq.question}
                         </span>
-
                         {openFaqs.includes(index) ? (
-                          <ChevronUp
-                            size={20}
-                            className="text-green-700 flex-shrink-0"
-                          />
+                          <ChevronUp size={20} className="text-green-700 flex-shrink-0" />
                         ) : (
-                          <ChevronDown
-                            size={20}
-                            className="text-gray-400 flex-shrink-0"
-                          />
+                          <ChevronDown size={20} className="text-gray-400 flex-shrink-0" />
                         )}
                       </button>
-
                       {openFaqs.includes(index) && (
                         <div className="px-4 sm:px-5 pb-4 pt-2 bg-gray-50 border-t border-gray-100">
-                          <p className="text-gray-600 leading-relaxed">
-                            {faq.answer}
-                          </p>
+                          <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
                         </div>
                       )}
                     </div>
@@ -466,56 +703,82 @@ export default function BlogDetails() {
               </div>
             )}
 
+            {/* Engagement Section */}
             <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 mt-6">
-              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <Share2 size={16} />
-                Share this article
-              </h3>
-
-              <div className="flex flex-col sm:flex-row gap-2">
-                <button
-                  onClick={() => handleShare("facebook")}
-                  className="flex-1 bg-[#1877f2] text-white p-2.5 rounded-lg hover:bg-[#0c63d4] transition-colors flex items-center justify-center gap-2 text-sm"
-                >
-                  <Facebook size={16} />
-                  Facebook
-                </button>
-
-                <button
-                  onClick={() => handleShare("twitter")}
-                  className="flex-1 bg-[#1da1f2] text-white p-2.5 rounded-lg hover:bg-[#0d8bec] transition-colors flex items-center justify-center gap-2 text-sm"
-                >
-                  <Twitter size={16} />
-                  Twitter
-                </button>
-
-                <button
-                  onClick={() => handleShare("linkedin")}
-                  className="flex-1 bg-[#0077b5] text-white p-2.5 rounded-lg hover:bg-[#006396] transition-colors flex items-center justify-center gap-2 text-sm"
-                >
-                  <Linkedin size={16} />
-                  LinkedIn
-                </button>
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={handleLike}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                      liked 
+                        ? 'bg-red-50 text-red-600 border border-red-200' 
+                        : 'bg-gray-50 text-gray-600 border border-gray-200 hover:bg-red-50 hover:text-red-600'
+                    }`}
+                  >
+                    <Heart size={18} fill={liked ? 'currentColor' : 'none'} />
+                    <span>{blog.likes || 0} Likes</span>
+                  </button>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-500">Share:</span>
+                  <button
+                    onClick={() => handleShare("facebook")}
+                    className="p-2 bg-[#1877f2] text-white rounded-lg hover:bg-[#0c63d4] transition-colors"
+                  >
+                    <Facebook size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleShare("twitter")}
+                    className="p-2 bg-[#1da1f2] text-white rounded-lg hover:bg-[#0d8bec] transition-colors"
+                  >
+                    <Twitter size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleShare("linkedin")}
+                    className="p-2 bg-[#0077b5] text-white rounded-lg hover:bg-[#006396] transition-colors"
+                  >
+                    <Linkedin size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleShare("whatsapp")}
+                    className="p-2 bg-[#25D366] text-white rounded-lg hover:bg-[#20b859] transition-colors"
+                  >
+                    <MessageCircle size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleShare("copy")}
+                    className="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    {copied ? <Check size={16} className="text-green-600" /> : <Copy size={16} />}
+                  </button>
+                </div>
               </div>
+            </div>
+
+            {/* Comments Section Placeholder */}
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 mt-6">
+              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <MessageCircle size={18} />
+                Discussion
+              </h3>
+              <p className="text-gray-500 text-sm">
+                Have questions about this article? Contact Dr. Ankush Garg directly at 
+                <a href="mailto:info@manovaidya.com" className="text-green-700 ml-1">info@manovaidya.com</a>
+              </p>
             </div>
           </div>
 
+          {/* Right Sidebar */}
           <div className="lg:w-1/3 w-full">
-            <div
-              ref={sidebarRef}
-              className="lg:sticky lg:top-24"
-              style={{
-                maxHeight: "calc(100vh - 8rem)",
-                overflowY: "auto",
-              }}
-            >
+            <div ref={sidebarRef} className="lg:sticky lg:top-24 space-y-6">
+              {/* Related Posts */}
               {relatedPosts.length > 0 && (
-                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-6">
+                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
                   <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                     <BookOpen size={18} />
                     Related Articles
                   </h3>
-
                   <div className="space-y-4">
                     {relatedPosts.map((relatedPost) => (
                       <div
@@ -528,33 +791,28 @@ export default function BlogDetails() {
                             <div className="w-20 h-20 flex-shrink-0 overflow-hidden">
                               <img
                                 src={relatedPost.image}
-                                alt={relatedPost.title}
+                                alt={relatedPost.metaTitle || relatedPost.title}
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                loading="lazy"
                               />
                             </div>
                           )}
-
                           <div className="flex-1 p-2 pr-3">
                             {relatedPost.category && (
                               <span className="text-[10px] font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded-full inline-block mb-1">
                                 {relatedPost.category}
                               </span>
                             )}
-
                             <h4 className="text-sm font-bold text-gray-900 mb-1 line-clamp-2 group-hover:text-green-700 transition-colors">
                               {relatedPost.title}
                             </h4>
-
                             <div className="flex items-center justify-between mt-1">
                               <span className="text-[10px] text-gray-500">
                                 {new Date(relatedPost.date).toLocaleDateString()}
                               </span>
-
                               <div className="flex items-center gap-1 text-gray-400">
                                 <Eye size={10} />
-                                <span className="text-[10px]">
-                                  {relatedPost.views || 0}
-                                </span>
+                                <span className="text-[10px]">{relatedPost.views || 0}</span>
                               </div>
                             </div>
                           </div>
@@ -562,7 +820,6 @@ export default function BlogDetails() {
                       </div>
                     ))}
                   </div>
-
                   <div className="mt-4 text-center">
                     <Link
                       to="/blog"
@@ -575,27 +832,46 @@ export default function BlogDetails() {
                 </div>
               )}
 
+              {/* Newsletter Subscription */}
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-5 shadow-sm border border-green-100">
                 <h3 className="font-semibold text-gray-900 mb-2">
                   Subscribe to Newsletter
                 </h3>
-
                 <p className="text-sm text-gray-600 mb-3">
-                  Get the latest updates about mental wellness directly in your
-                  inbox.
+                  Get the latest updates about mental wellness directly in your inbox.
                 </p>
-
-                <div className="flex gap-2">
+                <form onSubmit={(e) => e.preventDefault()} className="space-y-3">
                   <input
                     type="email"
-                    placeholder="Your email"
-                    className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 min-w-0"
+                    placeholder="Your email address"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    required
                   />
-
-                  <button className="bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-800 transition-colors whitespace-nowrap">
-                    Subscribe
+                  <button
+                    type="submit"
+                    className="w-full bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-800 transition-colors"
+                  >
+                    Subscribe Now
                   </button>
-                </div>
+                </form>
+                <p className="text-xs text-gray-500 mt-3">
+                  No spam. Unsubscribe anytime.
+                </p>
+              </div>
+
+              {/* Download PDF Option */}
+              <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                  <Download size={18} />
+                  Save for Later
+                </h3>
+                <button
+                  onClick={handlePrint}
+                  className="w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
+                >
+                  <Printer size={16} />
+                  Print / Save as PDF
+                </button>
               </div>
             </div>
           </div>
@@ -615,6 +891,7 @@ export default function BlogDetails() {
           margin-top: 2rem;
           margin-bottom: 1rem;
           color: #111827;
+          scroll-margin-top: 100px;
         }
 
         .blog-content h2 {
@@ -623,6 +900,7 @@ export default function BlogDetails() {
           margin-top: 1.75rem;
           margin-bottom: 0.875rem;
           color: #111827;
+          scroll-margin-top: 100px;
         }
 
         .blog-content h3 {
@@ -631,6 +909,7 @@ export default function BlogDetails() {
           margin-top: 1.5rem;
           margin-bottom: 0.75rem;
           color: #111827;
+          scroll-margin-top: 100px;
         }
 
         .blog-content p {
@@ -732,6 +1011,30 @@ export default function BlogDetails() {
         .blog-content * {
           max-width: 100%;
           box-sizing: border-box;
+        }
+
+        @media print {
+          .sticky,
+          .fixed,
+          button,
+          .lg\\:sticky {
+            display: none !important;
+          }
+          
+          .blog-content {
+            font-size: 12pt;
+            line-height: 1.5;
+          }
+          
+          .blog-content img {
+            page-break-inside: avoid;
+          }
+          
+          .blog-content h1,
+          .blog-content h2,
+          .blog-content h3 {
+            page-break-after: avoid;
+          }
         }
 
         @media (max-width: 768px) {

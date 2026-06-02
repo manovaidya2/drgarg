@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from "react";
 import axiosInstance from "../api/axiosInstance";
 
@@ -12,15 +11,31 @@ export default function AdminAddBlog() {
     slug: "",
     category: "",
     date: "",
-    image: "", // main blog image
+    image: "",
     shortDescription: "",
     content: "",
     faq: [{ question: "", answer: "" }],
+    // SEO Fields
+    metaTitle: "",
+    metaDescription: "",
+    metaKeywords: "",
+    canonicalUrl: "",
+    publishedDate: "",
+    ogTitle: "",
+    ogDescription: "",
+    ogImage: "",
+    twitterTitle: "",
+    twitterDescription: "",
+    twitterImage: "",
+    noIndex: false,
+    noFollow: false
   });
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [showLinkDialog, setShowLinkDialog] = useState(false);
   const [linkUrl, setLinkUrl] = useState("");
+  const [showSEOSection, setShowSEOSection] = useState(false);
+  const [showAdvancedSEO, setShowAdvancedSEO] = useState(false);
 
   // Image resize states
   const [isResizing, setIsResizing] = useState(false);
@@ -30,29 +45,127 @@ export default function AdminAddBlog() {
   const [resizeStartHeight, setResizeStartHeight] = useState(0);
   const [resizeDirection, setResizeDirection] = useState('');
 
+  // Auto-generate slug from title
+  const generateSlug = (title) => {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
+  // Auto-generate meta title
+  const generateMetaTitle = () => {
+    const metaTitle = formData.metaTitle || formData.title;
+    if (!formData.metaTitle && formData.title) {
+      setFormData(prev => ({
+        ...prev,
+        metaTitle: prev.title
+      }));
+    }
+  };
+
+  // Auto-generate meta description from short description
+  const generateMetaDescription = () => {
+    if (!formData.metaDescription && formData.shortDescription) {
+      const truncated = formData.shortDescription.length > 160 
+        ? formData.shortDescription.substring(0, 157) + '...' 
+        : formData.shortDescription;
+      setFormData(prev => ({
+        ...prev,
+        metaDescription: truncated
+      }));
+    }
+  };
+
   // Handle input changes
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+
+    // Auto-generate slug when title changes
+    if (name === 'title' && !formData.slug) {
+      setFormData(prev => ({
+        ...prev,
+        slug: generateSlug(value)
+      }));
+    }
+
+    // Auto-generate meta title when title changes and no custom meta title
+    if (name === 'title' && !formData.metaTitle) {
+      setFormData(prev => ({
+        ...prev,
+        metaTitle: value
+      }));
+    }
+
+    // Auto-generate meta description when short description changes
+    if (name === 'shortDescription') {
+      generateMetaDescription();
+    }
+  };
+
+  // Handle SEO auto-generation
+  const handleAutoGenerateSEO = () => {
+    setFormData(prev => ({
+      ...prev,
+      metaTitle: prev.title,
+      metaDescription: prev.shortDescription?.length > 160 
+        ? prev.shortDescription.substring(0, 157) + '...' 
+        : prev.shortDescription,
+      canonicalUrl: `https://drankushgarg.com/blog/${prev.slug}`,
+      ogTitle: prev.title,
+      ogDescription: prev.shortDescription,
+      ogImage: prev.image,
+      twitterTitle: prev.title,
+      twitterDescription: prev.shortDescription,
+      twitterImage: prev.image
+    }));
+  };
+
+  // SEO Validation
+  const validateSEO = () => {
+    const errors = [];
+    
+    if (formData.metaTitle && formData.metaTitle.length > 60) {
+      errors.push("Meta title should be less than 60 characters (currently: " + formData.metaTitle.length + ")");
+    }
+    
+    if (formData.metaDescription && formData.metaDescription.length > 160) {
+      errors.push("Meta description should be less than 160 characters (currently: " + formData.metaDescription.length + ")");
+    }
+    
+    if (!formData.metaTitle && formData.title) {
+      errors.push("Meta title is recommended for better SEO");
+    }
+    
+    if (!formData.metaDescription && formData.shortDescription) {
+      errors.push("Meta description is recommended for better SEO");
+    }
+    
+    return errors;
   };
 
   // FAQ handlers
-const handleFaqChange = (index, field, value) => {
-  const updatedFaq = [...formData.faq];
-  updatedFaq[index][field] = value;
-  setFormData({ ...formData, faq: updatedFaq });
-};
+  const handleFaqChange = (index, field, value) => {
+    const updatedFaq = [...formData.faq];
+    updatedFaq[index][field] = value;
+    setFormData({ ...formData, faq: updatedFaq });
+  };
 
-const addFaq = () => {
-  setFormData({
-    ...formData,
-    faq: [...formData.faq, { question: "", answer: "" }],
-  });
-};
+  const addFaq = () => {
+    setFormData({
+      ...formData,
+      faq: [...formData.faq, { question: "", answer: "" }],
+    });
+  };
 
-const removeFaq = (index) => {
-  const updatedFaq = formData.faq.filter((_, i) => i !== index);
-  setFormData({ ...formData, faq: updatedFaq });
-};
+  const removeFaq = (index) => {
+    const updatedFaq = formData.faq.filter((_, i) => i !== index);
+    setFormData({ ...formData, faq: updatedFaq });
+  };
 
   useEffect(() => {
     // Add global mouse events for resizing
@@ -77,29 +190,22 @@ const removeFaq = (index) => {
   const handleImageClick = (e) => {
     const target = e.target;
     
-    // Check if clicked element is an image
     if (target.tagName === 'IMG') {
       e.preventDefault();
       e.stopPropagation();
       
-      // Remove previous selection
       if (selectedImage) {
         selectedImage.classList.remove('selected-image');
         removeResizeHandles();
       }
       
-      // Add selection class to new image
       target.classList.add('selected-image');
       setSelectedImage(target);
       
-      // Add resize handles
       setTimeout(() => {
         addResizeHandles(target);
       }, 10);
-      
-      console.log('Image selected:', target);
     } else {
-      // Clicked on non-image, deselect
       if (selectedImage) {
         selectedImage.classList.remove('selected-image');
         removeResizeHandles();
@@ -108,13 +214,11 @@ const removeFaq = (index) => {
     }
   };
 
-  // Setup image click listener
   useEffect(() => {
     const editor = editorRef.current;
     if (editor) {
       editor.addEventListener('click', handleImageClick);
       
-      // Also handle for dynamically added images
       const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           mutation.addedNodes.forEach((node) => {
@@ -136,9 +240,8 @@ const removeFaq = (index) => {
 
   // Add resize handles to image
   const addResizeHandles = (image) => {
-    removeResizeHandles(); // Remove existing handles first
+    removeResizeHandles();
     
-    // Create container if it doesn't exist
     let container = image.parentNode;
     if (!container.classList || !container.classList.contains('image-resize-container')) {
       container = document.createElement('div');
@@ -147,12 +250,10 @@ const removeFaq = (index) => {
       container.style.display = 'inline-block';
       container.style.lineHeight = '0';
       
-      // Wrap image with container
       image.parentNode.insertBefore(container, image);
       container.appendChild(image);
     }
     
-    // Create resize handles
     const positions = [
       { name: 'nw', style: 'top: -8px; left: -8px; cursor: nw-resize;' },
       { name: 'ne', style: 'top: -8px; right: -8px; cursor: ne-resize;' },
@@ -187,12 +288,10 @@ const removeFaq = (index) => {
     });
   };
 
-  // Remove resize handles
   const removeResizeHandles = () => {
     const handles = document.querySelectorAll('.resize-handle');
     handles.forEach(handle => handle.remove());
     
-    // Unwrap image from container if needed
     const containers = document.querySelectorAll('.image-resize-container');
     containers.forEach(container => {
       const image = container.querySelector('img');
@@ -203,7 +302,6 @@ const removeFaq = (index) => {
     });
   };
 
-  // Start resize
   const startResize = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -217,7 +315,6 @@ const removeFaq = (index) => {
     const image = container.querySelector('img');
     if (!image) return;
     
-    // Store initial values
     setIsResizing(true);
     setResizeDirection(direction);
     setResizeStartX(e.clientX);
@@ -225,18 +322,15 @@ const removeFaq = (index) => {
     setResizeStartWidth(image.offsetWidth);
     setResizeStartHeight(image.offsetHeight);
     
-    // Store image and container in ref for resize function
     resizeRef.current = {
       image,
       container,
       aspectRatio: image.offsetWidth / image.offsetHeight
     };
     
-    // Add class to body to prevent text selection during resize
     document.body.style.userSelect = 'none';
   };
 
-  // Handle resize
   const handleResize = (e) => {
     if (!isResizing || !resizeRef.current) return;
     
@@ -249,59 +343,54 @@ const removeFaq = (index) => {
     let newWidth = resizeStartWidth;
     let newHeight = resizeStartHeight;
     
-    // Calculate new dimensions based on direction
     switch(resizeDirection) {
-      case 'se': // Bottom-right
+      case 'se':
         newWidth = Math.max(50, resizeStartWidth + deltaX);
         newHeight = e.shiftKey ? newWidth / aspectRatio : Math.max(50, resizeStartHeight + deltaY);
         break;
-      case 'sw': // Bottom-left
+      case 'sw':
         newWidth = Math.max(50, resizeStartWidth - deltaX);
         newHeight = e.shiftKey ? newWidth / aspectRatio : Math.max(50, resizeStartHeight + deltaY);
         break;
-      case 'ne': // Top-right
+      case 'ne':
         newWidth = Math.max(50, resizeStartWidth + deltaX);
         newHeight = e.shiftKey ? newWidth / aspectRatio : Math.max(50, resizeStartHeight - deltaY);
         break;
-      case 'nw': // Top-left
+      case 'nw':
         newWidth = Math.max(50, resizeStartWidth - deltaX);
         newHeight = e.shiftKey ? newWidth / aspectRatio : Math.max(50, resizeStartHeight - deltaY);
         break;
-      case 'e': // Right
+      case 'e':
         newWidth = Math.max(50, resizeStartWidth + deltaX);
         newHeight = e.shiftKey ? newWidth / aspectRatio : resizeStartHeight;
         break;
-      case 'w': // Left
+      case 'w':
         newWidth = Math.max(50, resizeStartWidth - deltaX);
         newHeight = e.shiftKey ? newWidth / aspectRatio : resizeStartHeight;
         break;
-      case 'n': // Top
+      case 'n':
         newWidth = e.shiftKey ? Math.max(50, (resizeStartHeight - deltaY) * aspectRatio) : resizeStartWidth;
         newHeight = Math.max(50, resizeStartHeight - deltaY);
         break;
-      case 's': // Bottom
+      case 's':
         newWidth = e.shiftKey ? Math.max(50, (resizeStartHeight + deltaY) * aspectRatio) : resizeStartWidth;
         newHeight = Math.max(50, resizeStartHeight + deltaY);
         break;
     }
     
-    // Apply new dimensions
     image.style.width = `${newWidth}px`;
     image.style.height = `${newHeight}px`;
     
-    // Remove width/height attributes
     image.removeAttribute('width');
     image.removeAttribute('height');
   };
 
-  // Stop resize
   const stopResize = () => {
     setIsResizing(false);
     resizeRef.current = null;
     document.body.style.userSelect = '';
   };
 
-  // Reset image to original size
   const resetImageSize = () => {
     if (!selectedImage) {
       alert("Please select an image first");
@@ -314,7 +403,6 @@ const removeFaq = (index) => {
     selectedImage.removeAttribute('height');
   };
 
-  // Set image to specific size
   const setImageSize = (width, height) => {
     if (!selectedImage) {
       alert("Please select an image first");
@@ -325,14 +413,12 @@ const removeFaq = (index) => {
     selectedImage.style.height = `${height}px`;
   };
 
-  // Add link to selected image
   const addLinkToSelectedImage = () => {
     if (!selectedImage) {
       alert("Please click on an image to select it first");
       return;
     }
 
-    // Check if image already has a link
     const parentAnchor = selectedImage.closest('a');
     if (parentAnchor) {
       setLinkUrl(parentAnchor.href || '');
@@ -343,7 +429,6 @@ const removeFaq = (index) => {
     setShowLinkDialog(true);
   };
 
-  // Handle link submission
   const handleLinkSubmit = () => {
     if (!selectedImage) {
       alert("No image selected");
@@ -357,7 +442,6 @@ const removeFaq = (index) => {
     }
 
     try {
-      // Ensure URL has protocol
       let url = linkUrl;
       if (!url.startsWith('http://') && !url.startsWith('https://')) {
         url = 'https://' + url;
@@ -366,27 +450,22 @@ const removeFaq = (index) => {
       const parentAnchor = selectedImage.closest('a');
       
       if (parentAnchor) {
-        // Update existing link
         parentAnchor.href = url;
         parentAnchor.target = '_blank';
         parentAnchor.rel = 'noopener noreferrer';
       } else {
-        // Remove resize handles and container before wrapping
         removeResizeHandles();
         
-        // Create new anchor tag around the image
         const anchor = document.createElement('a');
         anchor.href = url;
         anchor.target = '_blank';
         anchor.rel = 'noopener noreferrer';
         anchor.className = 'linked-image';
         
-        // Replace the image with the anchor containing the image
         selectedImage.parentNode.replaceChild(anchor, selectedImage);
         anchor.appendChild(selectedImage);
       }
 
-      // Keep image selected
       selectedImage.classList.add('selected-image');
       
       alert('Link added successfully!');
@@ -399,7 +478,6 @@ const removeFaq = (index) => {
     setLinkUrl("");
   };
 
-  // Edit existing image link
   const editImageLink = () => {
     if (!selectedImage) {
       alert("Please click on an image to select it first");
@@ -415,7 +493,6 @@ const removeFaq = (index) => {
     }
   };
 
-  // Remove link from image
   const removeImageLink = () => {
     if (!selectedImage) {
       alert("Please click on an image to select it first");
@@ -424,13 +501,10 @@ const removeFaq = (index) => {
 
     const parentAnchor = selectedImage.closest('a');
     if (parentAnchor) {
-      // Remove resize handles first
       removeResizeHandles();
       
-      // Replace anchor with just the image
       parentAnchor.parentNode.replaceChild(selectedImage, parentAnchor);
       
-      // Keep image selected
       selectedImage.classList.add('selected-image');
       
       alert('Link removed successfully!');
@@ -439,7 +513,6 @@ const removeFaq = (index) => {
     }
   };
 
-  // Editor image upload
   const handleEditorImageUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -448,29 +521,23 @@ const removeFaq = (index) => {
     reader.onload = (event) => {
       const base64 = event.target.result;
       
-      // Insert image
       formatText("insertImage", base64);
       
-      // Small delay to ensure image is inserted
       setTimeout(() => {
         const images = editorRef.current.getElementsByTagName('img');
         if (images.length > 0) {
           const lastImage = images[images.length - 1];
           
-          // Remove previous selection
           if (selectedImage) {
             selectedImage.classList.remove('selected-image');
             removeResizeHandles();
           }
           
-          // Select the new image
           lastImage.classList.add('selected-image');
           setSelectedImage(lastImage);
           
-          // Add click handler
           lastImage.addEventListener('click', handleImageClick);
           
-          // Ask if user wants to add link
           if (window.confirm("Do you want to add a link to this image?")) {
             setLinkUrl('');
             setShowLinkDialog(true);
@@ -481,7 +548,6 @@ const removeFaq = (index) => {
     reader.readAsDataURL(file);
   };
 
-  // Main blog image upload with preview
   const handleMainImageUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -489,29 +555,45 @@ const removeFaq = (index) => {
     const reader = new FileReader();
     reader.onload = (event) => {
       setFormData({ ...formData, image: event.target.result });
+      // Auto-generate OG and Twitter images
+      setFormData(prev => ({
+        ...prev,
+        ogImage: event.target.result,
+        twitterImage: event.target.result
+      }));
     };
     reader.readAsDataURL(file);
   };
 
-  // Submit blog to API
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Remove selection class and resize handles before saving
+    // Validate SEO
+    const seoErrors = validateSEO();
+    if (seoErrors.length > 0) {
+      if (!window.confirm(`SEO Recommendations:\n${seoErrors.join('\n')}\n\nDo you want to continue anyway?`)) {
+        return;
+      }
+    }
+    
     if (selectedImage) {
       selectedImage.classList.remove('selected-image');
       removeResizeHandles();
     }
     
     const htmlContent = editorRef.current.innerHTML;
-    const blogData = { ...formData, content: htmlContent };
+    const blogData = { 
+      ...formData, 
+      content: htmlContent,
+      publishedDate: formData.publishedDate || formData.date || new Date(),
+      modifiedDate: new Date()
+    };
 
     try {
       const response = await axiosInstance.post("/blogs", blogData);
       if (response.data.success) {
-        alert("Blog saved successfully!");
+        alert("Blog saved successfully with SEO optimization!");
 
-        // Reset form
         setFormData({
           title: "",
           slug: "",
@@ -521,9 +603,24 @@ const removeFaq = (index) => {
           shortDescription: "",
           content: "",
           faq: [{ question: "", answer: "" }],
+          metaTitle: "",
+          metaDescription: "",
+          metaKeywords: "",
+          canonicalUrl: "",
+          publishedDate: "",
+          ogTitle: "",
+          ogDescription: "",
+          ogImage: "",
+          twitterTitle: "",
+          twitterDescription: "",
+          twitterImage: "",
+          noIndex: false,
+          noFollow: false
         });
         editorRef.current.innerHTML = "";
         setSelectedImage(null);
+        setShowSEOSection(false);
+        setShowAdvancedSEO(false);
       } else {
         alert(response.data.message || "Failed to save blog");
       }
@@ -582,75 +679,292 @@ const removeFaq = (index) => {
         <form onSubmit={handleSubmit} className="space-y-6">
 
           {/* Text Inputs */}
-          {["title", "slug", "category", "date"].map((field) => (
-            <input
-              key={field}
-              type={field === "date" ? "date" : "text"}
-              name={field}
-              placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
-              required={field === "title" || field === "slug"}
-            />
-          ))}
-
-          {/* Short Description */}
-          <textarea
-            name="shortDescription"
-            placeholder="Short Description"
-            rows="3"
+          <input
+            type="text"
+            name="title"
+            placeholder="Title *"
+            value={formData.title}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+            required
+          />
+          
+          <input
+            type="text"
+            name="slug"
+            placeholder="Slug * (auto-generated from title)"
+            value={formData.slug}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-50"
+            required
+          />
+          
+          <input
+            type="text"
+            name="category"
+            placeholder="Category"
+            value={formData.category}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          />
+          
+          <input
+            type="date"
+            name="date"
+            placeholder="Date"
+            value={formData.date}
             onChange={handleChange}
             className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
           />
 
+          {/* Short Description */}
+          <textarea
+            name="shortDescription"
+            placeholder="Short Description (used for meta description if not specified)"
+            rows="3"
+            value={formData.shortDescription}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          />
+
+          {/* SEO Section Toggle */}
+          <div className="border rounded-xl overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setShowSEOSection(!showSEOSection)}
+              className="w-full px-4 py-3 bg-blue-50 hover:bg-blue-100 font-semibold text-left flex justify-between items-center"
+            >
+              <span>🔍 SEO Settings (Meta Tags & Social Media)</span>
+              <span>{showSEOSection ? '▼' : '▶'}</span>
+            </button>
+            
+            {showSEOSection && (
+              <div className="p-4 space-y-4">
+                {/* Auto-generate SEO Button */}
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={handleAutoGenerateSEO}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                  >
+                    ✨ Auto-generate from content
+                  </button>
+                </div>
+                
+                {/* Basic SEO Fields */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Meta Title 
+                      <span className="text-xs text-gray-500 ml-2">({formData.metaTitle?.length || 0}/60 chars)</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="metaTitle"
+                      value={formData.metaTitle}
+                      onChange={handleChange}
+                      placeholder="SEO Title (leave blank to use blog title)"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                    />
+                    {formData.metaTitle && formData.metaTitle.length > 60 && (
+                      <p className="text-xs text-red-500 mt-1">Meta title is too long! Keep under 60 characters.</p>
+                    )}
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Meta Description
+                      <span className="text-xs text-gray-500 ml-2">({formData.metaDescription?.length || 0}/160 chars)</span>
+                    </label>
+                    <textarea
+                      name="metaDescription"
+                      value={formData.metaDescription}
+                      onChange={handleChange}
+                      placeholder="SEO Description (leave blank to use short description)"
+                      rows="2"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                    />
+                    {formData.metaDescription && formData.metaDescription.length > 160 && (
+                      <p className="text-xs text-red-500 mt-1">Meta description is too long! Keep under 160 characters.</p>
+                    )}
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Meta Keywords</label>
+                  <input
+                    type="text"
+                    name="metaKeywords"
+                    value={formData.metaKeywords}
+                    onChange={handleChange}
+                    placeholder="keyword1, keyword2, keyword3"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Separate keywords with commas</p>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Canonical URL</label>
+                  <input
+                    type="url"
+                    name="canonicalUrl"
+                    value={formData.canonicalUrl}
+                    onChange={handleChange}
+                    placeholder="https://drankushgarg.com/blog/your-slug"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Published Date</label>
+                  <input
+                    type="date"
+                    name="publishedDate"
+                    value={formData.publishedDate}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  />
+                </div>
+                
+                {/* Advanced SEO Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setShowAdvancedSEO(!showAdvancedSEO)}
+                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  {showAdvancedSEO ? '▼ Hide' : '▶ Show'} Social Media & Advanced Settings
+                </button>
+                
+                {showAdvancedSEO && (
+                  <div className="space-y-4 pt-2">
+                    <div className="border-t pt-4">
+                      <h4 className="font-semibold text-gray-800 mb-3">Open Graph (Facebook, LinkedIn)</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">OG Title</label>
+                          <input
+                            type="text"
+                            name="ogTitle"
+                            value={formData.ogTitle}
+                            onChange={handleChange}
+                            placeholder="Social Media Title"
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">OG Description</label>
+                          <textarea
+                            name="ogDescription"
+                            value={formData.ogDescription}
+                            onChange={handleChange}
+                            placeholder="Social Media Description"
+                            rows="2"
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="border-t pt-4">
+                      <h4 className="font-semibold text-gray-800 mb-3">Twitter Card</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Twitter Title</label>
+                          <input
+                            type="text"
+                            name="twitterTitle"
+                            value={formData.twitterTitle}
+                            onChange={handleChange}
+                            placeholder="Twitter Card Title"
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Twitter Description</label>
+                          <textarea
+                            name="twitterDescription"
+                            value={formData.twitterDescription}
+                            onChange={handleChange}
+                            placeholder="Twitter Card Description"
+                            rows="2"
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="border-t pt-4">
+                      <h4 className="font-semibold text-gray-800 mb-3">Indexing Options</h4>
+                      <div className="flex gap-6">
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="noIndex"
+                            checked={formData.noIndex}
+                            onChange={handleChange}
+                            className="rounded"
+                          />
+                          <span className="text-sm">No Index (hide from search engines)</span>
+                        </label>
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="noFollow"
+                            checked={formData.noFollow}
+                            onChange={handleChange}
+                            className="rounded"
+                          />
+                          <span className="text-sm">No Follow (don't follow links)</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
           {/* FAQ Section */}
-<div className="border rounded-xl p-4 bg-gray-50">
-  <h2 className="text-lg font-semibold mb-3">FAQ Section</h2>
+          <div className="border rounded-xl p-4 bg-gray-50">
+            <h2 className="text-lg font-semibold mb-3">FAQ Section (Schema Markup Ready)</h2>
 
-  {formData.faq.map((item, index) => (
-    <div key={index} className="mb-4 border p-3 rounded-lg bg-white">
-      
-      <input
-        type="text"
-        placeholder="Question"
-        value={item.question}
-        onChange={(e) =>
-          handleFaqChange(index, "question", e.target.value)
-        }
-        className="w-full mb-2 border px-3 py-2 rounded"
-      />
+            {formData.faq.map((item, index) => (
+              <div key={index} className="mb-4 border p-3 rounded-lg bg-white">
+                <input
+                  type="text"
+                  placeholder="Question"
+                  value={item.question}
+                  onChange={(e) => handleFaqChange(index, "question", e.target.value)}
+                  className="w-full mb-2 border px-3 py-2 rounded"
+                />
+                <textarea
+                  placeholder="Answer"
+                  value={item.answer}
+                  onChange={(e) => handleFaqChange(index, "answer", e.target.value)}
+                  className="w-full border px-3 py-2 rounded"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeFaq(index)}
+                  className="mt-2 text-red-500 text-sm"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
 
-      <textarea
-        placeholder="Answer"
-        value={item.answer}
-        onChange={(e) =>
-          handleFaqChange(index, "answer", e.target.value)
-        }
-        className="w-full border px-3 py-2 rounded"
-      />
-
-      <button
-        type="button"
-        onClick={() => removeFaq(index)}
-        className="mt-2 text-red-500 text-sm"
-      >
-        Remove
-      </button>
-    </div>
-  ))}
-
-  <button
-    type="button"
-    onClick={addFaq}
-    className="bg-blue-500 text-white px-4 py-2 rounded"
-  >
-    + Add FAQ
-  </button>
-</div>
+            <button
+              type="button"
+              onClick={addFaq}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              + Add FAQ
+            </button>
+          </div>
 
           {/* Main Blog Image Upload */}
           <div>
-            <label className="block mb-2 font-medium">Blog Image</label>
+            <label className="block mb-2 font-medium">Blog Image (used for OG and Twitter images)</label>
             <input
               type="file"
               accept="image/*"
@@ -820,7 +1134,7 @@ const removeFaq = (index) => {
             type="submit"
             className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700"
           >
-            Publish Blog
+            Publish Blog with SEO
           </button>
         </form>
       </div>
@@ -850,7 +1164,6 @@ const removeFaq = (index) => {
             background: white;
           }
           
-          /* Editor Styles */
           div[contenteditable="true"] { 
             min-height: 400px;
             outline: none;
@@ -903,7 +1216,6 @@ const removeFaq = (index) => {
             color: #1d4ed8;
           }
           
-          /* Image Styles */
           div[contenteditable="true"] img { 
             max-width: 100%; 
             height: auto; 
@@ -927,7 +1239,6 @@ const removeFaq = (index) => {
             box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
           }
           
-          /* Resize Container */
           .image-resize-container {
             position: relative;
             display: inline-block;
@@ -943,7 +1254,6 @@ const removeFaq = (index) => {
             margin: 0;
           }
           
-          /* Resize Handles */
           .resize-handle {
             position: absolute;
             width: 16px;
@@ -962,7 +1272,6 @@ const removeFaq = (index) => {
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
           }
           
-          /* Linked Image Styles */
           div[contenteditable="true"] a.linked-image {
             text-decoration: none;
             border: none;
