@@ -1,4 +1,4 @@
-// BlogDetails.jsx - Complete SEO-optimized blog details page
+// BlogDetails.jsx - Complete SEO-optimized blog details page with Author Schema
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -309,6 +309,116 @@ export default function BlogDetails() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // ==================== AUTHOR SCHEMA (Person Schema) ====================
+  const generateAuthorSchema = () => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://drankushgarg.com/about#author",
+      "name": "Dr. Ankush Garg",
+      "alternateName": "Dr. Ankush Garg - Ayurvedic Neurologist",
+      "description": "India's leading Ayurvedic Neurologist specializing in Autism, ADHD, and Mental Health. Founder of Neuro-Ayurveda System and Manovaidya.",
+      "url": "https://drankushgarg.com/about",
+      "image": "https://drankushgarg.com/images/dr-ankush-garg.webp",
+      "email": "info@manovaidya.com",
+      "telephone": "+91-XXXXXXXXXX",
+      "jobTitle": "Ayurvedic Neurologist & Founder",
+      "worksFor": {
+        "@type": "MedicalOrganization",
+        "name": "Manovaidya",
+        "url": "https://drankushgarg.com",
+        "logo": "https://drankushgarg.com/logo.png",
+        "description": "India's Premier Ayurvedic Mental Health Clinic",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Gurgaon",
+          "addressRegion": "Haryana",
+          "addressCountry": "IN"
+        }
+      },
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "Ayurvedic Medical College",
+        "sameAs": "https://example.com/college"
+      },
+      "hasCredential": [
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "BAMS - Bachelor of Ayurvedic Medicine and Surgery",
+          "credentialCategory": "Medical Degree"
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "MPH - Master of Public Health",
+          "credentialCategory": "Postgraduate Degree"
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "PhD - Gut-Brain Axis Research",
+          "credentialCategory": "Doctoral Degree"
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "Ayurvedacharya",
+          "credentialCategory": "Specialist Certification"
+        }
+      ],
+      "knowsAbout": [
+        "Ayurvedic Neurology",
+        "Autism Treatment",
+        "ADHD Management",
+        "Gut-Brain Axis",
+        "Teen Mental Health",
+        "Anxiety Disorders",
+        "Depression",
+        "Neurodevelopmental Conditions",
+        "Brain-Gut-Behaviour Connection"
+      ],
+      "sameAs": [
+        "https://www.facebook.com/drankushgarg",
+        "https://www.instagram.com/drankushgarg",
+        "https://www.linkedin.com/in/drankushgarg",
+        "https://twitter.com/drankushgarg",
+        "https://www.youtube.com/c/drankushgarg"
+      ],
+      "award": [
+        "India's No.1 Autism Doctor",
+        "Best Ayurvedic Neurologist Award 2023",
+        "Excellence in Neuro-Ayurveda Research"
+      ],
+      "knowsLanguage": ["English", "Hindi"],
+      "specialty": "Ayurvedic Neurology",
+      "medicalSpecialty": "Neurology",
+      "availableService": [
+        "Autism Consultation",
+        "ADHD Treatment",
+        "Anxiety Management",
+        "Teen Mental Health Counseling",
+        "Neuro-Ayurveda Therapy"
+      ],
+      "honorificPrefix": "Dr.",
+      "gender": "Male",
+      "nationality": "Indian"
+    };
+  };
+
+  // Generate combined Author + Profile Page Schema
+  const generateProfilePageSchema = () => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      "@id": "https://drankushgarg.com/about#profilepage",
+      "name": "Dr. Ankush Garg - Ayurvedic Neurologist Profile",
+      "description": "Professional profile of Dr. Ankush Garg, India's leading Ayurvedic Neurologist",
+      "author": {
+        "@id": "https://drankushgarg.com/about#author"
+      },
+      "mainEntity": {
+        "@id": "https://drankushgarg.com/about#author"
+      }
+    };
+  };
+
   // Generate FAQ Schema
   const generateFAQSchema = () => {
     if (!blog?.faq || blog.faq.length === 0) return null;
@@ -327,13 +437,14 @@ export default function BlogDetails() {
     };
   };
 
-  // Generate BlogPosting Schema
+  // Generate BlogPosting Schema with Author Reference
   const generateBlogPostingSchema = () => {
     if (!blog) return null;
     
     return {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
+      "@id": `https://drankushgarg.com/blog/${slug}#article`,
       "headline": blog.metaTitle || blog.title,
       "description": blog.metaDescription || blog.shortDescription,
       "image": blog.ogImage || blog.image ? [blog.ogImage || blog.image] : [],
@@ -342,15 +453,19 @@ export default function BlogDetails() {
       "author": {
         "@type": "Person",
         "name": "Dr. Ankush Garg",
+        "@id": "https://drankushgarg.com/about#author",
         "url": "https://drankushgarg.com/about",
         "sameAs": [
           "https://twitter.com/drankushgarg",
-          "https://linkedin.com/in/drankushgarg"
+          "https://linkedin.com/in/drankushgarg",
+          "https://facebook.com/drankushgarg",
+          "https://instagram.com/drankushgarg"
         ]
       },
       "publisher": {
         "@type": "Organization",
-        "name": "Dr. Ankush Garg",
+        "name": "Dr. Ankush Garg - Manovaidya",
+        "url": "https://drankushgarg.com",
         "logo": {
           "@type": "ImageObject",
           "url": "https://drankushgarg.com/logo.png"
@@ -370,7 +485,11 @@ export default function BlogDetails() {
       "inLanguage": "en-US",
       "wordCount": blog.content?.length || 0,
       "isAccessibleForFree": true,
-      "readingTime": `${readingTime} minutes`
+      "readingTime": `${readingTime} minutes`,
+      "about": {
+        "@type": "Thing",
+        "name": blog.category || "Ayurvedic Mental Health"
+      }
     };
   };
 
@@ -379,6 +498,7 @@ export default function BlogDetails() {
     return {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
+      "@id": `https://drankushgarg.com/blog/${slug}#breadcrumb`,
       "itemListElement": [
         {
           "@type": "ListItem",
@@ -399,6 +519,29 @@ export default function BlogDetails() {
           "item": `https://drankushgarg.com/blog/${slug}`
         }
       ]
+    };
+  };
+
+  // Generate WebSite Schema
+  const generateWebSiteSchema = () => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://drankushgarg.com#website",
+      "name": "Dr. Ankush Garg - Ayurvedic Neurologist",
+      "description": "Expert Ayurvedic Neurologist specializing in Autism, ADHD, and Mental Health using Neuro-Ayurveda System",
+      "url": "https://drankushgarg.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://drankushgarg.com/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      },
+      "publisher": {
+        "@id": "https://drankushgarg.com/about#author"
+      }
     };
   };
 
@@ -474,26 +617,47 @@ export default function BlogDetails() {
         {/* Article Specific Meta Tags */}
         <meta property="article:published_time" content={blog.publishedDate || blog.date} />
         <meta property="article:modified_time" content={blog.modifiedDate || blog.updatedAt || blog.date} />
-        <meta property="article:author" content="Dr. Ankush Garg" />
+        <meta property="article:author" content="https://drankushgarg.com/about" />
+        <meta property="article:author:name" content="Dr. Ankush Garg" />
         {blog.category && <meta property="article:section" content={blog.category} />}
         
         {/* Robots Meta */}
         <meta name="robots" content={blog.noIndex || blog.noFollow ? 
-          `${blog.noIndex ? 'noindex' : 'index'}, ${blog.noFollow ? 'nofollow' : 'follow'}` : 
+          `${blog.noIndex ? 'noindex' : 'index'}, ${blog.noFollow ? 'nofollow' : 'follow'}, max-snippet:-1, max-image-preview:large, max-video-preview:-1` : 
           'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'} />
         
-        {/* Structured Data */}
+        {/* Schema.org Structured Data */}
+        {/* Author Schema (Person) */}
+        <script type="application/ld+json">
+          {JSON.stringify(generateAuthorSchema())}
+        </script>
+        
+        {/* Profile Page Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify(generateProfilePageSchema())}
+        </script>
+        
+        {/* Website Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify(generateWebSiteSchema())}
+        </script>
+        
+        {/* Blog Posting Schema */}
         <script type="application/ld+json">
           {JSON.stringify(generateBlogPostingSchema())}
         </script>
+        
+        {/* Breadcrumb Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify(generateBreadcrumbSchema())}
+        </script>
+        
+        {/* FAQ Schema */}
         {blog.faq && blog.faq.length > 0 && (
           <script type="application/ld+json">
             {JSON.stringify(generateFAQSchema())}
           </script>
         )}
-        <script type="application/ld+json">
-          {JSON.stringify(generateBreadcrumbSchema())}
-        </script>
       </Helmet>
 
       {/* Scroll Progress Bar */}
@@ -620,17 +784,19 @@ export default function BlogDetails() {
           {/* Main Article Content */}
           <div className="lg:w-2/3 w-full min-w-0" ref={mainContentRef}>
             {/* Author Bio */}
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 sm:p-5 shadow-sm border border-green-100 mb-5 sm:mb-6">
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 sm:p-5 shadow-sm border border-green-100 mb-5 sm:mb-6" itemScope itemType="https://schema.org/Person">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-md">
                   A
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">About the Author</h3>
-                  <p className="text-sm font-medium text-green-700">Dr. Ankush Garg</p>
+                  <p className="text-sm font-medium text-green-700" itemProp="name">Dr. Ankush Garg</p>
+                  <meta itemProp="jobTitle" content="Ayurvedic Neurologist" />
+                  <meta itemProp="url" content="https://drankushgarg.com/about" />
                 </div>
               </div>
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="text-sm text-gray-600 mb-3" itemProp="description">
                 Dr. Ankush Garg is India's No.1 autism doctor, leading Ayurvedic neurologist, 
                 and founder of Manovaidya. With over 9+ years of experience, he has helped 
                 thousands of patients achieve better mental health through his Neuro-Ayurveda System.
@@ -772,6 +938,28 @@ export default function BlogDetails() {
           {/* Right Sidebar */}
           <div className="lg:w-1/3 w-full">
             <div ref={sidebarRef} className="lg:sticky lg:top-24 space-y-6">
+              {/* Author Card (Enhanced) */}
+              <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                <div className="text-center">
+                  <div className="w-24 h-24 bg-gradient-to-br from-green-600 to-emerald-600 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-md mx-auto mb-3">
+                    A
+                  </div>
+                  <h3 className="font-bold text-gray-900 text-lg">Dr. Ankush Garg</h3>
+                  <p className="text-sm text-green-700 mb-2">Ayurvedic Neurologist</p>
+                  <p className="text-xs text-gray-500 mb-3">BAMS, MPH, PhD · Ayurvedacharya</p>
+                  <div className="flex justify-center gap-2 mb-3">
+                    <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">9+ Years Exp</span>
+                    <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">10,000+ Patients</span>
+                  </div>
+                  <Link
+                    to="/about"
+                    className="inline-block w-full bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-800 transition-colors"
+                  >
+                    Know More About Author
+                  </Link>
+                </div>
+              </div>
+
               {/* Related Posts */}
               {relatedPosts.length > 0 && (
                 <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { ArrowRight, Brain, HeartPulse, Moon, Activity } from "lucide-react";
 import ConsultationPopup from "../components/ConsultationPopup";
@@ -6,10 +7,54 @@ import ConsultationPopup from "../components/ConsultationPopup";
 export default function SeniorMentalHealthHero() {
   const [openPopup, setOpenPopup] = useState(false);
 
+  // Breadcrumb Schema Data
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://drankushgarg.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Senior Mental Health",
+        "item": "https://drankushgarg.com/senior-mental-health"
+      }
+    ]
+  };
+
   return (
     <>
+      {/* Breadcrumb Schema */}
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbSchema)}
+        </script>
+      </Helmet>
+
+      {/* Visible Breadcrumb Navigation */}
+      <nav className="w-full bg-[#fbfaf7] pt-6 px-4 sm:px-6 lg:px-10" aria-label="Breadcrumb">
+        <div className="mx-auto">
+          <ol className="flex flex-wrap items-center gap-2 text-[#5d625b] text-sm">
+            <li className="flex items-center">
+              <a href="/" className="hover:text-[#d98923] transition-colors">
+                Home
+              </a>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-[#b9cac1]">/</span>
+              <span className="text-[#002b18] font-medium">Senior Mental Health</span>
+            </li>
+          </ol>
+        </div>
+      </nav>
+
       <section className="w-full bg-[#fbfaf7] py-14 sm:py-16 lg:py-10 px-4 sm:px-6 lg:px-10">
-        <div className=" mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+        <div className="mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
           <div className="text-center lg:text-left">
             <div className="inline-flex items-center gap-2 rounded-full border border-[#d7ded6] bg-white px-4 py-2 text-[11px] tracking-[0.25em] uppercase text-[#00402a] mb-5">
               Senior Mental Health
@@ -75,9 +120,9 @@ export default function SeniorMentalHealthHero() {
               return (
                 <div key={index} className="bg-white rounded-2xl p-5 shadow-sm">
                   <Icon className="text-[#00402a] mb-3" size={26} />
-                  <h3 className="font-semibold text-[#0f172a] text-[15px] mb-1">
+                  <h2 className="font-semibold text-[#0f172a] text-[15px] mb-1">
                     {item.title}
-                  </h3>
+                  </h2>
                   <p className="text-[13px] text-[#64748b]">{item.desc}</p>
                 </div>
               );

@@ -1,12 +1,12 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import { Quote, ArrowRight } from "lucide-react";
 import ConsultationPopup from "../components/ConsultationPopup";
 import { useState } from "react";
 
-
-
 export default function TestimonialsPage() {
-    const [openPopup, setOpenPopup] = useState(false);
+  const [openPopup, setOpenPopup] = useState(false);
+  
   const testimonials = [
     {
       message:
@@ -40,103 +40,175 @@ export default function TestimonialsPage() {
     },
   ];
 
+  // Breadcrumb Schema Data
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://drankushgarg.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Testimonials",
+        "item": "https://drankushgarg.com/testimonials"
+      }
+    ]
+  };
+
+  // Review Schema for Testimonials (Aggregate Rating)
+  const aggregateRatingSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Dr. Ankush Garg - Neuro-Ayurveda System",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "500+",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "review": testimonials.map((item, index) => ({
+      "@type": "Review",
+      "datePublished": "2024",
+      "reviewBody": item.message,
+      "author": {
+        "@type": "Person",
+        "name": item.name
+      },
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "5",
+        "bestRating": "5"
+      }
+    }))
+  };
+
   return (
-    <div className="bg-white">
-      {/* HERO SECTION */}
-      <section className="relative w-full overflow-hidden bg-[#fbfaf6]">
-        <div className="absolute -top-20 -right-20 h-[220px] w-[220px] rounded-full bg-[#eadfca]/40 blur-2xl" />
+    <>
+      {/* Breadcrumb Schema */}
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbSchema)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(aggregateRatingSchema)}
+        </script>
+      </Helmet>
 
-        <div className="mx-auto  px-4 sm:px-6 lg:px-10 pt-8 sm:pt-10 md:pt-12 pb-10 sm:pb-12 md:pb-14">
-          <div className="max-w-[850px]">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#c8d5cf] bg-white/70 px-4 py-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#d8a63b]" />
-              <span className="text-[#003f26] text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.25em]">
-                Testimonials
-              </span>
+      {/* Visible Breadcrumb Navigation */}
+      <nav className="w-full bg-[#fbfaf6] pt-6 px-4 sm:px-6 lg:px-10" aria-label="Breadcrumb">
+        <div className="mx-auto">
+          <ol className="flex flex-wrap items-center gap-2 text-[#5d625b] text-sm">
+            <li className="flex items-center">
+              <a href="/" className="hover:text-[#d98923] transition-colors">
+                Home
+              </a>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-[#b9cac1]">/</span>
+              <span className="text-[#002b18] font-medium">Testimonials</span>
+            </li>
+          </ol>
+        </div>
+      </nav>
+
+      <div className="bg-white">
+        {/* HERO SECTION */}
+        <section className="relative w-full overflow-hidden bg-[#fbfaf6]">
+          <div className="absolute -top-20 -right-20 h-[220px] w-[220px] rounded-full bg-[#eadfca]/40 blur-2xl" />
+
+          <div className="mx-auto px-4 sm:px-6 lg:px-10 pt-8 sm:pt-10 md:pt-12 pb-10 sm:pb-12 md:pb-14">
+            <div className="max-w-[850px]">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#c8d5cf] bg-white/70 px-4 py-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#d8a63b]" />
+                <span className="text-[#003f26] text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.25em]">
+                  Testimonials
+                </span>
+              </div>
+
+              <h1 className="mt-5 font-serif text-[#003f26] text-[30px] sm:text-[38px] md:text-[44px] lg:text-[50px] leading-[1.05] tracking-[-0.025em]">
+                Stories of Clarity, Progress & Trust
+              </h1>
+
+              <p className="mt-4 max-w-[720px] text-[#36454f] text-[15px] sm:text-[17px] md:text-[18px] leading-[1.65]">
+                What families and patients say after experiencing the
+                Neuro-Ayurveda System.
+              </p>
             </div>
-
-            <h1 className="mt-5 font-serif text-[#003f26] text-[30px] sm:text-[38px] md:text-[44px] lg:text-[50px] leading-[1.05] tracking-[-0.025em]">
-              Stories of Clarity, Progress & Trust
-            </h1>
-
-            <p className="mt-4 max-w-[720px] text-[#36454f] text-[15px] sm:text-[17px] md:text-[18px] leading-[1.65]">
-              What families and patients say after experiencing the
-              Neuro-Ayurveda System.
-            </p>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* TESTIMONIALS SECTION */}
-      <section className="w-full bg-[#f6f4ef] py-10 sm:py-12 md:py-10">
-        <div className="mx-auto px-4 sm:px-6 lg:px-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-7 lg:gap-9">
-            {testimonials.map((item, index) => (
-              <article
-                key={index}
-                className="group bg-[#fffefa] border border-[#ddd8ce] rounded-[22px] px-7 sm:px-9 md:px-7 lg:px-8 py-5 sm:py-11 md:py-5 min-h-[250px] shadow-[0_18px_45px_rgba(20,35,28,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_65px_rgba(20,35,28,0.10)]"
-              >
-                <Quote
-                  size={36}
-                  strokeWidth={2.3}
-                  className="text-[#dda63b] fill-none mb-7"
-                />
+        {/* TESTIMONIALS SECTION */}
+        <section className="w-full bg-[#f6f4ef] py-10 sm:py-12 md:py-10">
+          <div className="mx-auto px-4 sm:px-6 lg:px-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-7 lg:gap-9">
+              {testimonials.map((item, index) => (
+                <article
+                  key={index}
+                  className="group bg-[#fffefa] border border-[#ddd8ce] rounded-[22px] px-7 sm:px-9 md:px-7 lg:px-8 py-5 sm:py-11 md:py-5 min-h-[250px] shadow-[0_18px_45px_rgba(20,35,28,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_65px_rgba(20,35,28,0.10)]"
+                >
+                  <Quote
+                    size={36}
+                    strokeWidth={2.3}
+                    className="text-[#dda63b] fill-none mb-7"
+                  />
 
-                <p className="font-serif text-[#071f1b] text-[18px] sm:text-[20px] lg:text-[16px] leading-[1.65] tracking-[-0.018em]">
-                  “{item.message}”
-                </p>
+                  <p className="font-serif text-[#071f1b] text-[18px] sm:text-[20px] lg:text-[16px] leading-[1.65] tracking-[-0.018em]">
+                    “{item.message}”
+                  </p>
 
-                <p className="mt-8 text-[#1f3f38] text-[16px] sm:text-[16px] leading-relaxed font-medium">
-                  — {item.name}
-                  {item.role ? `, ${item.role}` : ""}
-                </p>
-              </article>
-            ))}
+                  <p className="mt-8 text-[#1f3f38] text-[16px] sm:text-[16px] leading-relaxed font-medium">
+                    — {item.name}
+                    {item.role ? `, ${item.role}` : ""}
+                  </p>
+                </article>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA SECTION */}
-{/* CTA SECTION */}
-<section className="w-full bg-[#f6f4ef] px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8">
-  <div className="mx-auto max-w-[1600px] rounded-[22px] bg-gradient-to-r from-[#004225] via-[#053f24] to-[#1f5027] px-6 sm:px-10 lg:px-16 py-10 sm:py-12 lg:py-14">
-    
-    <div className="max-w-[700px]">
-      
-      <h2 className="font-serif text-white text-[26px] sm:text-[32px] lg:text-[36px] leading-[1.2] tracking-[-0.02em]">
-        Talk to Our Team
-      </h2>
+        {/* CTA SECTION */}
+        <section className="w-full bg-[#f6f4ef] px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8">
+          <div className="mx-auto max-w-[1600px] rounded-[22px] bg-gradient-to-r from-[#004225] via-[#053f24] to-[#1f5027] px-6 sm:px-10 lg:px-16 py-10 sm:py-12 lg:py-14">
+            <div className="max-w-[700px]">
+              <h2 className="font-serif text-white text-[26px] sm:text-[32px] lg:text-[36px] leading-[1.2] tracking-[-0.02em]">
+                Talk to Our Team
+              </h2>
 
-      <p className="mt-4 text-white/90 text-[15px] sm:text-[17px] lg:text-[18px] leading-relaxed font-medium">
-        Begin your own story of clarity with a structured first consultation.
-      </p>
+              <p className="mt-4 text-white/90 text-[15px] sm:text-[17px] lg:text-[18px] leading-relaxed font-medium">
+                Begin your own story of clarity with a structured first consultation.
+              </p>
 
-      <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <button
+                  onClick={() => setOpenPopup(true)}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#e86f2d] px-6 py-3 text-white text-[14px] sm:text-[15px] font-semibold transition-all duration-300 hover:bg-[#d96122]"
+                >
+                  Talk to Our Team
+                  <ArrowRight size={18} strokeWidth={2.2} />
+                </button>
+
+                <a
+                  href="/system"
+                  className="inline-flex items-center justify-center rounded-full border border-white/25 px-6 py-3 text-white text-[14px] sm:text-[15px] font-semibold transition-all duration-300 hover:bg-white/10"
+                >
+                  Explore the System
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
         
-        {/* 🔥 POPUP BUTTON */}
-        <button
-          onClick={() => setOpenPopup(true)}
-          className="inline-flex items-center justify-center gap-2 rounded-full bg-[#e86f2d] px-6 py-3 text-white text-[14px] sm:text-[15px] font-semibold transition-all duration-300 hover:bg-[#d96122]"
-        >
-          Talk to Our Team
-          <ArrowRight size={18} strokeWidth={2.2} />
-        </button>
-
-        <a
-          href="/system"
-          className="inline-flex items-center justify-center rounded-full border border-white/25 px-6 py-3 text-white text-[14px] sm:text-[15px] font-semibold transition-all duration-300 hover:bg-white/10"
-        >
-          Explore the System
-        </a>
-
+        <ConsultationPopup
+          isOpen={openPopup}
+          onClose={() => setOpenPopup(false)}
+        />
       </div>
-    </div>
-  </div>
-</section>
-<ConsultationPopup
-  isOpen={openPopup}
-  onClose={() => setOpenPopup(false)}
-/>
-    </div>
+    </>
   );
 }

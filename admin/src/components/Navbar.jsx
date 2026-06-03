@@ -8,7 +8,7 @@ const Navbar = () => {
   return (
     <>
       {/* Top Navbar (Sticky) */}
-      <nav className="bg-blue-900 p-6 text-white flex justify-between items-center md:ml-64 fixed top-0 left-0 right-0 z-40">
+      <nav className="bg-blue-900 p-6 text-white flex justify-between items-center fixed top-0 left-0 right-0 z-40 md:left-64">
         {/* Menu Icon for mobile */}
         <button
           className="md:hidden text-2xl"

@@ -1,11 +1,56 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import AutismADHDSymptomsReality from "./AutismADHDSymptomsReality";
 import DevelopmentRoadmap from "./DevelopmentRoadmap";
 import AutismCTA from "../system/AutismCTA";
 
 export default function AutismADHDSection() {
+  // Breadcrumb Schema Data
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://drankushgarg.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Autism & ADHD",
+        "item": "https://drankushgarg.com/autism-adhd"
+      }
+    ]
+  };
+
   return (
     <>
+      {/* Breadcrumb Schema */}
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbSchema)}
+        </script>
+      </Helmet>
+
+      {/* Visible Breadcrumb Navigation */}
+      <nav className="w-full bg-[#f7f1e8] pt-6 md:pt-8 px-4 sm:px-6 md:px-10 lg:px-10" aria-label="Breadcrumb">
+        <div className="w-full">
+          <ol className="flex flex-wrap items-center gap-2 text-[#5d625b] text-sm">
+            <li className="flex items-center">
+              <a href="/" className="hover:text-[#d98923] transition-colors">
+                Home
+              </a>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-[#b9cac1]">/</span>
+              <span className="text-[#002b18] font-medium">Autism & ADHD</span>
+            </li>
+          </ol>
+        </div>
+      </nav>
+
       <section className="w-full bg-white">
         {/* SECTION 1: HERO */}
         <div className="w-full bg-[#f7f1e8] py-8 md:py-10">
@@ -14,9 +59,9 @@ export default function AutismADHDSection() {
               Autism & ADHD
             </p>
 
-            <h2 className="font-serif text-[#002b18] text-[26px] sm:text-[30px] md:text-[34px] leading-[1.2] tracking-[-0.03em] max-w-[850px]">
+            <h1 className="font-serif text-[#002b18] text-[26px] sm:text-[30px] md:text-[34px] leading-[1.2] tracking-[-0.03em] max-w-[850px]">
               Autism & ADHD Are Not Just Behaviour Problems
-            </h2>
+            </h1>
 
             <p className="mt-4 text-[#374151] text-[14px] sm:text-[15px] md:text-[16px] leading-[1.6] max-w-[780px]">
               They are neurodevelopmental patterns that need a structured{" "}
@@ -34,9 +79,9 @@ export default function AutismADHDSection() {
             </p>
 
             <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-start">
-              <h3 className="font-serif text-[#002b18] text-[22px] sm:text-[26px] md:text-[30px] leading-[1.3] tracking-[-0.02em]">
+              <h2 className="font-serif text-[#002b18] text-[22px] sm:text-[26px] md:text-[30px] leading-[1.3] tracking-[-0.02em]">
                 What Autism & ADHD Really Are
-              </h3>
+              </h2>
 
               <div className="border-l border-[#d98923] pl-4 md:pl-6">
                 <p className="text-[#4b5b55] text-[14px] sm:text-[15px] md:text-[16px] leading-[1.7]">
@@ -52,7 +97,7 @@ export default function AutismADHDSection() {
       </section>
 
       <AutismADHDSymptomsReality />
-      <DevelopmentRoadmap   />
+      <DevelopmentRoadmap />
       <AutismCTA />
     </>
   );

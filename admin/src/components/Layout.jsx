@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 
 const Layout = ({ children }) => {
   return (
-    <div className="flex">
+    <div className="flex overflow-x-hidden">
       {/* Sidebar space is handled inside Navbar */}
       <div className="flex-1 flex flex-col">
         <Navbar />

@@ -30,6 +30,22 @@ export const createAppointment = async (req, res) => {
   }
 };
 
+/* DELETE APPOINTMENT */
+export const deleteAppointment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const appointment = await Appointment.findByIdAndDelete(id);
+
+    if (!appointment) {
+      return res.status(404).json({ success: false, message: "Appointment not found" });
+    }
+
+    res.status(200).json({ success: true, message: "Appointment deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
 /* ADMIN – GET ALL APPOINTMENTS */
 export const getAllAppointments = async (req, res) => {
   try {

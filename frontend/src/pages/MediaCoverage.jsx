@@ -1,12 +1,12 @@
+import { Helmet } from "react-helmet-async";
 import { ExternalLink, Newspaper, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import ConsultationPopup from "../components/ConsultationPopup";
 
-
 const mediaLinks = [
   { name: "DailyHunt", url: "http://m.dailyhunt.in/news/india/english/r+news+india-epaper-dhfacc36dfce9c4bb68db0e89d033c921b/how+dr+ankush+garg+is+redefining+autism+care+in+india+through+ayurveda-newsid-dhfacc36dfce9c4bb68db0e89d033c921b_41ad9760abf811f0bf6f3a0cab15bd8f?sm=Y" },
   { name: "Republic News India", url: "https://republicnewsindia.com/how-dr-ankush-garg-is-redefining-autism-care-in-india-through-ayurveda/" },
-  { name: "Flipboard", url: "https://flipboard.com/@republicnewsind/-how-dr-ankush-garg-is-redefining-autism/a-i80hUB8RRhGSXe5ySX5QOA%3Aa%3A3544623556-0097b8ce16%2Frepublicnewsindia.com" },
+  { name: "Flipboard", url: "https://flipboard.com/@republicnewsind/-how-dr-ankush-garg-is-redefining-autism-care-in-india-through-ayurveda/a-i80hUB8RRhGSXe5ySX5QOA%3Aa%3A3544623556-0097b8ce16%2Frepublicnewsindia.com" },
   { name: "The Indian Bulletin", url: "https://theindianbulletin.com/how-dr-ankush-garg-is-redefining-autism-care-in-india-through-ayurveda/" },
   { name: "RD Times", url: "https://rdtimes.in/how-dr-ankush-garg-is-redefining-autism-care-in-india-through-ayurveda/" },
   { name: "Abhyuday Times", url: "https://abhyudaytimes.com/how-dr-ankush-garg-is-redefining-autism-care-in-india-through-ayurveda/" },
@@ -43,135 +43,152 @@ const mediaLinks = [
 
 export default function MediaCoverage() {
   const [openPopup, setOpenPopup] = useState(false);
+
+  // Breadcrumb Schema Data
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://drankushgarg.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Media Coverage",
+        "item": "https://drankushgarg.com/media-coverage"
+      }
+    ]
+  };
+
   return (
     <>
-    {/* NEW MEDIA & PR HERO */}
-<section className="w-full bg-[#f6f4ef]">
-  <div className="mx-auto  px-4 sm:px-6 lg:px-10 pt-10 sm:pt-14 md:pt-16 pb-8 sm:pb-10">
+      {/* Breadcrumb Schema */}
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbSchema)}
+        </script>
+      </Helmet>
 
-    {/* BADGE */}
-    <div className="inline-flex items-center gap-2 rounded-full border border-[#cfd6d2] bg-white px-4 py-1.5">
-      <span className="h-1.5 w-1.5 rounded-full bg-[#d8a63b]" />
-      <span className="text-[#0b3b2e] text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.25em]">
-        MEDIA & PR
-      </span>
-    </div>
-
-    {/* HEADING */}
-    <h1 className="mt-6 font-serif text-[#0b3b2e] text-[34px] sm:text-[46px] md:text-[56px] lg:text-[54px] leading-[1.05] tracking-[-0.02em] max-w-[900px]">
-      Recognition, Research
-      <br />
-      & Public Awareness
-    </h1>
-
-    {/* DESCRIPTION */}
-    <p className="mt-6 max-w-[780px] text-[#3d4f4a] text-[16px] sm:text-[18px] md:text-[20px] leading-[1.7]">
-      Dr. Ankush Garg's work spans clinical practice, research on the
-      gut-brain axis, public awareness on autism and mental health, and the
-      development of the Neuro-Ayurveda System.
-    </p>
-
-  </div>
-</section>
-    <section className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100 py-10 px-4">
-      <div className=" mx-auto">
-
-        {/* Header
-        <div className="text-center mb-14">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#8b43ba] mb-4">
-            Media Coverage
-          </h1>
-          <p className="text-gray-600 max-w-3xl mx-auto">
-            How Dr. Ankush Garg is redefining autism care in India through Ayurveda,
-            featured across leading national and digital media platforms.
-          </p>
-        </div> */}
-
-        {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mediaLinks.map((item, index) => (
-            <a
-              key={index}
-              href={item.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-white rounded-2xl p-6 shadow border
-                         hover:shadow-xl transition flex flex-col justify-between"
-            >
-              <div className="flex items-start gap-4">
-                <div className="bg-purple-100 text-[#8b43ba] p-3 rounded-xl shrink-0">
-                  <Newspaper />
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-lg text-gray-800 group-hover:text-[#8b43ba] transition">
-                    {item.name}
-                  </h3>
-                  <p className="text-sm text-gray-500 mt-1">
-                    Published feature on autism care through Ayurveda
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-end mt-4 text-sm font-medium text-[#8b43ba]">
-                Read Article <ExternalLink size={16} className="ml-1" />
-              </div>
-            </a>
-          ))}
+      {/* Visible Breadcrumb Navigation */}
+      <nav className="w-full bg-[#f6f4ef] pt-6 px-4 sm:px-6 lg:px-10" aria-label="Breadcrumb">
+        <div className="mx-auto">
+          <ol className="flex flex-wrap items-center gap-2 text-[#5d625b] text-sm">
+            <li className="flex items-center">
+              <a href="/" className="hover:text-[#d98923] transition-colors">
+                Home
+              </a>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-[#b9cac1]">/</span>
+              <span className="text-[#002b18] font-medium">Media Coverage</span>
+            </li>
+          </ol>
         </div>
+      </nav>
 
-        {/* CTA */}
-        {/* <div className="text-center mt-16">
-          <p className="text-gray-600 mb-4">
-            Want to consult or know more about our holistic autism care approach?
+      {/* NEW MEDIA & PR HERO */}
+      <section className="w-full bg-[#f6f4ef]">
+        <div className="mx-auto px-4 sm:px-6 lg:px-10 pt-10 sm:pt-14 md:pt-16 pb-8 sm:pb-10">
+          {/* BADGE */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#cfd6d2] bg-white px-4 py-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#d8a63b]" />
+            <span className="text-[#0b3b2e] text-[11px] sm:text-[12px] font-medium uppercase tracking-[0.25em]">
+              MEDIA & PR
+            </span>
+          </div>
+
+          {/* HEADING */}
+          <h1 className="mt-6 font-serif text-[#0b3b2e] text-[34px] sm:text-[46px] md:text-[56px] lg:text-[54px] leading-[1.05] tracking-[-0.02em] max-w-[900px]">
+            Recognition, Research
+            <br />
+            & Public Awareness
+          </h1>
+
+          {/* DESCRIPTION */}
+          <p className="mt-6 max-w-[780px] text-[#3d4f4a] text-[16px] sm:text-[18px] md:text-[20px] leading-[1.7]">
+            Dr. Ankush Garg's work spans clinical practice, research on the
+            gut-brain axis, public awareness on autism and mental health, and the
+            development of the Neuro-Ayurveda System.
           </p>
-          <a
-            href="/appointment"
-            className="inline-block bg-[#8b43ba] text-white px-8 py-3 rounded-xl shadow hover:bg-[#7a38a6] transition"
-          >
-            Book Consultation
-          </a>
-        </div> */}
-      </div>
-    </section>
-    <section className="w-full bg-[#f6f4ef] px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8">
-  <div className="mx-auto  rounded-[22px] bg-gradient-to-r from-[#004225] via-[#053f24] to-[#1f5027] px-6 sm:px-10 lg:px-10 py-10 sm:py-12 lg:py-14">
-    
-    <div className="max-w-[700px]">
-      
-      <h2 className="font-serif text-white text-[26px] sm:text-[32px] lg:text-[36px] leading-[1.2] tracking-[-0.02em]">
-        Looking to Interview or Collaborate?
-      </h2>
+        </div>
+      </section>
 
-      <p className="mt-4 text-white/90 text-[15px] sm:text-[17px] lg:text-[18px] leading-relaxed font-medium">
-        Reach out for media, awareness programs, or research collaboration.
-      </p>
+      <section className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100 py-10 px-4">
+        <div className="mx-auto">
+          {/* Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {mediaLinks.map((item, index) => (
+              <a
+                key={index}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group bg-white rounded-2xl p-6 shadow border
+                         hover:shadow-xl transition flex flex-col justify-between"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="bg-purple-100 text-[#8b43ba] p-3 rounded-xl shrink-0">
+                    <Newspaper />
+                  </div>
 
-      <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
-        
-      <button
-  onClick={() => setOpenPopup(true)}
-  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#e86f2d] px-6 py-3 text-white text-[14px] sm:text-[15px] font-semibold transition-all duration-300 hover:bg-[#d96122]"
->
-  Contact the Team
-  <ArrowRight size={18} strokeWidth={2.2} />
-</button>
+                  <div>
+                    <h2 className="font-semibold text-lg text-gray-800 group-hover:text-[#8b43ba] transition">
+                      {item.name}
+                    </h2>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Published feature on autism care through Ayurveda
+                    </p>
+                  </div>
+                </div>
 
-        <a
-          href="/system"
-          className="inline-flex items-center justify-center rounded-full border border-white/25 px-6 py-3 text-white text-[14px] sm:text-[15px] font-semibold transition-all duration-300 hover:bg-white/10"
-        >
-          Explore the System
-        </a>
+                <div className="flex items-center justify-end mt-4 text-sm font-medium text-[#8b43ba]">
+                  Read Article <ExternalLink size={16} className="ml-1" />
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      </div>
-    </div>
-  </div>
-</section>
-<ConsultationPopup
-  isOpen={openPopup}
-  onClose={() => setOpenPopup(false)}
-/>
+      <section className="w-full bg-[#f6f4ef] px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8">
+        <div className="mx-auto rounded-[22px] bg-gradient-to-r from-[#004225] via-[#053f24] to-[#1f5027] px-6 sm:px-10 lg:px-10 py-10 sm:py-12 lg:py-14">
+          <div className="max-w-[700px]">
+            <h2 className="font-serif text-white text-[26px] sm:text-[32px] lg:text-[36px] leading-[1.2] tracking-[-0.02em]">
+              Looking to Interview or Collaborate?
+            </h2>
+
+            <p className="mt-4 text-white/90 text-[15px] sm:text-[17px] lg:text-[18px] leading-relaxed font-medium">
+              Reach out for media, awareness programs, or research collaboration.
+            </p>
+
+            <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <button
+                onClick={() => setOpenPopup(true)}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#e86f2d] px-6 py-3 text-white text-[14px] sm:text-[15px] font-semibold transition-all duration-300 hover:bg-[#d96122]"
+              >
+                Contact the Team
+                <ArrowRight size={18} strokeWidth={2.2} />
+              </button>
+
+              <a
+                href="/system"
+                className="inline-flex items-center justify-center rounded-full border border-white/25 px-6 py-3 text-white text-[14px] sm:text-[15px] font-semibold transition-all duration-300 hover:bg-white/10"
+              >
+                Explore the System
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <ConsultationPopup
+        isOpen={openPopup}
+        onClose={() => setOpenPopup(false)}
+      />
     </>
   );
 }

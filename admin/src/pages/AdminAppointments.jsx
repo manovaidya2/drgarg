@@ -13,6 +13,8 @@ export default function AdminAppointments() {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterConcern, setFilterConcern] = useState("all");
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -46,6 +48,27 @@ export default function AdminAppointments() {
       setError(err.response?.data?.message || "Failed to fetch appointments");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteAppointment = async (appointmentId) => {
+    const confirmed = window.confirm("Delete this appointment? This action cannot be undone.");
+    if (!confirmed) return;
+
+    try {
+      setDeleteLoading(true);
+      setDeleteError(null);
+      await api.delete(`/appointments/admin/${appointmentId}`);
+      setAppointments((prev) => prev.filter((appointment) => appointment._id !== appointmentId));
+      if (selectedAppointment?._id === appointmentId) {
+        setSelectedAppointment(null);
+        setShowDetailsModal(false);
+      }
+    } catch (err) {
+      console.error("Error deleting appointment:", err);
+      setDeleteError(err.response?.data?.message || "Unable to delete appointment. Please try again.");
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -373,7 +396,7 @@ export default function AdminAppointments() {
                         {item.message || "—"}
                       </p>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 flex items-center gap-2">
                       <button
                         onClick={() => {
                           setSelectedAppointment(item);
@@ -382,6 +405,14 @@ export default function AdminAppointments() {
                         className="p-2 text-purple-600 hover:bg-purple-100 rounded-lg transition-colors"
                       >
                         <Eye className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteAppointment(item._id)}
+                        className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                        disabled={deleteLoading}
+                        title="Delete appointment"
+                      >
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </td>
                   </tr>
@@ -432,16 +463,26 @@ export default function AdminAppointments() {
                 </div>
               )}
 
-              <button
-                onClick={() => {
-                  setSelectedAppointment(item);
-                  setShowDetailsModal(true);
-                }}
-                className="w-full mt-2 px-4 py-2 bg-gray-50 text-purple-600 rounded-xl text-sm font-medium hover:bg-purple-50 transition-colors flex items-center justify-center gap-2"
-              >
-                <Eye className="w-4 h-4" />
-                View Details
-              </button>
+              <div className="grid gap-2">
+                <button
+                  onClick={() => {
+                    setSelectedAppointment(item);
+                    setShowDetailsModal(true);
+                  }}
+                  className="w-full px-4 py-2 bg-gray-50 text-purple-600 rounded-xl text-sm font-medium hover:bg-purple-50 transition-colors flex items-center justify-center gap-2"
+                >
+                  <Eye className="w-4 h-4" />
+                  View Details
+                </button>
+                <button
+                  onClick={() => handleDeleteAppointment(item._id)}
+                  disabled={deleteLoading}
+                  className="w-full px-4 py-2 bg-red-50 text-red-600 rounded-xl text-sm font-medium hover:bg-red-100 transition-colors flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -549,15 +590,26 @@ export default function AdminAppointments() {
                 </div>
               )}
 
-              <div className="flex gap-3 pt-4">
+              <div className="flex flex-col gap-3 pt-4 sm:flex-row">
                 <button className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2">
                   <Reply className="w-4 h-4" />
                   Respond
                 </button>
-                <button className="px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-all">
+                <button className="px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-all flex items-center justify-center gap-2">
                   <Printer className="w-4 h-4" />
                 </button>
+                <button
+                  onClick={() => handleDeleteAppointment(selectedAppointment._id)}
+                  disabled={deleteLoading}
+                  className="px-4 py-3 bg-red-50 text-red-600 rounded-xl font-semibold hover:bg-red-100 transition-all flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete Appointment
+                </button>
               </div>
+              {deleteError && (
+                <p className="mt-3 text-sm text-red-600">{deleteError}</p>
+              )}
             </div>
           </div>
         </div>

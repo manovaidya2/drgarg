@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import api from "../api/axiosInstance.js";
 
 export default function ConsultationPopup({ isOpen, onClose }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -29,8 +31,8 @@ export default function ConsultationPopup({ isOpen, onClose }) {
 
     try {
       await api.post("/appointments/book", formData);
-
-      setSuccess("Consultation request submitted successfully!");
+      onClose();
+      navigate("/thank-you");
       setFormData({
         name: "",
         phone: "",
@@ -57,7 +59,7 @@ export default function ConsultationPopup({ isOpen, onClose }) {
         </button>
 
         <h3 className="font-serif text-[#0b3b2e] text-[22px] sm:text-[26px] leading-tight pr-10">
-          Request a Consultation
+          Request a Consultation test
         </h3>
 
         <p className="mt-2 text-[#6b7c76] text-[12px] sm:text-[13px] mb-5 sm:mb-6 leading-relaxed">

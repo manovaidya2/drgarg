@@ -13,8 +13,15 @@ import NeuroAyurvedaMethod from "../Home/NeuroAyurvedaMethod";
 import TrustSection from "../Home/TrustSection";
 import DomainExpertiseSection from "../Home/DomainExpertiseSection";
 import ClarityCTA from "../Home/ClarityCTA";
+import AutismFAQSection from "../Home/AutismFAQSection";
+import BlogCarousel from "../Home/BlogCarousel";
+
+// Import the image for preload URL
+import doctorImage from "../images/sirimg.webp";
 
 function Homepage() {
+  const imageUrl = typeof doctorImage === 'string' ? doctorImage : doctorImage?.src;
+
   return (
     <>
       {/* SEO META TAGS */}
@@ -61,6 +68,14 @@ function Homepage() {
           name="twitter:image"
           content="https://drankushgarg.com/og-image.jpg"
         />
+
+        {/* IMAGE PRELOAD - CRITICAL FOR LCP */}
+        <link 
+          rel="preload" 
+          as="image" 
+          href={imageUrl}
+          fetchPriority="high"
+        />
       </Helmet>
 
       {/* PAGE CONTENT */}
@@ -72,6 +87,8 @@ function Homepage() {
         <NeuroAyurvedaMethod /> 
         <TrustSection />
         <DomainExpertiseSection />
+        <AutismFAQSection />
+        <BlogCarousel />
         <ClarityCTA />
         
         {/* <AboutSection />

@@ -26,6 +26,7 @@ import Seniour from "./pages/Seniour";
 import NotFound from "./pages/NotFound";
 
 import TestimonialsPage from "./pages/TestimonialsPage";
+import ThankYou from "./pages/ThankYou";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -60,6 +61,7 @@ export default function App() {
           <Route path="/teenage-mental-health" element={<Teenage />} />
           <Route path="/seniour-mental-health" element={<Seniour />} />
           <Route path="/testimonials" element={<TestimonialsPage />} />
+          <Route path="/thank-you" element={<ThankYou />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

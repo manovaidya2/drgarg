@@ -1,7 +1,7 @@
-// BlogPage.jsx - Updated version
+// BlogPage.jsx - Updated version with Breadcrumb
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
-import { Helmet } from "react-helmet-async"; // Only import Helmet from react-helmet-async
+import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import axiosInstance from "../api/axiosInstance";
 
 export default function BlogPage() {
@@ -76,6 +76,26 @@ export default function BlogPage() {
     };
   };
 
+  // Breadcrumb Schema Data
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://drankushgarg.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://drankushgarg.com/blog"
+      }
+    ]
+  };
+
   if (loading) {
     return (
       <>
@@ -128,7 +148,29 @@ export default function BlogPage() {
         <script type="application/ld+json">
           {JSON.stringify(generateListStructuredData())}
         </script>
+        
+        {/* Breadcrumb Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbSchema)}
+        </script>
       </Helmet>
+
+      {/* Visible Breadcrumb Navigation */}
+      <nav className="w-full bg-[#f6f4ef] pt-6 px-4 sm:px-6 lg:px-10" aria-label="Breadcrumb">
+        <div className="mx-auto">
+          <ol className="flex flex-wrap items-center gap-2 text-[#5d625b] text-sm">
+            <li className="flex items-center">
+              <a href="/" className="hover:text-[#d98923] transition-colors">
+                Home
+              </a>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-[#b9cac1]">/</span>
+              <span className="text-[#002b18] font-medium">Blog</span>
+            </li>
+          </ol>
+        </div>
+      </nav>
 
       <div className="bg-[#f6f4ef]">
         {/* HERO */}
