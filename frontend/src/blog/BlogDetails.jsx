@@ -948,7 +948,7 @@ export default function BlogDetails() {
                   <p className="text-sm text-green-700 mb-2">Ayurvedic Neurologist</p>
                   <p className="text-xs text-gray-500 mb-3">BAMS, MPH, PhD · Ayurvedacharya</p>
                   <div className="flex justify-center gap-2 mb-3">
-                    <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">9+ Years Exp</span>
+                    <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">7+ Years Exp</span>
                     <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">10,000+ Patients</span>
                   </div>
                   <Link
