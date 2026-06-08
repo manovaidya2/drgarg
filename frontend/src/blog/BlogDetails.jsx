@@ -806,7 +806,7 @@ export default function BlogDetails() {
                   <Award size={12} /> Expert in Neuro-Ayurveda
                 </span>
                 <span className="text-xs text-gray-500 flex items-center gap-1">
-                  <TrendingUp size={12} /> 9+ Years Experience
+                  <TrendingUp size={12} /> 7+ Years Experience
                 </span>
               </div>
             </div>
