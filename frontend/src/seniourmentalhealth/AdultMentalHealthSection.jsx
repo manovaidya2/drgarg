@@ -16,13 +16,13 @@ export default function SeniorMentalHealthHero() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://drankushgarg.com/"
+        "item": "https://drankushgarg.in/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Senior Mental Health",
-        "item": "https://drankushgarg.com/senior-mental-health"
+        "item": "https://drankushgarg.in/senior-mental-health"
       }
     ]
   };

@@ -16,13 +16,13 @@ export default function AdultMentalHealthHero() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://drankushgarg.com/"
+        "item": "https://drankushgarg.in/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Adult Mental Health",
-        "item": "https://drankushgarg.com/adult-mental-health"
+        "item": "https://drankushgarg.in/adult-mental-health"
       }
     ]
   };

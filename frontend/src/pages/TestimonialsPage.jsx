@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { Quote, ArrowRight } from "lucide-react";
 import ConsultationPopup from "../components/ConsultationPopup";
 import { useState } from "react";
+import { GlobalSEO } from "../components/SEOProvider";
 
 export default function TestimonialsPage() {
   const [openPopup, setOpenPopup] = useState(false);
@@ -49,13 +50,13 @@ export default function TestimonialsPage() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://drankushgarg.com/"
+        "item": "https://drankushgarg.in/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Testimonials",
-        "item": "https://drankushgarg.com/testimonials"
+        "item": "https://drankushgarg.in/testimonials"
       }
     ]
   };
@@ -90,6 +91,18 @@ export default function TestimonialsPage() {
 
   return (
     <>
+      <GlobalSEO
+        seo={{
+          title: "Patient Testimonials | Dr. Ankush Garg",
+          description:
+            "Read patient and family testimonials about Dr. Ankush Garg's Neuro-Ayurveda approach for autism, anxiety, emotional health, and long-term mental wellness.",
+          keywords:
+            "Dr Ankush Garg reviews, patient testimonials, autism care testimonials, Neuro Ayurveda reviews, Manovaidya testimonials",
+          canonical: "https://drankushgarg.in/testimonials",
+          image: "https://drankushgarg.in/og-image.jpg",
+        }}
+      />
+
       {/* Breadcrumb Schema */}
       <Helmet>
         <script type="application/ld+json">

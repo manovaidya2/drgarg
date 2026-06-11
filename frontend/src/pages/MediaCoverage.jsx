@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { ExternalLink, Newspaper, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import ConsultationPopup from "../components/ConsultationPopup";
+import { GlobalSEO } from "../components/SEOProvider";
 
 const mediaLinks = [
   { name: "DailyHunt", url: "http://m.dailyhunt.in/news/india/english/r+news+india-epaper-dhfacc36dfce9c4bb68db0e89d033c921b/how+dr+ankush+garg+is+redefining+autism+care+in+india+through+ayurveda-newsid-dhfacc36dfce9c4bb68db0e89d033c921b_41ad9760abf811f0bf6f3a0cab15bd8f?sm=Y" },
@@ -53,19 +54,31 @@ export default function MediaCoverage() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://drankushgarg.com/"
+        "item": "https://drankushgarg.in/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Media Coverage",
-        "item": "https://drankushgarg.com/media-coverage"
+        "item": "https://drankushgarg.in/media-coverage"
       }
     ]
   };
 
   return (
     <>
+      <GlobalSEO
+        seo={{
+          title: "Media Coverage | Dr. Ankush Garg",
+          description:
+            "Read media coverage and public features about Dr. Ankush Garg's work in autism care, Ayurveda, Neuro-Ayurveda, mental health awareness, and research.",
+          keywords:
+            "Dr Ankush Garg media, autism care Ayurveda, Neuro Ayurveda news, Manovaidya media coverage, Ayurvedic neurologist",
+          canonical: "https://drankushgarg.in/media-coverage",
+          image: "https://drankushgarg.in/og-image.jpg",
+        }}
+      />
+
       {/* Breadcrumb Schema */}
       <Helmet>
         <script type="application/ld+json">

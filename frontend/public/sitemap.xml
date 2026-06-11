@@ -2,72 +2,100 @@
 <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://drankushgarg.com/</loc>
+    <loc>https://drankushgarg.in/</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.00</priority>
   </url>
 
   <url>
-    <loc>https://drankushgarg.com/about</loc>
+    <loc>https://drankushgarg.in/about</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.90</priority>
   </url>
 
   <url>
-    <loc>https://drankushgarg.com/blog</loc>
+    <loc>https://drankushgarg.in/blog</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
 
   <url>
-    <loc>https://drankushgarg.com/treatments</loc>
+    <loc>https://drankushgarg.in/treatments</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.90</priority>
   </url>
 
   <url>
-    <loc>https://drankushgarg.com/appointment</loc>
+    <loc>https://drankushgarg.in/appointment</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.95</priority>
   </url>
 
   <url>
-    <loc>https://drankushgarg.com/mindwellness</loc>
+    <loc>https://drankushgarg.in/mindwellness</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://drankushgarg.com/case-study</loc>
+    <loc>https://drankushgarg.in/case-study</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://drankushgarg.com/media-coverage</loc>
+    <loc>https://drankushgarg.in/media-coverage</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://drankushgarg.com/neuro-ayurveda-system</loc>
+    <loc>https://drankushgarg.in/neuro-ayurveda-system</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.90</priority>
   </url>
 
   <url>
-    <loc>https://drankushgarg.com/autism-adhd</loc>
+    <loc>https://drankushgarg.in/autism-adhd</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.90</priority>
   </url>
 
   <url>
-    <loc>https://drankushgarg.com/adult-mental-health</loc>
+    <loc>https://drankushgarg.in/adult-mental-health</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.90</priority>
   </url>
 
   <url>
-    <loc>https://drankushgarg.com/teenage-mental-health</loc>
+    <loc>https://drankushgarg.in/teenage-mental-health</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.90</priority>
   </url>
 
   <url>
-    <loc>https://drankushgarg.com/seniour-mental-health</loc>
+    <loc>https://drankushgarg.in/seniour-mental-health</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.90</priority>
   </url>
 
   <url>
-    <loc>https://drankushgarg.com/testimonials</loc>
+    <loc>https://drankushgarg.in/testimonials</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 

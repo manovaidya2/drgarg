@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import AutismADHDSymptomsReality from "./AutismADHDSymptomsReality";
 import DevelopmentRoadmap from "./DevelopmentRoadmap";
 import AutismCTA from "../system/AutismCTA";
+import { GlobalSEO } from "../components/SEOProvider";
 
 export default function AutismADHDSection() {
   // Breadcrumb Schema Data
@@ -14,19 +15,31 @@ export default function AutismADHDSection() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://drankushgarg.com/"
+        "item": "https://drankushgarg.in/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Autism & ADHD",
-        "item": "https://drankushgarg.com/autism-adhd"
+        "item": "https://drankushgarg.in/autism-adhd"
       }
     ]
   };
 
   return (
     <>
+      <GlobalSEO
+        seo={{
+          title: "Autism & ADHD Treatment | Dr. Ankush Garg Neuro-Ayurveda",
+          description:
+            "Structured Autism and ADHD care using Dr. Ankush Garg's Brain-Gut-Behaviour and Neuro-Ayurveda approach for attention, sensory, communication, and behaviour support.",
+          keywords:
+            "autism treatment India, ADHD treatment, autism doctor, neuro ayurveda autism, brain gut behaviour, Dr Ankush Garg",
+          canonical: "https://drankushgarg.in/autism-adhd",
+          image: "https://drankushgarg.in/og-image.jpg",
+        }}
+      />
+
       {/* Breadcrumb Schema */}
       <Helmet>
         <script type="application/ld+json">

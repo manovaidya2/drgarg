@@ -46,6 +46,8 @@ export default function BlogDetails() {
   const sidebarRef = useRef(null);
   const mainContentRef = useRef(null);
   const contentRef = useRef(null);
+  const normalizeSiteUrl = (url) =>
+    url?.replace(/https:\/\/drankushgarg\.com/g, "https://drankushgarg.in");
 
   // Calculate reading time
   const calculateReadingTime = (content) => {
@@ -186,7 +188,7 @@ export default function BlogDetails() {
           canonicalLink.setAttribute('rel', 'canonical');
           document.head.appendChild(canonicalLink);
         }
-        canonicalLink.setAttribute('href', blog.canonicalUrl);
+        canonicalLink.setAttribute('href', normalizeSiteUrl(blog.canonicalUrl));
       }
       
       // Update Open Graph tags
@@ -204,7 +206,7 @@ export default function BlogDetails() {
       updateMetaTag('property', 'og:title', blog.ogTitle || blog.metaTitle || blog.title);
       updateMetaTag('property', 'og:description', blog.ogDescription || blog.metaDescription || blog.shortDescription);
       updateMetaTag('property', 'og:image', blog.ogImage || blog.image);
-      updateMetaTag('property', 'og:url', `https://drankushgarg.com/blog/${blog.slug}`);
+      updateMetaTag('property', 'og:url', `https://drankushgarg.in/blog/${blog.slug}`);
       updateMetaTag('property', 'og:type', 'article');
       
       updateMetaTag('name', 'twitter:title', blog.twitterTitle || blog.metaTitle || blog.title);
@@ -314,20 +316,20 @@ export default function BlogDetails() {
     return {
       "@context": "https://schema.org",
       "@type": "Person",
-      "@id": "https://drankushgarg.com/about#author",
+      "@id": "https://drankushgarg.in/about#author",
       "name": "Dr. Ankush Garg",
       "alternateName": "Dr. Ankush Garg - Ayurvedic Neurologist",
       "description": "India's leading Ayurvedic Neurologist specializing in Autism, ADHD, and Mental Health. Founder of Neuro-Ayurveda System and Manovaidya.",
-      "url": "https://drankushgarg.com/about",
-      "image": "https://drankushgarg.com/images/dr-ankush-garg.webp",
+      "url": "https://drankushgarg.in/about",
+      "image": "https://drankushgarg.in/images/dr-ankush-garg.webp",
       "email": "info@manovaidya.com",
       "telephone": "+91-XXXXXXXXXX",
       "jobTitle": "Ayurvedic Neurologist & Founder",
       "worksFor": {
         "@type": "MedicalOrganization",
         "name": "Manovaidya",
-        "url": "https://drankushgarg.com",
-        "logo": "https://drankushgarg.com/logo.png",
+        "url": "https://drankushgarg.in",
+        "logo": "https://drankushgarg.in/logo.png",
         "description": "India's Premier Ayurvedic Mental Health Clinic",
         "address": {
           "@type": "PostalAddress",
@@ -407,14 +409,14 @@ export default function BlogDetails() {
     return {
       "@context": "https://schema.org",
       "@type": "ProfilePage",
-      "@id": "https://drankushgarg.com/about#profilepage",
+      "@id": "https://drankushgarg.in/about#profilepage",
       "name": "Dr. Ankush Garg - Ayurvedic Neurologist Profile",
       "description": "Professional profile of Dr. Ankush Garg, India's leading Ayurvedic Neurologist",
       "author": {
-        "@id": "https://drankushgarg.com/about#author"
+        "@id": "https://drankushgarg.in/about#author"
       },
       "mainEntity": {
-        "@id": "https://drankushgarg.com/about#author"
+        "@id": "https://drankushgarg.in/about#author"
       }
     };
   };
@@ -444,7 +446,7 @@ export default function BlogDetails() {
     return {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "@id": `https://drankushgarg.com/blog/${slug}#article`,
+      "@id": `https://drankushgarg.in/blog/${slug}#article`,
       "headline": blog.metaTitle || blog.title,
       "description": blog.metaDescription || blog.shortDescription,
       "image": blog.ogImage || blog.image ? [blog.ogImage || blog.image] : [],
@@ -453,8 +455,8 @@ export default function BlogDetails() {
       "author": {
         "@type": "Person",
         "name": "Dr. Ankush Garg",
-        "@id": "https://drankushgarg.com/about#author",
-        "url": "https://drankushgarg.com/about",
+        "@id": "https://drankushgarg.in/about#author",
+        "url": "https://drankushgarg.in/about",
         "sameAs": [
           "https://twitter.com/drankushgarg",
           "https://linkedin.com/in/drankushgarg",
@@ -465,10 +467,10 @@ export default function BlogDetails() {
       "publisher": {
         "@type": "Organization",
         "name": "Dr. Ankush Garg - Manovaidya",
-        "url": "https://drankushgarg.com",
+        "url": "https://drankushgarg.in",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://drankushgarg.com/logo.png"
+          "url": "https://drankushgarg.in/logo.png"
         },
         "sameAs": [
           "https://www.facebook.com/drankushgarg",
@@ -478,7 +480,7 @@ export default function BlogDetails() {
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": blog.canonicalUrl || `https://drankushgarg.com/blog/${slug}`
+        "@id": normalizeSiteUrl(blog.canonicalUrl) || `https://drankushgarg.in/blog/${slug}`
       },
       "keywords": blog.metaKeywords,
       "articleSection": blog.category,
@@ -498,25 +500,25 @@ export default function BlogDetails() {
     return {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
-      "@id": `https://drankushgarg.com/blog/${slug}#breadcrumb`,
+      "@id": `https://drankushgarg.in/blog/${slug}#breadcrumb`,
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://drankushgarg.com"
+          "item": "https://drankushgarg.in"
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": "Blog",
-          "item": "https://drankushgarg.com/blog"
+          "item": "https://drankushgarg.in/blog"
         },
         {
           "@type": "ListItem",
           "position": 3,
           "name": blog?.title || "Article",
-          "item": `https://drankushgarg.com/blog/${slug}`
+          "item": `https://drankushgarg.in/blog/${slug}`
         }
       ]
     };
@@ -527,20 +529,20 @@ export default function BlogDetails() {
     return {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "@id": "https://drankushgarg.com#website",
+      "@id": "https://drankushgarg.in#website",
       "name": "Dr. Ankush Garg - Ayurvedic Neurologist",
       "description": "Expert Ayurvedic Neurologist specializing in Autism, ADHD, and Mental Health using Neuro-Ayurveda System",
-      "url": "https://drankushgarg.com",
+      "url": "https://drankushgarg.in",
       "potentialAction": {
         "@type": "SearchAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": "https://drankushgarg.com/search?q={search_term_string}"
+          "urlTemplate": "https://drankushgarg.in/search?q={search_term_string}"
         },
         "query-input": "required name=search_term_string"
       },
       "publisher": {
-        "@id": "https://drankushgarg.com/about#author"
+        "@id": "https://drankushgarg.in/about#author"
       }
     };
   };
@@ -587,6 +589,9 @@ export default function BlogDetails() {
     );
   }
 
+  const canonicalUrl =
+    normalizeSiteUrl(blog.canonicalUrl) || `https://drankushgarg.in/blog/${slug}`;
+
   return (
     <>
       <Helmet>
@@ -597,11 +602,11 @@ export default function BlogDetails() {
         <meta name="author" content="Dr. Ankush Garg" />
         
         {/* Canonical URL */}
-        <link rel="canonical" href={blog.canonicalUrl || `https://drankushgarg.com/blog/${slug}`} />
+        <link rel="canonical" href={canonicalUrl} />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://drankushgarg.com/blog/${slug}`} />
+        <meta property="og:url" content={`https://drankushgarg.in/blog/${slug}`} />
         <meta property="og:title" content={blog.ogTitle || blog.metaTitle || blog.title} />
         <meta property="og:description" content={blog.ogDescription || blog.metaDescription || blog.shortDescription} />
         <meta property="og:image" content={blog.ogImage || blog.image} />
@@ -609,7 +614,7 @@ export default function BlogDetails() {
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content={`https://drankushgarg.com/blog/${slug}`} />
+        <meta name="twitter:url" content={`https://drankushgarg.in/blog/${slug}`} />
         <meta name="twitter:title" content={blog.twitterTitle || blog.metaTitle || blog.title} />
         <meta name="twitter:description" content={blog.twitterDescription || blog.metaDescription || blog.shortDescription} />
         <meta name="twitter:image" content={blog.twitterImage || blog.image} />
@@ -617,7 +622,7 @@ export default function BlogDetails() {
         {/* Article Specific Meta Tags */}
         <meta property="article:published_time" content={blog.publishedDate || blog.date} />
         <meta property="article:modified_time" content={blog.modifiedDate || blog.updatedAt || blog.date} />
-        <meta property="article:author" content="https://drankushgarg.com/about" />
+        <meta property="article:author" content="https://drankushgarg.in/about" />
         <meta property="article:author:name" content="Dr. Ankush Garg" />
         {blog.category && <meta property="article:section" content={blog.category} />}
         
@@ -793,7 +798,7 @@ export default function BlogDetails() {
                   <h3 className="font-semibold text-gray-900">About the Author</h3>
                   <p className="text-sm font-medium text-green-700" itemProp="name">Dr. Ankush Garg</p>
                   <meta itemProp="jobTitle" content="Ayurvedic Neurologist" />
-                  <meta itemProp="url" content="https://drankushgarg.com/about" />
+                  <meta itemProp="url" content="https://drankushgarg.in/about" />
                 </div>
               </div>
               <p className="text-sm text-gray-600 mb-3" itemProp="description">

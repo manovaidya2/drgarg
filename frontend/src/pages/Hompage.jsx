@@ -42,7 +42,7 @@ function Homepage() {
         <meta name="author" content="Dr. Ankush Garg" />
 
         {/* Canonical URL */}
-        <link rel="canonical" href="https://drankushgarg.com/" />
+        <link rel="canonical" href="https://drankushgarg.in/" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:title" content="Dr. Ankush Garg | Ayurvedic Mental Wellness Expert" />
@@ -51,10 +51,10 @@ function Homepage() {
           content="Personalized Ayurvedic treatments for mental wellness, stress, anxiety, and holistic mind care."
         />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://drankushgarg.com/" />
+        <meta property="og:url" content="https://drankushgarg.in/" />
         <meta
           property="og:image"
-          content="https://drankushgarg.com/og-image.jpg"
+          content="https://drankushgarg.in/og-image.jpg"
         />
 
         {/* Twitter */}
@@ -66,7 +66,7 @@ function Homepage() {
         />
         <meta
           name="twitter:image"
-          content="https://drankushgarg.com/og-image.jpg"
+          content="https://drankushgarg.in/og-image.jpg"
         />
 
         {/* IMAGE PRELOAD - CRITICAL FOR LCP */}

@@ -16,13 +16,13 @@ export default function TeenageMentalHealthHero() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://drankushgarg.com/"
+        "item": "https://drankushgarg.in/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Teenage Mental Health",
-        "item": "https://drankushgarg.com/teenage-mental-health"
+        "item": "https://drankushgarg.in/teenage-mental-health"
       }
     ]
   };

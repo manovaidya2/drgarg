@@ -33,7 +33,7 @@ function System() {
         <meta name="geo.region" content="IN" />
         <meta name="geo.placename" content="India" />
 
-        <link rel="canonical" href="https://drankushgarg.com/" />
+        <link rel="canonical" href="https://drankushgarg.in/neuro-ayurveda-system" />
 
         <meta
           property="og:title"
@@ -44,13 +44,17 @@ function System() {
           content="Specialized Neuro-Ayurveda treatment for Autism, ADHD, Anxiety & Brain Health. Developed by Dr. Ankush Garg."
         />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://drankushgarg.com/" />
+        <meta property="og:url" content="https://drankushgarg.in/neuro-ayurveda-system" />
         <meta
           property="og:image"
-          content="https://drankushgarg.com/og-image.jpg"
+          content="https://drankushgarg.in/og-image.jpg"
         />
 
         <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:url"
+          content="https://drankushgarg.in/neuro-ayurveda-system"
+        />
         <meta
           name="twitter:title"
           content="Dr. Ankush Garg | Autism & Brain Health Specialist"
@@ -61,7 +65,7 @@ function System() {
         />
         <meta
           name="twitter:image"
-          content="https://drankushgarg.com/og-image.jpg"
+          content="https://drankushgarg.in/og-image.jpg"
         />
       </Helmet>
 
@@ -77,4 +81,4 @@ function System() {
   );
 }
 
-export default System;   
+export default System;

@@ -11,19 +11,19 @@ export default function AboutDoctorIntro() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://drankushgarg.com/"
+        "item": "https://drankushgarg.in/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "About Doctor",
-        "item": "https://drankushgarg.com/about-doctor"
+        "item": "https://drankushgarg.in/about-doctor"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "Dr. Ankush Garg - Ayurvedic Neurologist & Autism Doctor",
-        "item": "https://drankushgarg.com/about-doctor"
+        "item": "https://drankushgarg.in/about-doctor"
       }
     ]
   };

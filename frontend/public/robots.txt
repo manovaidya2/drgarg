@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://drankushgarg.com/sitemap.xml
+Sitemap: https://drankushgarg.in/sitemap.xml

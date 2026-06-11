@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet-async";
+import { GlobalSEO } from "../components/SEOProvider";
 
 // 👉 sirf folder change kiya hai (adult → seniourmentalhealth)
 import AdultMentalHealthSection from "../seniourmentalhealth/AdultMentalHealthSection";
@@ -11,23 +11,17 @@ import MentalHealthClarityCTA from "../seniourmentalhealth/MentalHealthClarityCT
 function Seniour() {
   return (
     <>
-      <Helmet>
-        <title>
-          Senior Mental Health Care | Dr. Ankush Garg Neuro-Ayurveda
-        </title>
-
-        <meta
-          name="description"
-          content="Gentle and root-cause based mental health care for seniors. Address memory decline, anxiety, sleep problems, and emotional well-being."
-        />
-
-        <meta
-          name="keywords"
-          content="senior mental health, memory loss elderly, anxiety in seniors, sleep issues elderly, brain fog elderly"
-        />
-
-        <link rel="canonical" href="https://drankushgarg.com/senior" />
-      </Helmet>
+      <GlobalSEO
+        seo={{
+          title: "Senior Mental Health Care | Dr. Ankush Garg Neuro-Ayurveda",
+          description:
+            "Gentle and root-cause based mental health care for seniors. Address memory decline, anxiety, sleep problems, brain fog, and emotional well-being.",
+          keywords:
+            "senior mental health, memory loss elderly, anxiety in seniors, sleep issues elderly, brain fog elderly, Dr Ankush Garg",
+          canonical: "https://drankushgarg.in/seniour-mental-health",
+          image: "https://drankushgarg.in/og-image.jpg",
+        }}
+      />
 
       <div>
         <AdultMentalHealthSection />

@@ -115,7 +115,7 @@ export default function AdminAddBlog() {
       metaDescription: prev.shortDescription?.length > 160 
         ? prev.shortDescription.substring(0, 157) + '...' 
         : prev.shortDescription,
-      canonicalUrl: `https://drankushgarg.com/blog/${prev.slug}`,
+      canonicalUrl: `https://drankushgarg.in/blog/${prev.slug}`,
       ogTitle: prev.title,
       ogDescription: prev.shortDescription,
       ogImage: prev.image,
@@ -810,7 +810,7 @@ export default function AdminAddBlog() {
                     name="canonicalUrl"
                     value={formData.canonicalUrl}
                     onChange={handleChange}
-                    placeholder="https://drankushgarg.com/blog/your-slug"
+                    placeholder="https://drankushgarg.in/blog/your-slug"
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                   />
                 </div>

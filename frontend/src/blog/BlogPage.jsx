@@ -59,7 +59,7 @@ export default function BlogPage() {
       "@type": "CollectionPage",
       "headline": "Autism, ADHD & Mental Health Blog",
       "description": siteSettings.description,
-      "url": "https://drankushgarg.com/blog",
+      "url": "https://drankushgarg.in/blog",
       "numberOfItems": filteredBlogs.length,
       "author": {
         "@type": "Person",
@@ -70,7 +70,7 @@ export default function BlogPage() {
         "name": "Dr. Ankush Garg",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://drankushgarg.com/logo.png"
+          "url": "https://drankushgarg.in/logo.png"
         }
       }
     };
@@ -85,13 +85,13 @@ export default function BlogPage() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://drankushgarg.com/"
+        "item": "https://drankushgarg.in/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Blog",
-        "item": "https://drankushgarg.com/blog"
+        "item": "https://drankushgarg.in/blog"
       }
     ]
   };
@@ -122,21 +122,21 @@ export default function BlogPage() {
         <meta name="keywords" content="autism, ADHD, mental health, Ayurveda, Dr. Ankush Garg, neuro-ayurveda, child psychology, mental wellness, anxiety treatment, depression help" />
         
         {/* Canonical URL */}
-        <link rel="canonical" href="https://drankushgarg.com/blog" />
+        <link rel="canonical" href="https://drankushgarg.in/blog" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://drankushgarg.com/blog" />
+        <meta property="og:url" content="https://drankushgarg.in/blog" />
         <meta property="og:title" content={siteSettings.title} />
         <meta property="og:description" content={siteSettings.description} />
-        <meta property="og:image" content="https://drankushgarg.com/blog-og-image.jpg" />
+        <meta property="og:image" content="https://drankushgarg.in/blog-og-image.jpg" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://drankushgarg.com/blog" />
+        <meta name="twitter:url" content="https://drankushgarg.in/blog" />
         <meta name="twitter:title" content={siteSettings.title} />
         <meta name="twitter:description" content={siteSettings.description} />
-        <meta name="twitter:image" content="https://drankushgarg.com/blog-twitter-image.jpg" />
+        <meta name="twitter:image" content="https://drankushgarg.in/blog-twitter-image.jpg" />
         
         {/* Additional SEO */}
         <meta name="author" content="Dr. Ankush Garg" />

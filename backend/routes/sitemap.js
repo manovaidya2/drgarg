@@ -3,7 +3,7 @@ import Blog from "../models/Blog.js";
 
 const router = express.Router();
 
-const SITE_URL = "https://drankushgarg.com";
+const SITE_URL = "https://drankushgarg.in";
 
 const escapeXml = (value = "") =>
   String(value)

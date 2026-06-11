@@ -62,13 +62,13 @@ export default function Appointment() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://drankushgarg.com/"
+        "item": "https://drankushgarg.in/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Book Consultation",
-        "item": "https://drankushgarg.com/appointment"
+        "item": "https://drankushgarg.in/appointment"
       }
     ]
   };
@@ -79,7 +79,7 @@ export default function Appointment() {
     "@type": "MedicalBusiness",
     "name": "Manovaidya Clinic",
     "description": "Ayurvedic mental health and autism treatment clinic by Dr. Ankush Garg",
-    "image": "https://drankushgarg.com/clinic-image.jpg",
+    "image": "https://drankushgarg.in/clinic-image.jpg",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Near Vinayak Hospital, Atta Market, Pocket E, Sector 27",
@@ -93,7 +93,7 @@ export default function Appointment() {
       "latitude": "28.5700",
       "longitude": "77.3200"
     },
-    "url": "https://drankushgarg.com/appointment",
+    "url": "https://drankushgarg.in/appointment",
     "telephone": "+917823838638",
     "openingHours": "Mon-Sat 10:00-19:00",
     "priceRange": "₹₹",
@@ -109,14 +109,14 @@ export default function Appointment() {
         <meta name="keywords" content="book consultation, Dr. Ankush Garg appointment, autism doctor appointment, ADHD treatment, Ayurvedic neurologist, Manovaidya clinic" />
         
         {/* Canonical URL */}
-        <link rel="canonical" href="https://drankushgarg.com/appointment" />
+        <link rel="canonical" href="https://drankushgarg.in/appointment" />
         
         {/* Open Graph */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://drankushgarg.com/appointment" />
+        <meta property="og:url" content="https://drankushgarg.in/appointment" />
         <meta property="og:title" content="Book Consultation | Dr. Ankush Garg" />
         <meta property="og:description" content="Book a consultation with India's No.1 Autism Doctor and Ayurvedic Neurologist. Online and in-clinic appointments available." />
-        <meta property="og:image" content="https://drankushgarg.com/consultation-og-image.jpg" />
+        <meta property="og:image" content="https://drankushgarg.in/consultation-og-image.jpg" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInstance";
+import { GlobalSEO } from "../components/SEOProvider";
 
 export default function CaseStudyList() {
   const [caseStudies, setCaseStudies] = useState([]);
@@ -17,13 +18,13 @@ export default function CaseStudyList() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://drankushgarg.com/"
+        "item": "https://drankushgarg.in/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Case Studies",
-        "item": "https://drankushgarg.com/case-studies"
+        "item": "https://drankushgarg.in/case-study"
       }
     ]
   };
@@ -93,6 +94,18 @@ export default function CaseStudyList() {
 
   return (
     <>
+      <GlobalSEO
+        seo={{
+          title: "Case Studies | Dr. Ankush Garg Neuro-Ayurveda",
+          description:
+            "Explore documented case studies and patient journeys showing structured progress with Dr. Ankush Garg's Neuro-Ayurveda System.",
+          keywords:
+            "Dr Ankush Garg case studies, Neuro Ayurveda case study, autism improvement case study, mental health Ayurveda results",
+          canonical: "https://drankushgarg.in/case-study",
+          image: "https://drankushgarg.in/og-image.jpg",
+        }}
+      />
+
       {/* Breadcrumb Schema */}
       <Helmet>
         <script type="application/ld+json">

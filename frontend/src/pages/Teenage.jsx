@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet-async";
+import { GlobalSEO } from "../components/SEOProvider";
 
 import AdultCommonProblems from "../teenage/AdultCommonProblems";
 import ReframingSection from "../teenage/ReframingSection";
@@ -10,23 +10,17 @@ import TeenageMentalHealthHero from "../teenage/TeenageMentalHealthHero";
 function Adult() {
   return (
     <>
-      <Helmet>
-        <title>
-          Teenage Mental Health | Dr. Ankush Garg Neuro-Ayurveda Approach
-        </title>
-
-        <meta
-          name="description"
-          content="Holistic teenage mental health support using Neuro-Ayurveda. Address anxiety, behaviour issues, screen addiction, mood swings and emotional struggles in teens."
-        />
-
-        <meta
-          name="keywords"
-          content="teenage mental health, teen anxiety, teen depression, behaviour issues teens, screen addiction teens, neuro ayurveda teens, Dr Ankush Garg"
-        />
-
-        <link rel="canonical" href="https://drankushgarg.com/teenage" />
-      </Helmet>
+      <GlobalSEO
+        seo={{
+          title: "Teenage Mental Health | Dr. Ankush Garg Neuro-Ayurveda",
+          description:
+            "Holistic teenage mental health support using Neuro-Ayurveda. Address anxiety, behaviour issues, screen addiction, mood swings, and emotional struggles in teens.",
+          keywords:
+            "teenage mental health, teen anxiety, teen depression, behaviour issues teens, screen addiction teens, neuro ayurveda teens, Dr Ankush Garg",
+          canonical: "https://drankushgarg.in/teenage-mental-health",
+          image: "https://drankushgarg.in/og-image.jpg",
+        }}
+      />
 
       <div>
         <TeenageMentalHealthHero />

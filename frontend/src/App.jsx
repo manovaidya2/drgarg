@@ -40,7 +40,7 @@ export default function App() {
 
   return (
     <div className="font-sans">
-      <GlobalSEO /> {/* Default global SEO */}
+      <GlobalSEO includeAnalytics /> {/* Default global SEO */}
       <Header />
       <ScrollToTop />
       <main className="min-h-screen">

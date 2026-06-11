@@ -34,7 +34,7 @@ function Adult() {
   <meta name="geo.region" content="IN" />
   <meta name="geo.placename" content="India" />
 
-  <link rel="canonical" href="https://drankushgarg.com/adult" />
+  <link rel="canonical" href="https://drankushgarg.in/adult-mental-health" />
 
   <meta
     property="og:title"
@@ -45,10 +45,11 @@ function Adult() {
     content="Holistic care for anxiety, depression, OCD, stress, sleep issues, and emotional health through Dr. Ankush Garg’s Neuro-Ayurveda System."
   />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://drankushgarg.com/adult" />
-  <meta property="og:image" content="https://drankushgarg.com/og-image.jpg" />
+  <meta property="og:url" content="https://drankushgarg.in/adult-mental-health" />
+  <meta property="og:image" content="https://drankushgarg.in/og-image.jpg" />
 
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://drankushgarg.in/adult-mental-health" />
   <meta
     name="twitter:title"
     content="Adult Mental Health Treatment | Dr. Ankush Garg"
@@ -57,7 +58,7 @@ function Adult() {
     name="twitter:description"
     content="Neuro-Ayurveda based support for adult anxiety, depression, OCD, stress, emotional imbalance, and brain-gut health."
   />
-  <meta name="twitter:image" content="https://drankushgarg.com/og-image.jpg" />
+  <meta name="twitter:image" content="https://drankushgarg.in/og-image.jpg" />
 </Helmet>
 
       <div>
@@ -71,4 +72,4 @@ function Adult() {
   );
 }
 
-export default Adult;   
+export default Adult;

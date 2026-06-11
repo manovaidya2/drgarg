@@ -146,13 +146,13 @@ function About() {
 
     canonical.setAttribute(
       "href",
-      "https://drankushgarg.com/about"
+      "https://drankushgarg.in/about"
     );
 
     return () => {
       canonical.setAttribute(
         "href",
-        "https://drankushgarg.com/"
+        "https://drankushgarg.in/"
       );
     };
   }, []);
@@ -191,11 +191,11 @@ function About() {
         <meta property="og:type" content="website" />
         <meta
           property="og:url"
-          content="https://drankushgarg.com/about"
+          content="https://drankushgarg.in/about"
         />
         <meta
           property="og:image"
-          content="https://drankushgarg.com/og-image.jpg"
+          content="https://drankushgarg.in/og-image.jpg"
         />
 
         {/* Twitter */}
@@ -213,7 +213,7 @@ function About() {
         />
         <meta
           name="twitter:image"
-          content="https://drankushgarg.com/og-image.jpg"
+          content="https://drankushgarg.in/og-image.jpg"
         />
       </Helmet>
 

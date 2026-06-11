@@ -64,7 +64,7 @@
 //         />
 //         <link
 //           rel="canonical"
-//           href={`https://drankushgarg.com/case-study/${slug}`}
+//           href={`https://drankushgarg.in/case-study/${slug}`}
 //         />
 
 //         {/* Open Graph */}
@@ -79,7 +79,7 @@
 //         <meta property="og:type" content="article" />
 //         <meta
 //           property="og:url"
-//           content={`https://drankushgarg.com/case-study/${slug}`}
+//           content={`https://drankushgarg.in/case-study/${slug}`}
 //         />
 //         <meta property="og:image" content={caseStudy.image} />
 
@@ -300,7 +300,7 @@ export default function CaseStudyDetails() {
         />
         <link
           rel="canonical"
-          href={`https://drankushgarg.com/case-study/${slug}`}
+          href={`https://drankushgarg.in/case-study/${slug}`}
         />
 
         {/* Open Graph */}
@@ -315,7 +315,7 @@ export default function CaseStudyDetails() {
         <meta property="og:type" content="article" />
         <meta
           property="og:url"
-          content={`https://drankushgarg.com/case-study/${slug}`}
+          content={`https://drankushgarg.in/case-study/${slug}`}
         />
         <meta property="og:image" content={caseStudy.image} />
 
@@ -475,7 +475,7 @@ export default function CaseStudyDetails() {
             <p className="text-sm text-gray-500 mb-3">Share this case study:</p>
             <div className="flex flex-wrap gap-3">
               <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://drankushgarg.com/case-study/${slug}`)}`}
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://drankushgarg.in/case-study/${slug}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#1877f2] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#0e5fc7] transition-colors"
@@ -483,7 +483,7 @@ export default function CaseStudyDetails() {
                 Facebook
               </a>
               <a
-                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://drankushgarg.com/case-study/${slug}`)}&text=${encodeURIComponent(caseStudy.title)}`}
+                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://drankushgarg.in/case-study/${slug}`)}&text=${encodeURIComponent(caseStudy.title)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#1da1f2] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#0c85d0] transition-colors"
@@ -491,7 +491,7 @@ export default function CaseStudyDetails() {
                 Twitter
               </a>
               <a
-                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://drankushgarg.com/case-study/${slug}`)}`}
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://drankushgarg.in/case-study/${slug}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#0a66c2] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#084e96] transition-colors"
@@ -499,7 +499,7 @@ export default function CaseStudyDetails() {
                 LinkedIn
               </a>
               <a
-                href={`https://wa.me/?text=${encodeURIComponent(`${caseStudy.title} - https://drankushgarg.com/case-study/${slug}`)}`}
+                href={`https://wa.me/?text=${encodeURIComponent(`${caseStudy.title} - https://drankushgarg.in/case-study/${slug}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#25d366] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1da851] transition-colors"

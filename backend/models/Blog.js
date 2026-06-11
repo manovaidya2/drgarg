@@ -59,7 +59,7 @@ blogSchema.pre('save', function(next) {
   
   // Set canonicalUrl to blog URL if not provided
   if (!this.canonicalUrl && this.slug) {
-    this.canonicalUrl = `https://drankushgarg.com/blog/${this.slug}`;
+    this.canonicalUrl = `https://drankushgarg.in/blog/${this.slug}`;
   }
   
   next();

@@ -11,13 +11,13 @@ export default function NeuroAyurvedaSystemSections() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://drankushgarg.com/"
+        "item": "https://drankushgarg.in/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Neuro-Ayurveda System",
-        "item": "https://drankushgarg.com/neuro-ayurveda-system"
+        "item": "https://drankushgarg.in/neuro-ayurveda-system"
       }
     ]
   };
