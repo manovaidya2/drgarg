@@ -11,6 +11,7 @@ import BlogList from "./pages/BlogList";
 import CaseStudiesList from "./pages/CaseStudiesList";
 import EditCaseStudy from "./pages/CaseStudyEdit";
 import CaseStudyEdit from "./pages/CaseStudyEdit";
+import GalleryManager from "./pages/GalleryManager";
 
 
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/add-blog" element={<Layout><AdminAddBlog /></Layout>} />
           <Route path="/add-casestudy" element={<Layout><AdminAddCaseStudy /></Layout>} />
           <Route path="/appointments" element={<Layout><AdminAppointments /></Layout>} />
+          <Route path="/gallery" element={<Layout><GalleryManager /></Layout>} />
           <Route path="/blogs/edit/:id" element={<Layout><EditBlog/></Layout>} />
           <Route path="/blog-list" element={<Layout><BlogList /></Layout>} />
            <Route path="/case-studies" element={<Layout><CaseStudiesList /></Layout>} />

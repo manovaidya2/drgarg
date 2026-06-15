@@ -368,7 +368,7 @@ export default function Hero() {
                 {/* OPTIMIZED IMAGE TAG WITH FETCH PRIORITY */}
                 <img
                   src={doctorImage}
-                  alt="Dr. Ankush Garg - India's No.1 Ayurvedic Neurologist and Autism Specialist, founder of Neuro-Ayurveda System at Manovaidya Clinic"
+                  alt="Dr. Ankush Garg - leading Ayurvedic Neurologist and Autism Specialist, founder of Neuro-Ayurveda System at Manovaidya Clinic"
                   className="w-full h-[300px] min-[390px]:h-[340px] sm:h-[430px] md:h-[458px] object-cover object-center"
                   loading="eager"
                   fetchPriority="high"

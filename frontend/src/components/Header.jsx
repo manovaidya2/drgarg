@@ -210,7 +210,7 @@ export default function Header() {
 
   const primaryNav = [
     { to: "/", label: "Home" },
-    { to: "/about", label: "About" },
+    { to: "/about", label: "Meet The Doctor" },
     { to: "/neuro-ayurveda-system", label: "The System" },
     {
       label: "Conditions",
@@ -229,6 +229,7 @@ export default function Header() {
         { to: "/media-coverage", label: "Media & Press", description: "Features & talks" },
       ],
     },
+    { to: "/gallery", label: "Gallery" },
     { to: "/blog", label: "Blogs" },
     { to: "/appointment", label: "Contact" },
   ];
@@ -267,7 +268,7 @@ export default function Header() {
 </Link>
             <nav
               ref={menuRef}
-              className="hidden xl:flex items-center gap-4 2xl:gap-6 text-[16px] 2xl:text-[18px] shrink-0"
+              className="hidden xl:flex items-center gap-1 2xl:gap-4 text-[16px] 2xl:text-[18px] shrink-0"
             >
               {primaryNav.map((item) => {
                 if (item.children) {

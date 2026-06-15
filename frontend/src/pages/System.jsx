@@ -15,7 +15,7 @@ function System() {
     <>
       <Helmet>
         <title>
-          Dr. Ankush Garg | India’s No.1 Autism Doctor & Neuro-Ayurveda Specialist
+          Dr. Ankush Garg | One of India’s Top Autism Doctors & Neuro-Ayurveda Specialist
         </title>
 
         <meta
@@ -37,7 +37,7 @@ function System() {
 
         <meta
           property="og:title"
-          content="Dr. Ankush Garg | India’s No.1 Autism Doctor"
+          content="Dr. Ankush Garg | One of India’s Top Autism Doctors"
         />
         <meta
           property="og:description"

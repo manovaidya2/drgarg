@@ -19,6 +19,7 @@ import {
   FaPhoneAlt,
   FaEnvelope,
   FaMapMarkerAlt,
+  FaImages,
 } from "react-icons/fa";
 import { MdHealthAndSafety, MdPsychology,} from "react-icons/md";
 import { GiHealthNormal, GiHealing, GiMeditation } from "react-icons/gi";
@@ -123,6 +124,7 @@ const Sidebar = () => {
               { to: "/dashboard", icon: FaTachometerAlt, label: "Dashboard", color: "from-cyan-400 to-blue-400" },
               { to: "/blog-list", icon: FaBook, label: "BLOGS", color: "from-green-400 to-emerald-400" },
               { to: "/case-studies", icon: FaBrain, label: "CASE STUDIES", color: "from-purple-400 to-pink-400" },
+              { to: "/gallery", icon: FaImages, label: "GALLERY", color: "from-sky-400 to-cyan-400" },
               { to: "/appointments", icon: FaCalendarAlt, label: "APPOINTMENT", color: "from-yellow-400 to-orange-400" },
             ].map((item, index) => (
               <li key={index}>

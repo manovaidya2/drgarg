@@ -191,7 +191,7 @@ export default function BlogPage() {
 
             <p className="mt-6 max-w-[780px] text-[#3d4f4a] text-[16px] sm:text-[18px] md:text-[20px] leading-[1.7]">
               Plain-language, parent-friendly, research-backed articles from Dr.
-              Ankush Garg — India's No.1 autism doctor, best Ayurvedic
+              Ankush Garg — one of India's top autism doctors, leading Ayurvedic
               neurologist, and founder of Manovaidya.
             </p>
           </div>
@@ -208,8 +208,8 @@ export default function BlogPage() {
               Most parents and patients leave a doctor's clinic with a diagnosis
               and no real understanding. This blog exists to fix that. Every
               article here is written or personally guided by{" "}
-              <strong>Dr. Ankush Garg</strong> — widely recognized as India's{" "}
-              <strong>No.1 autism doctor</strong>, the country's leading{" "}
+              <strong>Dr. Ankush Garg</strong> — widely recognized as one of India's{" "}
+              <strong>top autism doctors</strong>, the country's leading{" "}
               <strong>Ayurvedic neurologist</strong>, and the developer of the{" "}
               <strong>Neuro-Ayurveda System</strong> at{" "}
               <strong>Manovaidya</strong>. No jargon. No fear-mongering. Just

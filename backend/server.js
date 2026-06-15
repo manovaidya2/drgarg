@@ -9,6 +9,7 @@ import { fileURLToPath } from "url";
 import blogRoutes from "./routes/blogRoutes.js";
 import caseStudyRoutes from "./routes/caseStudyRoutes.js";
 import appointmentRoutes from "./routes/appointmentRoutes.js";
+import galleryRoutes from "./routes/galleryRoutes.js";
 import sitemapRoute from "./routes/sitemap.js";
 
 dotenv.config();
@@ -28,6 +29,7 @@ const spaRoutes = [
   "/case-study",
   "/case-study/:slug",
   "/media-coverage",
+  "/gallery",
   "/neuro-ayurveda-system",
   "/autism-adhd",
   "/adult-mental-health",
@@ -58,6 +60,7 @@ mongoose
 app.use("/api/blogs", blogRoutes);
 app.use("/api/case-studies", caseStudyRoutes);
 app.use("/api/appointments", appointmentRoutes);
+app.use("/api/gallery", galleryRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({

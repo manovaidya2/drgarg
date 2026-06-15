@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import axiosInstance from "../api/axiosInstance";
+import doctorImage from "../images/sirimg.webp";
 import {
   Calendar,
   ArrowLeft,
@@ -384,7 +385,7 @@ export default function BlogDetails() {
         "https://www.youtube.com/c/drankushgarg"
       ],
       "award": [
-        "India's No.1 Autism Doctor",
+        "One of India's Top Autism Doctors",
         "Best Ayurvedic Neurologist Award 2023",
         "Excellence in Neuro-Ayurveda Research"
       ],
@@ -675,7 +676,7 @@ export default function BlogDetails() {
 
       {/* Sticky Header */}
       <div className="bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-3">
+        <div className="w-full px-[10px] py-3">
           <div className="flex items-center justify-between">
             <Link
               to="/blog"
@@ -709,7 +710,7 @@ export default function BlogDetails() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
         </div>
 
-        <div className="relative h-full flex items-end max-w-7xl mx-auto px-4 pb-8 sm:pb-12">
+        <div className="relative h-full flex items-end w-full px-[10px] pb-8 sm:pb-12">
           <div className="max-w-3xl">
             {/* Category and Meta Info */}
             <div className="flex items-center gap-3 mb-3 flex-wrap">
@@ -759,11 +760,11 @@ export default function BlogDetails() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-6 md:py-12">
+      <div className="w-full px-[10px] py-6 md:py-12">
         <div className="flex flex-col lg:flex-row gap-8 relative">
           {/* Left Sidebar - Table of Contents */}
           {tableOfContents.length > 0 && (
-            <div className="lg:w-1/4 hidden lg:block">
+            <div className="hidden lg:block lg:w-[220px] lg:flex-shrink-0">
               <div className="sticky top-24 bg-white rounded-xl p-5 shadow-sm border border-gray-100">
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                   <BookOpen size={18} />
@@ -787,7 +788,7 @@ export default function BlogDetails() {
           )}
 
           {/* Main Article Content */}
-          <div className="lg:w-2/3 w-full min-w-0" ref={mainContentRef}>
+          <div className="w-full min-w-0 lg:flex-1" ref={mainContentRef}>
             {/* Author Bio */}
             <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 sm:p-5 shadow-sm border border-green-100 mb-5 sm:mb-6" itemScope itemType="https://schema.org/Person">
               <div className="flex items-center gap-3 mb-4">
@@ -802,7 +803,7 @@ export default function BlogDetails() {
                 </div>
               </div>
               <p className="text-sm text-gray-600 mb-3" itemProp="description">
-                Dr. Ankush Garg is India's No.1 autism doctor, leading Ayurvedic neurologist, 
+                Dr. Ankush Garg is one of India's top autism doctors, leading Ayurvedic neurologist, 
                 and founder of Manovaidya. With over 9+ years of experience, he has helped 
                 thousands of patients achieve better mental health through his Neuro-Ayurveda System.
               </p>
@@ -941,13 +942,18 @@ export default function BlogDetails() {
           </div>
 
           {/* Right Sidebar */}
-          <div className="lg:w-1/3 w-full">
+          <div className="w-full lg:w-[340px] lg:flex-shrink-0">
             <div ref={sidebarRef} className="lg:sticky lg:top-24 space-y-6">
               {/* Author Card (Enhanced) */}
               <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
                 <div className="text-center">
-                  <div className="w-24 h-24 bg-gradient-to-br from-green-600 to-emerald-600 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-md mx-auto mb-3">
-                    A
+                  <div className="mx-auto mb-4 h-32 w-32 overflow-hidden rounded-2xl border-4 border-green-50 shadow-md">
+                    <img
+                      src={doctorImage}
+                      alt="Dr. Ankush Garg Ayurvedic Neurologist"
+                      className="h-full w-full object-cover object-top"
+                      loading="lazy"
+                    />
                   </div>
                   <h3 className="font-bold text-gray-900 text-lg">Dr. Ankush Garg</h3>
                   <p className="text-sm text-green-700 mb-2">Ayurvedic Neurologist</p>
@@ -956,6 +962,19 @@ export default function BlogDetails() {
                     <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">7+ Years Exp</span>
                     <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">10,000+ Patients</span>
                   </div>
+                  <ul className="mb-4 space-y-2 border-t border-green-100 pt-4 text-left text-sm leading-6 text-gray-600">
+                    {[
+                      "Autism, ADHD, child development and mental health clinic in India",
+                      "Care led by a BAMS, MPH, PhD qualified doctor",
+                      "7+ years of experience in child development and mental health care",
+                      "Founder of Manovaidya, Noida and developer of the Neuro-Ayurveda System",
+                    ].map((point) => (
+                      <li key={point} className="flex gap-2">
+                        <Check size={16} className="mt-1 shrink-0 text-green-700" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
                   <Link
                     to="/about"
                     className="inline-block w-full bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-800 transition-colors"

@@ -105,7 +105,7 @@ export default function Appointment() {
       {/* SEO and Schema */}
       <Helmet>
         <title>Book Consultation | Dr. Ankush Garg - Ayurvedic Neurologist</title>
-        <meta name="description" content="Book online or in-clinic consultation with Dr. Ankush Garg, India's No.1 Autism Doctor and Ayurvedic Neurologist. Get personalized Neuro-Ayurveda assessment for autism, ADHD, and mental health." />
+        <meta name="description" content="Book online or in-clinic consultation with Dr. Ankush Garg, one of India's top Autism Doctors and Ayurvedic Neurologists. Get personalized Neuro-Ayurveda assessment for autism, ADHD, and mental health." />
         <meta name="keywords" content="book consultation, Dr. Ankush Garg appointment, autism doctor appointment, ADHD treatment, Ayurvedic neurologist, Manovaidya clinic" />
         
         {/* Canonical URL */}
@@ -115,13 +115,13 @@ export default function Appointment() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://drankushgarg.in/appointment" />
         <meta property="og:title" content="Book Consultation | Dr. Ankush Garg" />
-        <meta property="og:description" content="Book a consultation with India's No.1 Autism Doctor and Ayurvedic Neurologist. Online and in-clinic appointments available." />
+        <meta property="og:description" content="Book a consultation with one of India's top Autism Doctors and Ayurvedic Neurologists. Online and in-clinic appointments available." />
         <meta property="og:image" content="https://drankushgarg.in/consultation-og-image.jpg" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Book Consultation | Dr. Ankush Garg" />
-        <meta name="twitter:description" content="Book a consultation with India's No.1 Autism Doctor and Ayurvedic Neurologist." />
+        <meta name="twitter:description" content="Book a consultation with one of India's top Autism Doctors and Ayurvedic Neurologists." />
         
         {/* Robots */}
         <meta name="robots" content="index, follow" />

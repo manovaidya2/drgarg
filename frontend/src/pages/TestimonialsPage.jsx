@@ -1,6 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { Quote, ArrowRight } from "lucide-react";
+import { Quote, ArrowRight, Star } from "lucide-react";
 import ConsultationPopup from "../components/ConsultationPopup";
 import { useState } from "react";
 import { GlobalSEO } from "../components/SEOProvider";
@@ -11,33 +11,141 @@ export default function TestimonialsPage() {
   const testimonials = [
     {
       message:
-        "For the first time, someone explained why therapy alone was not giving results. After following the system, we started seeing better response and engagement in our child.",
-      name: "Parent",
+        "Mere child mein eye contact ki problem thi aur behaviour bhi kaafi different tha. Humne kaafi doctors aur therapies try ki, lekin long-term growth nahi ho rahi thi. Manovaidya mein holistic approach ke saath treatment start hua, aur kuch months mein eye contact, behaviour aur engagement mein noticeable improvement dikhi.",
+      name: "Rajivkumar Raut",
       role: "Autism Care",
     },
     {
       message:
-        "We had tried different therapies for our child's autism, but we were confused. At Manovaidya, we understood the brain-gut-behaviour connection and got a clear roadmap.",
-      name: "Parent",
+        "Meri cousin ko jerking movements aur seizures hote the, jiske baad wo confused aur thaki hui feel karti thi. Daily routine, school aur ghar ke kaam manage karna mushkil ho gaya tha. Manovaidya ke guidance se hume condition ko samajhne aur treatment direction milne mein help hui.",
+      name: "Bulbul Singh",
+      role: "Seizure Support",
+    },
+    {
+      message:
+        "Meri beti bahut hyperactive thi aur hume bataya gaya tha ki usse ADHD hai. Pehle treatment se zyada improvement nahi aa rahi thi. Manovaidya se treatment start karne ke baad dheere-dheere behaviour balanced hua, wo shant baith kar activities karne lagi.",
+      name: "Jatin Kumar Sanjowa",
+      role: "ADHD Care",
+    },
+    {
+      message:
+        "Mera beta 15 saal ka hai aur usse sleep disorder tha. Raat mein sone mein problem, din mein irritability aur thakan hoti thi. Manovaidya ke treatment se 2-3 months mein improvement dikhne lagi, ab beta calm aur confident feel karta hai.",
+      name: "Vikash Pandey",
+      role: "Sleep Disorder",
+    },
+    {
+      message:
+        "My 17 year old daughter was suffering from anxiety, mood swings and overthinking. As parents, hum samajh nahi pa rahe the ki problem kya hai. We tried many things and consulted doctors, but Manovaidya ne hume better direction aur support diya.",
+      name: "Monu Singh",
+      role: "Teen Mental Health",
+    },
+    {
+      message:
+        "Hamara beta pehle na achhe se eye contact karta tha aur na respond karta tha. School mein teachers bhi bolte the ki baccha participate nahi karta. Kaafi therapies try ki, but result zero tha. Manovaidya se treatment start karne ke baad positive changes dikhne lage.",
+      name: "Pushkarnath Patel",
+      role: "Child Development",
+    },
+    {
+      message:
+        "Humein pata chala ki hamare 4 saal ke bete ko autism spectrum hai, aur eye contact aur response ka issue badh raha tha. Social media ke through Manovaidya ke baare mein pata chala aur treatment start karne ke baad progress dikhne lagi.",
+      name: "Pawan Kumar Chaubey",
       role: "Autism Spectrum",
     },
     {
       message:
-        "My teenager was anxious, angry, and not talking to us. The approach helped us understand the emotional pressure behind the behaviour.",
-      name: "Parent of Teenager",
-      role: "",
+        "Autism ka samna karna aasaan nahi tha. Har din ek struggle tha. Yahan aane ke baad pehli baar laga ki koi hume samajhta hai. Doctor treatment ke saath parents ko mentally support bhi karte hain. Eye contact, behaviour aur understanding mein jo badlaav aaye, wo priceless hain.",
+      name: "Rinkiii",
+      role: "Autism Care",
     },
     {
       message:
-        "I consulted for anxiety and overthinking. I realized it was not only a thought problem, but a nervous system issue. The treatment gave me clarity and stability.",
-      name: "Adult Patient",
-      role: "",
+        "Overthinking aur low motivation meri life ka part ban gaye the. Manovaidya ke personalized plan se ab main zyada productive aur positive feel karta hoon. Therapy aur Ayurveda ka combination meri life kaafi better bana diya hai.",
+      name: "Manisha Bhatia",
+      role: "Mental Wellness",
     },
     {
       message:
-        "The biggest difference was tracking. Every month we could see what was changing.",
-      name: "Parent",
-      role: "Long-term Care",
+        "Meri beti loud sounds aur bright lights se easily disturb ho jati thi aur social interaction mein problem hoti thi. Pehle kaafi therapies try ki, lekin khaas result nahi mila. Manovaidya mein treatment shuru karne ke baad improvement dikhna start hua.",
+      name: "Prem Sha",
+      role: "Sensory Concerns",
+    },
+    {
+      message:
+        "Dr. Ankush Garg is a good mind growth doctor. Treatment phase by phase hota hai according to child, aur consultation style bhi achha hai. Unhone hume samjhaya ki apne child ke liye kya karna chahiye.",
+      name: "Soman Sharma",
+      role: "Child Growth",
+    },
+    {
+      message:
+        "I had a great experience taking treatment from Manovaidya. Mere bacche ke behaviour mein kaafi improvement dikhi hai. Thanks to Doctor Ankush Garg.",
+      name: "Rohit Raikwar",
+      role: "Behaviour Support",
+    },
+    {
+      message:
+        "Maine Dr. Ankush Garg ji ki video online dekhi thi aur phir mere hyperactive bacche ke liye consult kiya. Consultation mein meri baat properly suni gayi aur solution ko clearly explain kiya gaya.",
+      name: "Khalida Khan",
+      role: "Hyperactivity Support",
+    },
+    {
+      message:
+        "Autism ke liye treatment dhoondhna easy nahi tha, lekin yahan aane ke baad direction clear ho gayi. 6 months mein bacche mein speech, understanding aur behaviour mein solid progress dikhi. Doctor ka caring behaviour aur positive approach helpful raha.",
+      name: "Mani Ram",
+      role: "Autism Care",
+    },
+    {
+      message:
+        "Doctor ne hamesha patience se hamari baatein suni aur step by step guide diya. Bacche ki behaviour problems pehle se bahut kam ho gayi hain. Humko lagta hai ab baccha ek better track pe hai.",
+      name: "Prenshu Singh",
+      role: "Behaviour Support",
+    },
+    {
+      message:
+        "Whole team is very good in their response. They always support us whenever we need. Understanding and focus improved a lot in my child within a very short span of time. Thanks to the whole Manovaidya team for responding humbly and clearing all our doubts.",
+      name: "Avipsa Mohanty",
+      role: "Focus & Understanding",
+    },
+    {
+      message:
+        "Hamare bacche ko autism ke symptoms the aur hum bohot pareshaan the. Dr. Garg ne calmly har cheez explain ki, har question patiently suna. 2 months ki treatment ke baad baccha zyada eye contact karta hai aur respond bhi karta hai.",
+      name: "Dinesh Arya",
+      role: "Autism Care",
+    },
+    {
+      message:
+        "Jab humne treatment start kiya tha to hume pata nahi tha kya expect karein. Baccha na baithta tha na respond karta tha. Dheere-dheere routine aur therapies ne cheezein badli. 1 saal baad confidence, speech aur understanding ka level dekhkar dil khush ho jata hai.",
+      name: "Kajal Rawat",
+      role: "Child Development",
+    },
+    {
+      message:
+        "It was a wonderful experience with Dr. Ankush Garg. Before visiting his clinic I had many doubts about my child, but after meeting him he diagnosed my child appropriately and advised according to his mental condition.",
+      name: "Dishita Mishra",
+      role: "Child Consultation",
+    },
+    {
+      message:
+        "Mujhe Manovaidya ke baare mein Facebook ke through pata chala tha. Sir se consultation lekar bahut achha feel hua. Unhone bahut calmly hamari problem suni aur solution bataya.",
+      name: "Vijay Kumar Maurya",
+      role: "Consultation",
+    },
+    {
+      message:
+        "Before I started treatment here with Dr. Ankush, I used to believe that nothing could be done in autism after so many wasted efforts. The Ayurvedic treatment at Manovaidya changed my belief and showed remarkable improvements in my autistic child.",
+      name: "Indu Bala",
+      role: "Autism Care",
+    },
+    {
+      message:
+        "Dr. Ankush Garg's deep knowledge of Ayurveda and personalized approach to treatment have made a significant positive impact on my health and well-being. His attentive listening and thoughtful guidance helped me understand and manage my health better.",
+      name: "Nitin Bansal",
+      role: "Ayurvedic Care",
+    },
+    {
+      message:
+        "I had migraine pain, and after taking Ayurvedic medicines for migraine and headache I am much more relieved now. I also had acidity related issues, which are also better now. Thanks to Dr. Ankush Garg for personalized care.",
+      name: "Seema Seema",
+      role: "Migraine & Acidity",
     },
   ];
 
@@ -85,7 +193,11 @@ export default function TestimonialsPage() {
         "@type": "Rating",
         "ratingValue": "5",
         "bestRating": "5"
-      }
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Google Business Profile"
+/*  */      }
     }))
   };
 
@@ -170,6 +282,30 @@ export default function TestimonialsPage() {
                     strokeWidth={2.3}
                     className="text-[#dda63b] fill-none mb-7"
                   />
+
+                  <div className="mb-5 flex flex-wrap items-center gap-3">
+                    <div className="flex items-center gap-2" aria-label="4.9 out of 5 star rating">
+                      <span className="text-[14px] font-bold text-[#1f3f38]">4.9</span>
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            size={16}
+                            className="fill-[#fbbc04] text-[#fbbc04]"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <span className="rounded-full border border-[#dfe5f2] bg-white px-3 py-1 text-[11px] font-bold shadow-sm">
+                      <span className="text-[#4285f4]">G</span>
+                      <span className="text-[#ea4335]">o</span>
+                      <span className="text-[#fbbc04]">o</span>
+                      <span className="text-[#4285f4]">g</span>
+                      <span className="text-[#34a853]">l</span>
+                      <span className="text-[#ea4335]">e</span>
+                      <span className="ml-1 text-[#4b5563]">Review</span>
+                    </span>
+                  </div>
 
                   <p className="font-serif text-[#071f1b] text-[18px] sm:text-[20px] lg:text-[16px] leading-[1.65] tracking-[-0.018em]">
                     “{item.message}”

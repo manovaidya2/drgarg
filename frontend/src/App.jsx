@@ -16,6 +16,7 @@ import MindwellnessPage from "./pages/MindwellnessPage";
 import CaseStudyList from "./pages/CaseStudyList";
 import CaseStudyDetails from "./pages/CaseStudyDetails";
 import MediaCoverage from "./pages/MediaCoverage";
+import Gallery from "./pages/Gallery";
 
 import { GlobalSEO } from "./components/SEOProvider";
 import System from "./pages/System";
@@ -55,6 +56,7 @@ export default function App() {
           <Route path="/case-study" element={<CaseStudyList />} />
           <Route path="/case-study/:slug" element={<CaseStudyDetails />} />
           <Route path="/media-coverage" element={<MediaCoverage />} />
+          <Route path="/gallery" element={<Gallery />} />
           <Route path="/neuro-ayurveda-system" element={<System />} />
           <Route path="/autism-adhd" element={<AutismADHDSection />} />
           <Route path="/adult-mental-health" element={<Adult />} />

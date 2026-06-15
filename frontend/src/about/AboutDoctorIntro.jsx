@@ -60,7 +60,7 @@ export default function AboutDoctorIntro() {
             </p>
 
             <h2 className="font-serif text-[#002b18] text-[28px] md:text-[36px] leading-[1.18] font-normal mb-5">
-              Dr. Ankush Garg — India&apos;s No.1 Autism Doctor & Leading
+              Dr. Ankush Garg — One of India&apos;s Top Autism Doctors & Leading
               Ayurvedic Neurologist
             </h2>
 

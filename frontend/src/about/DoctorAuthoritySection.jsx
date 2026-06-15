@@ -24,7 +24,7 @@ export default function DoctorAuthoritySection() {
 
               <ul className="space-y-3 text-[#1f2f2a] text-[14px] leading-[1.45]">
                 <li>
-                  • Recognized as India's <strong>No.1 autism doctor</strong>
+                  • Recognized as one of India's <strong>top autism doctors</strong>
                 </li>
                 <li>
                   • Best <strong>Ayurvedic neurologist</strong> for ADHD & speech delay
