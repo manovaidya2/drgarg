@@ -246,10 +246,7 @@ export default function Hero() {
               </h1>
 
               <p className="mt-5 sm:mt-8 max-w-[650px] mx-auto lg:mx-0 text-[15px] sm:text-[17px] md:text-[20px] leading-[1.65] text-[#2f3f4a]">
-                Dr. Ankush Garg, No.1 Ayurvedic Neurologist and developer of the
-                Neuro-Ayurveda System, helps children, teenagers, adults, and
-                seniors heal complex brain, behaviour, and mental health
-                conditions through an integrated Brain–Gut–Behaviour approach.
+              Dr. Ankush Garg, one of India’s leading Ayurvedic Neurologists and developer of the Neuro-Ayurveda System, helps children, teenagers, adults, and seniors heal complex brain, behaviour, and mental health conditions through an integrated Brain–Gut–Behaviour approach.
               </p>
 
               <div className="mt-6 sm:mt-8 flex flex-col min-[480px]:flex-row items-stretch min-[480px]:items-center justify-center lg:justify-start gap-3">

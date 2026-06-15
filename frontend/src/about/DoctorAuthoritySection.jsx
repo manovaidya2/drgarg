@@ -59,34 +59,23 @@ export default function DoctorAuthoritySection() {
 
             <div className="mt-6 max-w-[680px] space-y-5 text-[#1f2f2a] text-[15px] md:text-[16px] leading-[1.65]">
               <p>
-                <strong>Dr. Ankush Garg</strong> is widely recognized as the{" "}
-                <strong>No.1 autism doctor in India</strong> and the country's
-                leading <strong>Ayurvedic neurologist</strong>. Parents from
-                across India and abroad consult him as the{" "}
-                <strong>best Ayurvedic doctor for autism</strong>, ADHD, speech
-                delay, sensory issues and neurodevelopmental disorders — and
-                adults consult him as a top{" "}
-                <strong>mental health Ayurveda specialist</strong> for anxiety,
-                depression, OCD, overthinking and sleep disorders.
+Dr. Ankush Garg is an Autism, ADHD, Child Development & Mental Health Specialist in India, Founder of Manovaidya and Creator of the Neuro-Ayurveda Development System, a structured framework developed to support developmental, behavioural and mental wellness concerns through a comprehensive and personalized approach.
+
               </p>
 
               <p>
-                His clinical authority is built on a rare combination: classical
-                Ayurvedic training (<strong>BAMS, Ayurvedacharya</strong>),
-                public health understanding (<strong>MPH</strong>), and original{" "}
-                <strong>PhD research on the Gut-Brain Axis</strong> — the science
-                explaining how gut health shapes brain development, mood,
-                attention and behaviour.
+               His work focuses on Autism Spectrum Disorder (ASD), ADHD, Child Development, Behavioural Challenges, Speech & Communication Concerns, Teen Mental Health, Adult Mental Health, Women’s Emotional Wellbeing, Stress-Related Concerns and Senior Mental Health Support.
+
               </p>
 
               <p>
-                Dr. Garg is the <strong>founder of Manovaidya</strong> and the
-                developer of the <strong>Neuro-Ayurveda System</strong> — a
-                structured, root-cause Brain–Gut–Behaviour treatment model that
-                has helped thousands of children with autism and adults with
-                mental health concerns regain stability, independence and
-                clarity.
+              Through Manovaidya, Dr. Ankush Garg combines traditional Ayurvedic understanding with modern insights into brain development, behaviour, emotional wellbeing and cognitive health. His approach emphasizes root-cause understanding, personalized guidance, family-centred support and long-term wellness planning.
+
               </p>
+              <p>Through detailed assessment, individualized recommendations and structured follow-up, he helps children, adults and families better understand their concerns and move forward with greater clarity, confidence and direction.
+</p>
+<p>Families from across India connect with Dr. Ankush Garg for Autism, ADHD, Child Development and Mental Health support through a compassionate, personalized and structured Neuro-Ayurveda approach.
+</p>
             </div>
           </div>
 
