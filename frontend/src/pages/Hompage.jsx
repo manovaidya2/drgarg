@@ -7,17 +7,20 @@ import HealthyMindSection from "../Home/HealthyMindSection";
 import Testimonials from "./Testimonials";
 import AboutSection from "../Home/AboutSection";
 import StatsSection from "../Home/StatsSection";
+import NeuroDevelopmentSystemSection from "../Home/NeuroDevelopmentSystemSection";
+import LifeStageExpertiseSection from "../Home/LifeStageExpertiseSection";
+import FamilySupportOverviewSection from "../Home/FamilySupportOverviewSection";
 import CoreProblemSection from "../Home/CoreProblemSection";
 import BigTruthSection from "../Home/BigTruthSection";
 import NeuroAyurvedaMethod from "../Home/NeuroAyurvedaMethod";
 import TrustSection from "../Home/TrustSection";
-import DomainExpertiseSection from "../Home/DomainExpertiseSection";
+// import DomainExpertiseSection from "../Home/DomainExpertiseSection";
 import ClarityCTA from "../Home/ClarityCTA";
 import AutismFAQSection from "../Home/AutismFAQSection";
 import BlogCarousel from "../Home/BlogCarousel";
 
 // Import the image for preload URL
-import doctorImage from "../images/sirimg.webp";
+import doctorImage from "../images/dr-ankush-hero-banner-v2.png";
 
 function Homepage() {
   const imageUrl = typeof doctorImage === 'string' ? doctorImage : doctorImage?.src;
@@ -82,11 +85,14 @@ function Homepage() {
       <div>
         <Hero />
         <StatsSection />
+        <NeuroDevelopmentSystemSection />
+        <LifeStageExpertiseSection />
+        <FamilySupportOverviewSection />
         <CoreProblemSection />
         <BigTruthSection />
         <NeuroAyurvedaMethod /> 
         <TrustSection />
-        <DomainExpertiseSection />
+        {/* <DomainExpertiseSection /> */}
         <AutismFAQSection />
         <BlogCarousel />
         <ClarityCTA />

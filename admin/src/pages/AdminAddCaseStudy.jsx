@@ -865,10 +865,10 @@ export default function AdminAddCaseStudy() {
   };
 
   return (
-    <section className="p-8 bg-gray-50 min-h-screen">
-      <div className="max-w-5xl mx-auto bg-white rounded-3xl p-8 shadow border">
+    <section className="min-h-screen">
+      <div className="w-full bg-white rounded-xl p-5 md:p-6 shadow-sm border border-gray-100">
 
-        <h1 className="text-3xl font-bold mb-8 text-gray-800">
+        <h1 className="text-3xl font-bold mb-5 text-gray-800">
           Add Case Study
         </h1>
 

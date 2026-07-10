@@ -126,13 +126,19 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 
-import AboutDoctorIntro from "../about/AboutDoctorIntro";
-import DoctorAuthoritySection from "../about/DoctorAuthoritySection";
-import DifferentStandardCare from "../about/DifferentStandardCare";
-import CredentialsAuthority from "../about/CredentialsAuthority";
-import GutBrainAxisSection from "../about/GutBrainAxisSection";
-import ResearchAndMethod from "../about/ResearchAndMethod";
-import PhilosophyCTA from "../about/PhilosophyCTA";
+// import AboutDoctorIntro from "../about/AboutDoctorIntro";
+// import DoctorAuthoritySection from "../about/DoctorAuthoritySection";
+// import DifferentStandardCare from "../about/DifferentStandardCare";
+// import CredentialsAuthority from "../about/CredentialsAuthority";
+// import GutBrainAxisSection from "../about/GutBrainAxisSection";
+// import ResearchAndMethod from "../about/ResearchAndMethod";
+// import PhilosophyCTA from "../about/PhilosophyCTA";
+import NewAboutHeroSection from "../about/NewAboutHeroSection";
+import NewAboutStorySection from "../about/NewAboutStorySection";
+import NewAboutSystemSection from "../about/NewAboutSystemSection";
+import NewAboutCardsSection from "../about/NewAboutCardsSection";
+import NewAboutFaqSection from "../about/NewAboutFaqSection";
+import NewAboutMoreSection from "../about/NewAboutMoreSection";
 
 function About() {
   useEffect(() => {
@@ -217,7 +223,7 @@ function About() {
         />
       </Helmet>
 
-      <div>
+      {/* <div>
         <AboutDoctorIntro />
         <DoctorAuthoritySection />
         <DifferentStandardCare />
@@ -225,6 +231,15 @@ function About() {
         <GutBrainAxisSection />
         <ResearchAndMethod />
         <PhilosophyCTA />
+      </div> */}
+
+      <div className="bg-white">
+        <NewAboutHeroSection />
+        <NewAboutStorySection />
+        <NewAboutSystemSection />
+        <NewAboutCardsSection />
+        <NewAboutFaqSection />
+        <NewAboutMoreSection />
       </div>
     </>
   );

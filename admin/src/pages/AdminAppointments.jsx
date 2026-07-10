@@ -184,7 +184,7 @@ export default function AdminAppointments() {
   /* LOADING STATE */
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+      <div className="flex min-h-[360px] items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600 font-medium">Loading appointments...</p>
@@ -196,7 +196,7 @@ export default function AdminAppointments() {
   /* ERROR STATE */
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+      <div className="flex min-h-[360px] items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
           <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertCircle className="w-10 h-10 text-red-500" />
@@ -222,15 +222,15 @@ export default function AdminAppointments() {
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
       </div>
 
-      <div className="relative max-w-4xl mx-auto    py-5">
+      <div className="relative mx-auto w-full max-w-none">
         {/* Header Section */}
-        <div className="mb-6">
+        <div className="mb-5">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 bg-clip-text text-transparent">
                 Appointments
               </h1>
-              <p className="text-gray-500 mt-2">Manage and track all appointment requests</p>
+              <p className="text-gray-500 mt-1.5">Manage and track all appointment requests</p>
             </div>
             <div className="flex gap-3">
               <button
@@ -252,7 +252,7 @@ export default function AdminAppointments() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">
           <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group">
             <div className="flex items-center justify-between mb-4">
               <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -300,7 +300,7 @@ export default function AdminAppointments() {
         </div>
 
         {/* Search and Filter Bar */}
-        <div className="bg-white rounded-2xl shadow-lg p-4 mb-8">
+        <div className="bg-white rounded-xl shadow-lg p-4 mb-5">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -331,7 +331,7 @@ export default function AdminAppointments() {
         </div>
 
         {/* Desktop Table */}
-        <div className="hidden lg:block   overflow-hidden">
+        <div className="hidden overflow-hidden rounded-xl bg-white shadow-lg lg:block">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gradient-to-r from-purple-100 to-pink-100">

@@ -246,6 +246,8 @@ const Dashboard = () => {
         pointBorderWidth: 2,
         pointRadius: 4,
         pointHoverRadius: 6,
+        pointStyle: 'circle',
+        spanGaps: false,
       }
     ]
   };
@@ -262,6 +264,7 @@ const Dashboard = () => {
           'rgba(59, 130, 246, 0.8)',
         ],
         borderRadius: 8,
+        borderSkipped: false,
       }
     ]
   };
@@ -277,6 +280,8 @@ const Dashboard = () => {
           'rgba(59, 130, 246, 0.8)',
         ],
         borderWidth: 0,
+        hoverOffset: 12,
+        spacing: 4,
       }
     ]
   };
@@ -284,6 +289,12 @@ const Dashboard = () => {
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false,
+    transitions: {
+      active: {
+        animation: false,
+      },
+    },
     plugins: {
       legend: {
         display: false,
@@ -315,6 +326,7 @@ const Dashboard = () => {
   const doughnutOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false,
     plugins: {
       legend: {
         position: 'bottom',
@@ -328,18 +340,45 @@ const Dashboard = () => {
     cutout: '70%',
   };
 
-  const StatCard = ({ title, value, icon: Icon, color, growth, subtitle, onClick }) => (
+  const chartCards = {
+    line: {
+      icon: FaChartLine,
+      badge: "bg-indigo-50 text-indigo-600",
+    },
+    doughnut: {
+      icon: FaHeartbeat,
+      badge: "bg-emerald-50 text-emerald-600",
+    },
+    bar: {
+      icon: MdOutlineTrendingUp,
+      badge: "bg-purple-50 text-purple-600",
+    },
+  };
+
+  const iconTheme = {
+    blue: "bg-blue-50 text-blue-600 shadow-blue-100",
+    green: "bg-green-50 text-green-600 shadow-green-100",
+    purple: "bg-purple-50 text-purple-600 shadow-purple-100",
+    orange: "bg-orange-50 text-orange-600 shadow-orange-100",
+  };
+
+  const StatCard = ({ title, value, icon: Icon, color, growth, subtitle, onClick }) => {
+    const colorKey = color.includes("green")
+      ? "green"
+      : color.includes("purple")
+        ? "purple"
+        : color.includes("orange")
+          ? "orange"
+          : "blue";
+
+    return (
     <div 
-      className="relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer group"
+      className={`group relative overflow-hidden rounded-2xl bg-white p-6 shadow-lg ${onClick ? "cursor-pointer" : ""}`}
       onClick={onClick}
       onMouseEnter={() => setHoveredItem(title)}
       onMouseLeave={() => setHoveredItem(null)}
     >
       {/* Animated background */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${color} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity duration-300`}></div>
-      
-      {/* Decorative circle */}
-      <div className={`absolute -top-4 -right-4 w-24 h-24 bg-${color.split('-')[1]}-100 rounded-full opacity-30 group-hover:scale-150 transition-transform duration-500`}></div>
       
       <div className="flex items-start justify-between">
         <div>
@@ -347,8 +386,10 @@ const Dashboard = () => {
           <p className="text-3xl font-bold text-gray-800">{value}</p>
           {subtitle && <p className="text-xs text-gray-400 mt-1">{subtitle}</p>}
         </div>
-        <div className={`p-3 bg-${color.split('-')[1]}-50 rounded-xl group-hover:scale-110 transition-transform duration-300`}>
-          <Icon className={`w-6 h-6 text-${color.split('-')[1]}-600`} />
+        <div className="relative">
+          <div className={`relative rounded-xl p-3 shadow-lg ${iconTheme[colorKey]}`}>
+            <Icon className="h-6 w-6" />
+          </div>
         </div>
       </div>
       
@@ -363,15 +404,38 @@ const Dashboard = () => {
       )}
     </div>
   );
+  };
+
+  const ChartCard = ({ type, title, children, aside, className = "", height = "h-64" }) => {
+    const theme = chartCards[type];
+    const Icon = theme.icon;
+
+    return (
+      <div className={`relative overflow-hidden rounded-2xl bg-white p-6 shadow-lg ${className}`}>
+        <div className="relative mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+          <div className="flex items-center gap-2">
+            {aside}
+            <span className={`relative grid h-9 w-9 place-items-center rounded-xl ${theme.badge}`}>
+              <Icon className="relative h-4 w-4" />
+            </span>
+          </div>
+        </div>
+        <div className={`relative ${height}`}>
+          {children}
+        </div>
+      </div>
+    );
+  };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex min-h-[360px] items-center justify-center">
         <div className="text-center">
           <div className="relative">
-            <div className="w-20 h-20 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+            <div className="w-20 h-20 rounded-full border-4 border-indigo-200 border-t-indigo-600"></div>
             <div className="absolute inset-0 flex items-center justify-center">
-              <FaHeartbeat className="w-8 h-8 text-indigo-600 animate-pulse" />
+              <FaHeartbeat className="w-8 h-8 text-indigo-600" />
             </div>
           </div>
           <p className="mt-4 text-gray-600 font-medium">Loading dashboard...</p>
@@ -381,16 +445,9 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 lg:p-8 relative">
-      {/* Background decorative elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div>
-
+    <div className="relative min-h-screen">
       {/* Header */}
-      <div className="relative mb-8">
+      <div className="relative mb-5">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
             <h1 className="text-3xl lg:text-4xl font-bold text-gray-800 flex items-center gap-3">
@@ -399,10 +456,10 @@ const Dashboard = () => {
               </span>
               <button 
                 onClick={fetchDashboardData}
-                className="p-2 hover:bg-white rounded-full transition-all duration-300 group"
+                className="p-2 hover:bg-white rounded-full"
                 disabled={refreshing}
               >
-                <MdRefresh className={`w-5 h-5 text-gray-500 group-hover:text-indigo-600 group-hover:rotate-180 transition-all duration-500 ${refreshing ? 'animate-spin' : ''}`} />
+                <MdRefresh className="w-5 h-5 text-gray-500" />
               </button>
             </h1>
             <p className="text-gray-500 mt-1">Welcome back, Dr. Ankush Garg</p>
@@ -424,10 +481,10 @@ const Dashboard = () => {
 
             {/* Notifications */}
             <div className="relative group">
-              <button className="relative p-2 bg-white rounded-xl hover:bg-gray-50 transition-colors">
+              <button className="relative p-2 bg-white rounded-xl hover:bg-gray-50">
                 <FaBell className="w-5 h-5 text-gray-600" />
                 {notifications.filter(n => !n.read).length > 0 && (
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                 )}
               </button>
               
@@ -450,7 +507,7 @@ const Dashboard = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="relative grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">
         <StatCard
           title="Total Appointments"
           value={stats.appointments.total}
@@ -492,42 +549,33 @@ const Dashboard = () => {
       </div>
 
       {/* Charts Row */}
-      <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
         {/* Line Chart - Appointments Trend */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-800">Appointments Trend</h3>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500">Last 7 days</span>
-              <FaChartLine className="w-4 h-4 text-indigo-600" />
-            </div>
-          </div>
-          <div className="h-64">
+        <ChartCard
+          type="line"
+          title="Appointments Trend"
+          className="lg:col-span-2"
+          aside={<span className="text-xs text-gray-500">Last 7 days</span>}
+        >
             <Line data={lineChartData} options={chartOptions} />
-          </div>
-        </div>
+        </ChartCard>
 
         {/* Doughnut Chart - Appointment Status */}
-        <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Appointment Status</h3>
-          <div className="h-48">
+        <ChartCard type="doughnut" title="Appointment Status" height="h-48">
             <Doughnut data={doughnutData} options={doughnutOptions} />
-          </div>
-        </div>
+        </ChartCard>
       </div>
 
       {/* Second Row */}
-      <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
         {/* Bar Chart - Content Distribution */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Content Distribution</h3>
-          <div className="h-64">
+        <ChartCard type="bar" title="Content Distribution" className="lg:col-span-2">
             <Bar data={barChartData} options={chartOptions} />
-          </div>
-        </div>
+        </ChartCard>
 
         {/* Quick Actions */}
-        <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+        <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-lg">
+          <div className="relative">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
           <div className="space-y-3">
             {[
@@ -539,21 +587,23 @@ const Dashboard = () => {
               <button
                 key={index}
                 onClick={() => window.location.href = action.path}
-                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-all group"
+                className="flex w-full items-center gap-3 rounded-xl p-3 hover:bg-gray-50"
+                style={{ animationDelay: `${index * 90}ms` }}
               >
-                <div className={`p-2 bg-${action.color}-50 rounded-lg group-hover:scale-110 transition-transform`}>
-                  <action.icon className={`w-4 h-4 text-${action.color}-600`} />
+                <div className={`relative rounded-lg p-2 shadow-sm ${iconTheme[action.color]}`}>
+                  <action.icon className="relative h-4 w-4" />
                 </div>
                 <span className="text-sm font-medium text-gray-700">{action.label}</span>
-                <FaArrowUp className="w-3 h-3 text-gray-400 ml-auto rotate-45 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <FaArrowUp className="ml-auto h-3 w-3 rotate-45 text-gray-400" />
               </button>
             ))}
+          </div>
           </div>
         </div>
       </div>
 
       {/* Recent Activity */}
-      <div className="relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+      <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-lg">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-gray-800">Recent Activity</h3>
           <button className="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
@@ -565,10 +615,11 @@ const Dashboard = () => {
           {recentActivities.map((activity, index) => (
             <div 
               key={activity.id}
-              className="flex items-start gap-4 p-3 rounded-xl hover:bg-gray-50 transition-all group"
+              className="group flex items-start gap-4 rounded-xl p-3 hover:bg-gray-50"
+              style={{ animationDelay: `${index * 70}ms` }}
             >
-              <div className={`p-2 bg-${activity.color}-50 rounded-lg group-hover:scale-110 transition-transform`}>
-                <activity.icon className={`w-4 h-4 text-${activity.color}-600`} />
+              <div className={`relative rounded-lg p-2 shadow-sm ${iconTheme[activity.color] || iconTheme.blue}`}>
+                <activity.icon className="relative h-4 w-4" />
               </div>
               
               <div className="flex-1">
@@ -585,7 +636,7 @@ const Dashboard = () => {
                 </div>
               )}
 
-              <button className="opacity-0 group-hover:opacity-100 transition-opacity">
+              <button className="opacity-70">
                 <MdMoreVert className="w-5 h-5 text-gray-400" />
               </button>
             </div>
@@ -599,25 +650,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes blob {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-        
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-        
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-      `}</style>
     </div>
   );
 };

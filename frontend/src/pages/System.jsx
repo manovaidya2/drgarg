@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import NeuroAyurvedaIntro from "../system/NeuroAyurvedaIntro";
@@ -7,25 +5,28 @@ import TreatmentGapSection from "../system/TreatmentGapSection";
 import TreatmentApproachSection from "../system/TreatmentApproachSection";
 import CoreDevelopmentPillars from "../system/CoreDevelopmentPillars";
 import HowItConnects from "../system/HowItConnects";
+import NeuroSystemFAQ from "../system/NeuroSystemFAQ";
 import NeuroSystemCTA from "../system/NeuroSystemCTA";
-
+import AboutDoctorIntro from "../about/AboutDoctorIntro";
+import AboutDoctorEducation from "../about/AboutDoctorEducation";
+import AboutDoctorExperience from "../about/AboutDoctorExperience";
+import AboutDoctorFAQ from "../about/AboutDoctorFAQ";
+import AboutDoctorCTA from "../about/AboutDoctorCTA";
 
 function System() {
   return (
     <>
       <Helmet>
-        <title>
-          Dr. Ankush Garg | One of India’s Top Autism Doctors & Neuro-Ayurveda Specialist
-        </title>
+        <title>Neuro-Ayurveda Development System | Dr. Ankush Garg</title>
 
         <meta
           name="description"
-          content="Dr. Ankush Garg is India’s leading Autism Doctor and Ayurvedic Neurologist. Founder of Manovaidya and developer of the Neuro-Ayurveda System, specializing in autism, ADHD, anxiety, OCD, and holistic brain health."
+          content="Understand the Neuro-Ayurveda Development System by Dr. Ankush Garg, a structured framework for development, behaviour, emotional wellbeing, autism, ADHD and mind-body concerns."
         />
 
         <meta
           name="keywords"
-          content="Dr Ankush Garg, Autism Doctor India, ADHD treatment, Ayurvedic Neurologist, Neuro Ayurveda, Manovaidya, gut brain axis doctor, anxiety depression OCD treatment, autism specialist India"
+          content="Neuro-Ayurveda Development System, Dr Ankush Garg, Autism, ADHD, child development, behavioural concerns, emotional wellbeing, mind-body health"
         />
 
         <meta name="robots" content="index, follow" />
@@ -37,18 +38,15 @@ function System() {
 
         <meta
           property="og:title"
-          content="Dr. Ankush Garg | One of India’s Top Autism Doctors"
+          content="Neuro-Ayurveda Development System | Dr. Ankush Garg"
         />
         <meta
           property="og:description"
-          content="Specialized Neuro-Ayurveda treatment for Autism, ADHD, Anxiety & Brain Health. Developed by Dr. Ankush Garg."
+          content="A structured framework for understanding development, behaviour and emotional wellbeing."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://drankushgarg.in/neuro-ayurveda-system" />
-        <meta
-          property="og:image"
-          content="https://drankushgarg.in/og-image.jpg"
-        />
+        <meta property="og:image" content="https://drankushgarg.in/og-image.jpg" />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta
@@ -57,25 +55,30 @@ function System() {
         />
         <meta
           name="twitter:title"
-          content="Dr. Ankush Garg | Autism & Brain Health Specialist"
+          content="Neuro-Ayurveda Development System | Dr. Ankush Garg"
         />
         <meta
           name="twitter:description"
-          content="India’s leading Autism Doctor using Neuro-Ayurveda system for brain, behaviour & gut health."
+          content="A structured framework for understanding development, behaviour, emotional wellbeing and mind-body concerns."
         />
-        <meta
-          name="twitter:image"
-          content="https://drankushgarg.in/og-image.jpg"
-        />
+        <meta name="twitter:image" content="https://drankushgarg.in/og-image.jpg" />
       </Helmet>
 
       <div>
-<NeuroAyurvedaIntro />
-<TreatmentGapSection />
-<TreatmentApproachSection />
-<CoreDevelopmentPillars     />
-<HowItConnects />
-<NeuroSystemCTA />
+        <NeuroAyurvedaIntro />
+        <TreatmentGapSection />
+        <TreatmentApproachSection />
+        <CoreDevelopmentPillars />
+        <HowItConnects />
+        <NeuroSystemFAQ />
+        <NeuroSystemCTA />
+        
+        {/* Professional Background & Training Sections */}
+        <AboutDoctorIntro />
+        <AboutDoctorEducation />
+        <AboutDoctorExperience />
+        <AboutDoctorFAQ />
+        <AboutDoctorCTA />
       </div>
     </>
   );

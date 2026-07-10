@@ -75,10 +75,10 @@ const BlogList = () => {
   }
 
   return (
-    <div className="p-6 bg-slate-50 min-h-screen">
+    <div className="min-h-screen">
 
       {/* HEADER */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-xl shadow mb-6 flex justify-between items-center">
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-5 rounded-xl shadow mb-5 flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Blog Management</h1>
           <p className="text-sm opacity-80">
@@ -96,7 +96,7 @@ const BlogList = () => {
       </div>
 
       {/* STATS */}
-      <div className="grid md:grid-cols-3 gap-4 mb-6">
+      <div className="grid md:grid-cols-3 gap-4 mb-5">
 
         <div className="bg-white p-4 rounded-xl shadow flex items-center gap-4">
           <div className="bg-indigo-100 p-3 rounded-lg">
@@ -132,7 +132,7 @@ const BlogList = () => {
       </div>
 
       {/* SEARCH */}
-      <div className="bg-white p-4 rounded-xl shadow mb-6 flex items-center gap-3">
+      <div className="bg-white p-4 rounded-xl shadow mb-5 flex items-center gap-3">
         <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
         <input
           type="text"

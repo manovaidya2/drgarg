@@ -418,16 +418,16 @@ const CaseStudiesList = () => {
   }, [filteredCaseStudies]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen">
+      <div className="mx-auto w-full max-w-none">
         {/* Header Section */}
-        <div className="mb-8">
+        <div className="mb-5">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
               <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
                 Case Studies Dashboard
               </h1>
-              <p className="text-gray-600 mt-2 text-lg">
+              <p className="text-gray-600 mt-1.5 text-base md:text-lg">
                 Manage and analyze your case studies content
               </p>
             </div>
@@ -451,7 +451,7 @@ const CaseStudiesList = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">
           <StatsCard 
             icon={BookOpen}
             label="Total Studies"
@@ -487,7 +487,7 @@ const CaseStudiesList = () => {
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-white rounded-xl shadow-sm p-4 mb-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-sm p-4 mb-5 border border-gray-100">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />

@@ -631,9 +631,9 @@ export default function AdminAddBlog() {
   };
 
   return (
-    <section className="p-8 bg-gray-50 min-h-screen">
-      <div className="max-w-5xl mx-auto bg-white rounded-3xl p-8 border shadow">
-        <h1 className="text-3xl font-bold mb-8 text-gray-800">Add New Blog</h1>
+    <section className="min-h-screen">
+      <div className="w-full bg-white rounded-xl p-5 md:p-6 border border-gray-100 shadow-sm">
+        <h1 className="text-3xl font-bold mb-5 text-gray-800">Add New Blog</h1>
 
         {/* Link Dialog Modal */}
         {showLinkDialog && (

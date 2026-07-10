@@ -229,12 +229,12 @@ export default function GalleryManager() {
   };
 
   return (
-    <section className="min-h-screen w-full max-w-full overflow-hidden bg-[#f6f7fb]">
-      <div className="mb-6 overflow-hidden rounded-3xl bg-slate-950 text-white shadow-xl">
-        <div className="relative p-5 md:p-6">
+    <section className="min-h-screen w-full max-w-full overflow-hidden">
+      <div className="mb-5 overflow-hidden rounded-xl bg-slate-950 text-white shadow-xl">
+        <div className="relative p-5">
           <div className="absolute right-[-80px] top-[-80px] h-56 w-56 rounded-full bg-purple-500/30 blur-3xl" />
           <div className="absolute bottom-[-90px] left-[40%] h-52 w-52 rounded-full bg-cyan-400/20 blur-3xl" />
-          <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div className="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-xs uppercase tracking-[0.28em] text-cyan-200">Admin Gallery</p>
               <h1 className="mt-2 text-3xl font-black md:text-4xl">Gallery Management</h1>
@@ -272,7 +272,7 @@ export default function GalleryManager() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-200">
+      <div className="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200">
         <div className="flex flex-col gap-4 border-b border-slate-100 bg-white p-5 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="flex items-center gap-2 text-xl font-black text-slate-900">
