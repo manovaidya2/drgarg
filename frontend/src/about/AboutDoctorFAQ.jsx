@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, HelpCircle } from "lucide-react";
 
 const faqs = [
   {
@@ -28,35 +28,36 @@ export default function AboutDoctorFAQ() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section className="w-full bg-[#f9faf7] px-4 py-10 sm:px-6 md:px-10">
-      <div className="mx-auto">
-        <p className="mb-4 text-[11px] uppercase tracking-[0.4em] text-[#d98923]">
-          Frequently Asked Questions
-        </p>
+    <section className="w-full bg-white px-4 py-12 sm:px-6 md:px-10 md:py-16">
+      <div className="mx-auto grid grid-cols-1 gap-8 lg:grid-cols-[220px_1fr] lg:gap-14">
+        <div className="flex flex-row items-center gap-4 lg:flex-col lg:items-start">
+          <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-[#e5e2d9] bg-[#fbfaf6] text-[#075640] shadow-sm">
+            <HelpCircle size={26} strokeWidth={1.8} />
+          </div>
+          <h2 className="font-serif text-[24px] font-semibold leading-[1.2] text-[#075640] sm:text-[28px] lg:mt-2">
+            Frequently Asked Questions
+          </h2>
+        </div>
 
-        <h2 className="mb-8 font-serif text-[28px] leading-[1.15] tracking-[-0.03em] text-[#002b18] sm:text-[32px] md:text-[34px]">
-          Frequently Asked Questions
-        </h2>
-
-        <div className="overflow-hidden rounded-[12px] border border-[#e2ddd3] bg-white shadow-sm">
+        <div className="divide-y divide-[#e5e2d9] rounded-[14px] border border-[#e5e2d9] bg-[#fbfaf6] px-2 shadow-[0_10px_28px_rgba(5,54,39,0.04)] sm:px-4">
           {faqs.map((faq, index) => {
             const isOpen = open === index;
             return (
-              <div key={faq.q} className="border-b border-[#e2ddd3] last:border-b-0">
+              <div key={faq.q}>
                 <button
                   type="button"
                   onClick={() => setOpen(isOpen ? -1 : index)}
-                  className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left font-serif text-[16px] text-[#002b18]"
+                  className="flex w-full items-center justify-between gap-4 py-5 text-left text-[15px] font-bold text-[#273931]"
                 >
                   {faq.q}
                   <ChevronDown
-                    size={18}
-                    className={`shrink-0 transition ${isOpen ? "rotate-180" : ""}`}
+                    size={19}
+                    className={`shrink-0 text-[#075640] transition ${isOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div className="px-5 pb-5 text-[14px] leading-[1.7] text-[#4b5b55]">
+                  <div className="pb-5 text-[14px] font-medium leading-[1.75] text-[#4c5b55]">
                     {faq.a}
                   </div>
                 )}

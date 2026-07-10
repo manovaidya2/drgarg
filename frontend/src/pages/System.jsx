@@ -1,17 +1,16 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import NeuroAyurvedaIntro from "../system/NeuroAyurvedaIntro";
-import TreatmentGapSection from "../system/TreatmentGapSection";
+import SystemHero from "../system/SystemHero";
+import SystemOverviewCards from "../system/SystemOverviewCards";
 import TreatmentApproachSection from "../system/TreatmentApproachSection";
 import CoreDevelopmentPillars from "../system/CoreDevelopmentPillars";
 import HowItConnects from "../system/HowItConnects";
 import NeuroSystemFAQ from "../system/NeuroSystemFAQ";
 import NeuroSystemCTA from "../system/NeuroSystemCTA";
-import AboutDoctorIntro from "../about/AboutDoctorIntro";
-import AboutDoctorEducation from "../about/AboutDoctorEducation";
-import AboutDoctorExperience from "../about/AboutDoctorExperience";
-import AboutDoctorFAQ from "../about/AboutDoctorFAQ";
-import AboutDoctorCTA from "../about/AboutDoctorCTA";
+// import AboutDoctorIntro from "../about/AboutDoctorIntro";
+// import AboutDoctorEducation from "../about/AboutDoctorEducation";
+// import AboutDoctorExperience from "../about/AboutDoctorExperience";
+// import AboutDoctorCTA from "../about/AboutDoctorCTA";
 
 function System() {
   return (
@@ -64,21 +63,20 @@ function System() {
         <meta name="twitter:image" content="https://drankushgarg.in/og-image.jpg" />
       </Helmet>
 
-      <div>
-        <NeuroAyurvedaIntro />
-        <TreatmentGapSection />
-        <TreatmentApproachSection />
+      <div className="overflow-x-hidden">
+        <SystemHero />
+        <SystemOverviewCards />
         <CoreDevelopmentPillars />
+        <TreatmentApproachSection />
+        <NeuroSystemCTA />
         <HowItConnects />
         <NeuroSystemFAQ />
-        <NeuroSystemCTA />
-        
+
         {/* Professional Background & Training Sections */}
-        <AboutDoctorIntro />
+        {/* <AboutDoctorIntro />
         <AboutDoctorEducation />
         <AboutDoctorExperience />
-        <AboutDoctorFAQ />
-        <AboutDoctorCTA />
+        <AboutDoctorCTA /> */}
       </div>
     </>
   );

@@ -60,12 +60,12 @@ export default function NewAboutHeroSection() {
           </div>
         </div>
 
-        <div className="relative mx-auto flex min-h-[420px] w-full max-w-[440px] items-end justify-center lg:min-h-[520px]">
-          <div className="absolute bottom-0 h-[390px] w-[390px] rounded-full bg-[#dce8d8] sm:h-[450px] sm:w-[450px]" />
+        <div className="relative mx-auto -mb-8 flex min-h-[330px] w-full max-w-[440px] items-end justify-center sm:mb-0 sm:min-h-[420px] lg:min-h-[520px]">
+          <div className="absolute bottom-0 h-[320px] w-[320px] rounded-full bg-[#dce8d8] sm:h-[450px] sm:w-[450px]" />
           <img
             src={doctorImage}
             alt="Dr. Ankush Garg"
-            className="relative z-10 max-h-[520px] w-auto object-contain"
+            className="relative z-10 max-h-[350px] w-auto object-contain sm:max-h-[520px]"
           />
         </div>
 

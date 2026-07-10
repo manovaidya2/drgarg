@@ -13,10 +13,10 @@ const pillars = [
 export default function NewAboutSystemSection() {
   return (
     <section className="bg-white px-5 pb-8 sm:px-8 lg:px-12">
-      <div className="mx-auto  rounded-[16px] bg-[#fbfaf6] px-6 py-9 shadow-[0_16px_40px_rgba(5,54,39,0.06)] sm:px-10">
-        <div className="mx-auto max-w-[880px] text-center">
-          <h2 className="font-serif text-[28px] font-semibold text-[#075640]">
-            The Neuro-Ayurveda Development System<sup className="text-[13px]">TM</sup>
+      <div className="mx-auto rounded-[16px] bg-[#fbfaf6] px-5 py-9 shadow-[0_16px_40px_rgba(5,54,39,0.06)] sm:px-10">
+        <div className="mx-auto max-w-[880px] text-left sm:text-center">
+          <h2 className="text-center font-serif text-[23px] font-semibold leading-[1.2] text-[#075640] sm:text-[28px]">
+            The Neuro-Ayurveda <span className="inline-block">Development System<sup className="align-super text-[10px] sm:text-[13px]">TM</sup></span>
           </h2>
           <div className="mt-3 space-y-3 text-[15px] font-medium leading-[1.75] text-[#58655f]">
             <p>
@@ -67,7 +67,7 @@ export default function NewAboutSystemSection() {
         <div className="mt-9 text-center">
           <Link
             to="/neuro-ayurveda-system"
-            className="inline-flex h-[46px] items-center justify-center gap-2 rounded-[5px] bg-[#075640] px-7 text-[12px] font-bold uppercase text-white transition hover:bg-[#064834]"
+            className="inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-[5px] bg-[#075640] px-5 py-3 text-center text-[11px] font-bold uppercase leading-snug text-white transition hover:bg-[#064834] sm:w-auto sm:px-7 sm:text-[12px]"
           >
             Learn More About The Neuro-Ayurveda Development System
             <MoveUpRight size={15} />
