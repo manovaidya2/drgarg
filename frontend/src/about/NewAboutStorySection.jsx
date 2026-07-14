@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {
   BriefcaseBusiness,
   Eye,
@@ -38,36 +37,42 @@ const focusAreas = [
     icon: UsersRound,
     title: "Child Development",
     desc: "Supporting children with developmental, behavioural, communication and learning-related concerns.",
+    href: "https://manovaidya.org/child-health-care",
     tone: "bg-[#eef7f1] text-[#166b56]",
   },
   {
     icon: ShieldCheck,
     title: "Behavioural Concerns",
     desc: "Helping families better understand emotional regulation, behaviour patterns and developmental challenges.",
+    href: "https://manovaidya.org/women-health-care",
     tone: "bg-[#fbf7ed] text-[#b27728]",
   },
   {
     icon: Sparkles,
     title: "Teen Mental Wellness",
     desc: "Supporting emotional wellbeing, confidence, academic stress and healthy development during adolescence.",
+    href: "https://manovaidya.org/teen-mental-wellness",
     tone: "bg-[#eef5fb] text-[#3b7491]",
   },
   {
     icon: HeartPulse,
     title: "Adult Mental Health",
     desc: "Helping individuals address stress, anxiety, emotional wellbeing and lifestyle-related concerns.",
+    href: "https://manovaidya.org/adult-mental-wellness",
     tone: "bg-[#fff6ed] text-[#aa6c28]",
   },
   {
     icon: Leaf,
     title: "Mind & Body Health",
     desc: "Understanding the relationship between emotional wellbeing, lifestyle and overall health.",
+    href: "https://manovaidya.org/mind-body-wellbeing",
     tone: "bg-[#edf8f3] text-[#075640]",
   },
   {
     icon: BriefcaseBusiness,
     title: "Senior Mental Wellness",
     desc: "Supporting seniors with emotional wellbeing, lifestyle balance, stress-related concerns and long-term health guidance.",
+    href: "https://manovaidya.org/senior-mind-memory-care",
     tone: "bg-[#f7f1fb] text-[#775688]",
   },
 ];
@@ -87,7 +92,7 @@ function BulletList({ items }) {
 
 export default function NewAboutStorySection() {
   return (
-    <section className="bg-white px-5 py-12 sm:px-8 lg:px-12">
+    <section id="about-manovaidya" className="bg-white px-5 py-12 sm:px-8 lg:px-12">
       <div className="mx-auto ">
         <div className="grid gap-10 border-b border-[#e9e5dc] pb-12 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
           <div>
@@ -173,9 +178,10 @@ export default function NewAboutStorySection() {
               {focusAreas.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <div
+                  <a
                     key={item.title}
-                    className="flex min-h-[118px] items-start gap-3 rounded-[9px] bg-[#fbfaf6] p-4 shadow-[0_10px_24px_rgba(5,54,39,0.04)]"
+                    href={item.href}
+                    className="flex min-h-[118px] items-start gap-3 rounded-[9px] bg-[#fbfaf6] p-4 shadow-[0_10px_24px_rgba(5,54,39,0.04)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(5,54,39,0.08)]"
                   >
                     <div className={`grid h-10 w-10 shrink-0 place-items-center rounded-full ${item.tone}`}>
                       <Icon size={20} />
@@ -188,16 +194,16 @@ export default function NewAboutStorySection() {
                         {item.desc}
                       </p>
                     </div>
-                  </div>
+                  </a>
                 );
               })}
             </div>
-            <Link
-              to="/autism-adhd"
+            <a
+              href="https://manovaidya.org/child-health-care"
               className="mt-7 inline-flex text-[15px] font-bold text-[#075640] transition hover:text-[#0a7a5b]"
             >
               Explore All Areas Of Expertise →
-            </Link>
+            </a>
           </div>
         </div>
       </div>

@@ -210,15 +210,23 @@ export default function Header() {
 
   const primaryNav = [
     { to: "/", label: "Home" },
-    { to: "/about", label: "Meet The Doctor" },
-    { to: "/neuro-ayurveda-system", label: "The System" },
+    {
+      label: "About",
+      children: [
+        { to: "/about", label: "About Doctor", description: "Dr Ankush Garg's profile" },
+        { to: "/neuro-ayurveda-system", label: "About System", description: "Neuro-Ayurveda framework" },
+        { to: "https://manovaidya.org/about/manovaidya", label: "About Manovaidya", description: "Mission, vision & care approach" },
+      ],
+    },
     {
       label: "Conditions",
       children: [
-        { to: "/autism-adhd", label: "Autism & ADHD", description: "Children & developmental care" },
-        { to: "/adult-mental-health", label: "Adult Mental Health", description: "Anxiety, OCD, depression" },
-        { to: "/teenage-mental-health", label: "Teenage Mental Health", description: "Behaviour & focus" },
-        { to: "/seniour-mental-health", label: "Senior Mental Health", description: "Memory, cognition, sleep" },
+        { to: "https://manovaidya.org/child-health-care", label: "Child Health Care", description: "Children & developmental care" },
+        { to: "https://manovaidya.org/teen-mental-wellness", label: "Teen Mental Wellness", description: "Behaviour, stress & focus" },
+        { to: "https://manovaidya.org/adult-mental-wellness", label: "Adult Mental Health Care", description: "Anxiety, OCD, depression" },
+        { to: "https://manovaidya.org/senior-mind-memory-care", label: "Senior Mind & Memory Care", description: "Memory, cognition, sleep" },
+        { to: "https://manovaidya.org/women-health-care", label: "Women Mental Health", description: "Emotional wellbeing & life transitions" },
+        { to: "https://manovaidya.org/mind-body-wellbeing", label: "Mind & Body Wellbeing", description: "Stress-related body concerns" },
       ],
     },
     {
@@ -226,6 +234,7 @@ export default function Header() {
       children: [
         { to: "/case-study", label: "Case Studies", description: "Documented outcomes" },
         { to: "/testimonials", label: "Testimonials", description: "In their own words" },
+        { to: "/testimonial-videos", label: "Testimonial Videos", description: "Watch patient stories" },
         { to: "/media-coverage", label: "Media & Press", description: "Features & talks" },
       ],
     },

@@ -66,7 +66,7 @@ export default function AboutDoctorExperience() {
       <div className="mx-auto px-4 md:px-10">
         <div className="mx-auto mb-10 max-w-[760px] text-center">
           <h2 className="font-serif text-[22px] font-semibold leading-[1.35] tracking-[-0.02em] text-[#075640] sm:text-[26px] md:text-[28px]">
-            Professional Background Across 15+ Years Of Clinical Care &amp; Education
+            Professional Background Across 7+ Years Of Clinical Care &amp; Education
           </h2>
         </div>
 

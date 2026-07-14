@@ -4,7 +4,7 @@ import { CalendarCheck, HeartPulse, Leaf, Sprout, UsersRound } from "lucide-reac
 import doctorImage from "../images/White coat.webp";
 
 const stats = [
-  { icon: CalendarCheck, value: "15+", label: "Years Experience" },
+  { icon: CalendarCheck, value: "7+", label: "Year Experience" },
   { icon: UsersRound, value: "Thousands", label: "of Patients Treated" },
   { icon: Leaf, value: "Holistic", label: "Ayurvedic Care" },
 ];

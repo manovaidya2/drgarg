@@ -29,7 +29,7 @@ const cards = [
     icon: Heart,
     title: "Why Families Choose Dr. Ankush Garg",
     items: [
-      "15+ Years of trusted experience",
+      "7+ Year of trusted experience",
       "Personalized & compassionate care",
       "Root-cause approach",
       "Advanced Ayurvedic therapies",

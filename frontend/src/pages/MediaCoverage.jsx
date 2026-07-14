@@ -42,6 +42,15 @@ const mediaLinks = [
   { name: "Bharat Mirror", url: "https://english.bharatmirror.com/how-dr-ankush-garg-is-redefining-autism-care-in-india-through-ayurveda/" }
 ];
 
+function getOutletIcon(url) {
+  try {
+    const domain = new URL(url).hostname.replace(/^m\./, "").replace(/^www\./, "");
+    return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+  } catch {
+    return "";
+  }
+}
+
 export default function MediaCoverage() {
   const [openPopup, setOpenPopup] = useState(false);
 
@@ -144,8 +153,18 @@ export default function MediaCoverage() {
                          hover:shadow-xl transition flex flex-col justify-between"
               >
                 <div className="flex items-start gap-4">
-                  <div className="bg-purple-100 text-[#8b43ba] p-3 rounded-xl shrink-0">
-                    <Newspaper />
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-purple-100 text-[#8b43ba]">
+                    <img
+                      src={getOutletIcon(item.url)}
+                      alt={`${item.name} icon`}
+                      className="h-7 w-7 rounded-md object-contain"
+                      loading="lazy"
+                      onError={(event) => {
+                        event.currentTarget.style.display = "none";
+                        event.currentTarget.nextElementSibling?.classList.remove("hidden");
+                      }}
+                    />
+                    <Newspaper className="hidden h-6 w-6" />
                   </div>
 
                   <div>

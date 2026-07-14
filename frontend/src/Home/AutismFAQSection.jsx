@@ -54,7 +54,7 @@ export default function AutismFAQSection() {
         }}
       />
 
-      <section className="bg-white py-20">
+      {/* <section className="bg-white py-20">
         <div className="mx-auto max-w-5xl px-4">
           <div className="mb-14 text-center">
             <span className="inline-block rounded-full bg-[#e8f5e9] px-4 py-2 text-sm font-semibold text-[#2e7d32]">
@@ -109,7 +109,7 @@ export default function AutismFAQSection() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 }

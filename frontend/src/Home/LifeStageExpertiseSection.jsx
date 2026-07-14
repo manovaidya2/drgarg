@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 const expertiseAreas = [
@@ -7,7 +6,7 @@ const expertiseAreas = [
     title: "Child Development",
     description:
       "Autism, ADHD, Speech Delay, Learning Difficulties and Behavioural Challenges.",
-    link: "/autism-adhd",
+    link: "https://manovaidya.org/child-health-care",
     color: "#7b47be",
     bg: "#eee5ff",
     icon: (
@@ -22,7 +21,7 @@ const expertiseAreas = [
     title: "Teen Mental Wellness",
     description:
       "Stress, Anxiety, Depression, Confidence, Screen Dependency and more.",
-    link: "/teenage-mental-health",
+    link: "https://manovaidya.org/teen-mental-wellness",
     color: "#4d9b44",
     bg: "#e3f2dd",
     icon: (
@@ -36,7 +35,7 @@ const expertiseAreas = [
     title: "Adult Mental Health",
     description:
       "Anxiety, Depression, Stress, Burnout, Sleep Issues and Emotional Wellbeing.",
-    link: "/adult-mental-health",
+    link: "https://manovaidya.org/adult-mental-wellness",
     color: "#3278c6",
     bg: "#e4f0ff",
     icon: (
@@ -51,7 +50,7 @@ const expertiseAreas = [
     title: "Women Mental Health",
     description:
       "Hormonal Changes, Emotional Wellbeing, Life Transitions and more.",
-    link: "/appointment",
+    link: "https://manovaidya.org/women-health-care",
     color: "#df5f83",
     bg: "#ffe3ee",
     icon: (
@@ -66,7 +65,7 @@ const expertiseAreas = [
     title: "Senior Mind & Memory Care",
     description:
       "Memory Concerns, Dementia, Alzheimer's Support and Cognitive Wellness.",
-    link: "/seniour-mental-health",
+    link: "https://manovaidya.org/senior-mind-memory-care",
     color: "#d88636",
     bg: "#ffead8",
     icon: (
@@ -81,7 +80,7 @@ const expertiseAreas = [
     title: "Mind & Body Concerns",
     description:
       "Migraine, Sleep Issues, Gut Health, Thyroid, Stress-Related Physical Symptoms.",
-    link: "/mindwellness",
+    link: "https://manovaidya.org/mind-body-wellbeing",
     color: "#2e8c91",
     bg: "#dff5f3",
     icon: (
@@ -129,13 +128,13 @@ export default function LifeStageExpertiseSection() {
                 {area.description}
               </p>
 
-              <Link
-                to={area.link}
+              <a
+                href={area.link}
                 className="mt-auto inline-flex items-center gap-2 pt-3 text-[12px] font-semibold text-[#064834] transition hover:text-[#053b2b]"
               >
                 Learn More
                 <ArrowRight size={13} strokeWidth={2.2} />
-              </Link>
+              </a>
             </article>
           ))}
         </div>

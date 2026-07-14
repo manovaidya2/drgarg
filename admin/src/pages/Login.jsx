@@ -1,12 +1,28 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff, LogIn, Sparkles, User } from "lucide-react";
+import {
+  Activity,
+  ArrowRight,
+  CheckCircle2,
+  Eye,
+  EyeOff,
+  Lock,
+  ShieldCheck,
+  Stethoscope,
+  User,
+} from "lucide-react";
 
 const users = [
   { username: "manovaidya", password: "manovaidya@123" },
   { email: "abhi@123", password: "123" },
   { email: "teacher@example.com", password: "123456" },
   { email: "admin@example.com", password: "123456" },
+];
+
+const highlights = [
+  "Secure access for content and appointments",
+  "Clean dashboard for daily clinic operations",
+  "Built for fast updates and patient follow-ups",
 ];
 
 const Login = () => {
@@ -44,277 +60,243 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setIsLoading(true);
 
-    // Simulate API call
     setTimeout(() => {
-      // Check for manovaidya first, then check other users
       const user = users.find(
         (u) => (u.username === username || u.email === username) && u.password === password
       );
 
       if (user) {
-        // Store auth token (in real app, this would be a JWT)
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("username", username);
         if (rememberMe) {
           localStorage.setItem("rememberMe", "true");
         }
-        
-        // Redirect to dashboard with animation
+
         navigate("/dashboard");
       } else {
         setErrors({
           username: "Invalid credentials",
-          password: "Invalid credentials"
+          password: "Invalid credentials",
         });
         setIsLoading(false);
       }
-    }, 1500);
+    }, 900);
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+  const clearFieldError = (field) => {
+    setErrors((current) => ({ ...current, [field]: "" }));
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 flex items-center justify-center p-4 relative overflow-hidden">
-      
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-40 left-40 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div>
+    <main className="min-h-screen overflow-hidden bg-[#f4fbf8] text-slate-900">
+      <div className="relative isolate flex min-h-screen items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.20),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(20,184,166,0.18),transparent_32%)]" />
+        <div className="absolute inset-x-0 top-0 -z-10 h-52 bg-gradient-to-b from-emerald-100/80 to-transparent" />
 
-      {/* Floating particles */}
-      <div className="absolute inset-0">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute bg-white rounded-full opacity-20 animate-float"
-            style={{
-              width: `${Math.random() * 6 + 2}px`,
-              height: `${Math.random() * 6 + 2}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${Math.random() * 10 + 10}s`
-            }}
-          />
-        ))}
-      </div>
+        <section className="grid w-full max-w-6xl overflow-hidden rounded-[28px] border border-white/80 bg-white shadow-[0_30px_90px_rgba(15,118,110,0.18)] lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="relative hidden min-h-[650px] overflow-hidden bg-gradient-to-br from-emerald-950 via-teal-900 to-slate-950 p-10 text-white lg:block">
+            <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.14)_0,transparent_32%,rgba(16,185,129,0.18)_100%)]" />
+            <div className="absolute -right-28 top-20 h-72 w-72 rounded-full border border-white/10" />
+            <div className="absolute -bottom-24 -left-24 h-80 w-80 rounded-full border border-emerald-300/20" />
 
-      {/* Main Card */}
-      <div className="relative w-full max-w-md">
-        {/* Decorative elements */}
-        <div className="absolute -inset-1 bg-gradient-to-r from-pink-600 to-purple-600 rounded-3xl blur-xl opacity-30 animate-pulse"></div>
-        
-        <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20">
-          
-          {/* Logo/Brand */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl mb-4 shadow-lg transform hover:scale-110 transition-transform duration-300">
-              <Sparkles className="w-10 h-10 text-white" />
+            <div className="relative flex h-full flex-col justify-between">
+              <div>
+                <div className="inline-flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
+                  <span className="grid h-11 w-11 place-items-center rounded-xl bg-white text-emerald-700 shadow-lg">
+                    <Stethoscope className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-white">Dr. Ankush Garg</p>
+                    <p className="text-xs font-medium text-emerald-100">Admin Workspace</p>
+                  </div>
+                </div>
+
+                <div className="mt-16 max-w-lg">
+                  <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald-400/15 px-4 py-2 text-sm font-semibold text-emerald-100 ring-1 ring-emerald-300/20">
+                    <ShieldCheck className="h-4 w-4" />
+                    Protected clinic management
+                  </p>
+                  <h1 className="text-5xl font-bold leading-tight tracking-normal">
+                    Manage your digital clinic with clarity.
+                  </h1>
+                  <p className="mt-5 text-base leading-7 text-emerald-50/80">
+                    Sign in to update blogs, case studies, appointments, gallery content, and daily admin work from one focused place.
+                  </p>
+                </div>
+              </div>
+
+              <div className="relative rounded-3xl bg-white/10 p-5 ring-1 ring-white/15 backdrop-blur">
+                <div className="mb-5 flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-white">Workspace Status</p>
+                    <p className="text-xs text-emerald-100/80">Ready for secure access</p>
+                  </div>
+                  <span className="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-300/15 text-emerald-100">
+                    <Activity className="h-5 w-5" />
+                  </span>
+                </div>
+
+                <div className="space-y-3">
+                  {highlights.map((item) => (
+                    <div key={item} className="flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-3">
+                      <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-200" />
+                      <span className="text-sm font-medium text-emerald-50">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-            <p className="text-purple-200">Sign in to continue your journey</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
-            
-            {/* Username Field */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-purple-200 block">
-                Username
-              </label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-purple-300 group-focus-within:text-purple-400 transition-colors" />
+          <div className="flex min-h-[650px] items-center justify-center px-5 py-8 sm:px-10 lg:px-14">
+            <div className="w-full max-w-md">
+              <div className="mb-8 lg:hidden">
+                <div className="mb-5 inline-flex items-center gap-3 rounded-2xl bg-emerald-50 px-4 py-3 ring-1 ring-emerald-100">
+                  <span className="grid h-11 w-11 place-items-center rounded-xl bg-emerald-600 text-white shadow-lg shadow-emerald-100">
+                    <Stethoscope className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-bold text-slate-900">Dr. Ankush Garg</p>
+                    <p className="text-xs font-semibold text-emerald-700">Admin Workspace</p>
+                  </div>
                 </div>
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => {
-                    setUsername(e.target.value);
-                    setErrors({ ...errors, username: "" });
-                  }}
-                  className={`w-full pl-10 pr-3 py-3 bg-white/10 border ${
-                    errors.username ? 'border-red-400' : 'border-white/20'
-                  } rounded-xl text-white placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all`}
-                  placeholder="Enter your username"
-                  autoFocus
-                />
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/0 to-pink-500/0 group-focus-within:from-purple-500/10 group-focus-within:to-pink-500/10 transition-all pointer-events-none"></div>
               </div>
-              {errors.username && (
-                <p className="text-red-400 text-sm mt-1 animate-shake">{errors.username}</p>
-              )}
-            </div>
 
-            {/* Password Field */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-purple-200 block">
-                Password
-              </label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-purple-300 group-focus-within:text-purple-400 transition-colors" />
+              <div className="mb-8">
+                <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-emerald-700 ring-1 ring-emerald-100">
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  Admin Login
+                </p>
+                <h2 className="text-3xl font-bold tracking-normal text-slate-950 sm:text-4xl">
+                  Welcome back
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-slate-500">
+                  Enter your credentials to continue to the management dashboard.
+                </p>
+              </div>
+
+              <form onSubmit={handleLogin} className="space-y-5">
+                <div>
+                  <label htmlFor="username" className="mb-2 block text-sm font-semibold text-slate-700">
+                    Username or email
+                  </label>
+                  <div
+                    className={`group flex h-13 items-center rounded-2xl border bg-white px-4 shadow-sm transition-all ${
+                      errors.username
+                        ? "border-red-300 ring-4 ring-red-50"
+                        : "border-slate-200 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-50"
+                    }`}
+                  >
+                    <User className="h-5 w-5 shrink-0 text-slate-400 transition-colors group-focus-within:text-emerald-600" />
+                    <input
+                      id="username"
+                      type="text"
+                      value={username}
+                      onChange={(e) => {
+                        setUsername(e.target.value);
+                        clearFieldError("username");
+                      }}
+                      className="h-full min-w-0 flex-1 border-0 bg-transparent px-3 text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400"
+                      placeholder="Enter username or email"
+                      autoFocus
+                    />
+                  </div>
+                  {errors.username && (
+                    <p className="mt-2 text-sm font-medium text-red-600">{errors.username}</p>
+                  )}
                 </div>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setErrors({ ...errors, password: "" });
-                  }}
-                  className={`w-full pl-10 pr-10 py-3 bg-white/10 border ${
-                    errors.password ? 'border-red-400' : 'border-white/20'
-                  } rounded-xl text-white placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all`}
-                  placeholder="Enter your password"
-                />
+
+                <div>
+                  <label htmlFor="password" className="mb-2 block text-sm font-semibold text-slate-700">
+                    Password
+                  </label>
+                  <div
+                    className={`group flex h-13 items-center rounded-2xl border bg-white px-4 shadow-sm transition-all ${
+                      errors.password
+                        ? "border-red-300 ring-4 ring-red-50"
+                        : "border-slate-200 focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-50"
+                    }`}
+                  >
+                    <Lock className="h-5 w-5 shrink-0 text-slate-400 transition-colors group-focus-within:text-emerald-600" />
+                    <input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        clearFieldError("password");
+                      }}
+                      className="h-full min-w-0 flex-1 border-0 bg-transparent px-3 text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400"
+                      placeholder="Enter password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((value) => !value)}
+                      className="grid h-9 w-9 shrink-0 place-items-center rounded-xl text-slate-400 transition hover:bg-slate-100 hover:text-emerald-700"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    </button>
+                  </div>
+                  {errors.password && (
+                    <p className="mt-2 text-sm font-medium text-red-600">{errors.password}</p>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between gap-4">
+                  <label className="flex cursor-pointer items-center gap-3 text-sm font-semibold text-slate-600">
+                    <input
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                    />
+                    Remember me
+                  </label>
+                  <span className="text-sm font-semibold text-emerald-700">Contact admin</span>
+                </div>
+
                 <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  type="submit"
+                  disabled={isLoading}
+                  className="group flex h-13 w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 px-5 text-sm font-bold text-white shadow-xl shadow-emerald-100 transition hover:-translate-y-0.5 hover:from-emerald-700 hover:to-teal-700 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-purple-300 hover:text-purple-400 transition-colors" />
+                  {isLoading ? (
+                    <>
+                      <span className="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin" />
+                      Signing in
+                    </>
                   ) : (
-                    <Eye className="h-5 w-5 text-purple-300 hover:text-purple-400 transition-colors" />
+                    <>
+                      Sign in to dashboard
+                      <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
+                    </>
                   )}
                 </button>
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/0 to-pink-500/0 group-focus-within:from-purple-500/10 group-focus-within:to-pink-500/10 transition-all pointer-events-none"></div>
-              </div>
-              {errors.password && (
-                <p className="text-red-400 text-sm mt-1 animate-shake">{errors.password}</p>
-              )}
-            </div>
+              </form>
 
-            {/* Remember Me & Forgot Password */}
-            <div className="flex items-center justify-between">
-              <label className="flex items-center space-x-2 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 bg-white/10 border border-white/20 rounded focus:ring-purple-400 focus:ring-2 text-purple-500 transition-all cursor-pointer"
-                />
-                <span className="text-sm text-purple-200 group-hover:text-white transition-colors">
-                  Remember me
-                </span>
-              </label>
-              <a
-                href="#"
-                className="text-sm text-purple-200 hover:text-white transition-colors"
-              >
-                Forgot password?
-              </a>
-            </div>
-
-            {/* Login Button */}
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden group"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
-              {isLoading ? (
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Signing in...</span>
-                </div>
-              ) : (
-                <div className="flex items-center justify-center space-x-2">
-                  <LogIn className="w-5 h-5" />
-                  <span>Sign In</span>
-                </div>
-              )}
-            </button>
-
-            {/* Quick Login Hints */}
-            <div className="mt-4 space-y-2">
-              <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-                <p className="text-xs text-purple-300 mb-2 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3" /> Quick Login:
-                </p>
-                <div className="flex flex-col gap-1 text-xs">
-                  <div className="flex justify-between items-center">
-                    <span className="text-purple-300">Main Account:</span>
-                    <code className="bg-purple-900/50 px-2 py-0.5 rounded text-white font-mono">manovaidya</code>
-                    <code className="bg-pink-900/50 px-2 py-0.5 rounded text-white font-mono">manovaidya@123</code>
-                  </div>
-                  <div className="flex justify-between items-center text-purple-400/70">
-                    <span className="text-purple-300">Demo Accounts:</span>
-                    <span className="text-xs text-purple-300">(email/pass)</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-1 mt-1">
-                    <div className="flex flex-col">
-                      <span className="text-purple-300">admin@example.com</span>
-                      <span className="text-purple-300">teacher@example.com</span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-purple-300">••••••</span>
-                      <span className="text-purple-300">••••••</span>
-                    </div>
+              <div className="mt-7 rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4">
+                <div className="flex items-start gap-3">
+                  <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-700" />
+                  <div>
+                    <p className="text-sm font-bold text-slate-800">Main account</p>
+                    <p className="mt-1 text-xs font-medium leading-5 text-slate-600">
+                      Username: <span className="font-bold text-slate-900">manovaidya</span> | Password:{" "}
+                      <span className="font-bold text-slate-900">manovaidya@123</span>
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-          </form>
-
-          {/* Footer */}
-          <p className="mt-6 text-center text-sm text-purple-300">
-            Don't have an account?{' '}
-            <a href="#" className="text-white hover:underline font-medium">
-              Contact Admin
-            </a>
-          </p>
-        </div>
+          </div>
+        </section>
       </div>
-
-      <style jsx>{`
-        @keyframes blob {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-        
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-        
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
-          20%, 40%, 60%, 80% { transform: translateX(2px); }
-        }
-        
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-        
-        .animate-float {
-          animation: float 15s infinite ease-in-out;
-        }
-        
-        .animate-shake {
-          animation: shake 0.5s ease-in-out;
-        }
-        
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-      `}</style>
-    </div>
+    </main>
   );
 };
 

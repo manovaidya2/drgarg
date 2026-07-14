@@ -27,7 +27,7 @@ const authorityPoints = [
     text: "Mental Wellness Specialist",
     icon: Users,
   },
-  { title: "10+ Years of", text: "Clinical Experience", icon: CalendarCheck },
+  { title: "7+ Years of", text: "Clinical Experience", icon: CalendarCheck },
   { title: "Trusted by Families", text: "Across India", icon: ShieldCheck },
 ];
 
@@ -73,22 +73,19 @@ export default function Hero() {
               transition={{ duration: 0.7 }}
               className="mx-auto max-w-[670px] pt-4 text-center lg:mx-0 lg:pt-0 lg:text-left"
             >
-              <p className="text-[18px] font-bold leading-[1.22] text-[#161126] sm:text-[23px] lg:text-[25px] xl:text-[23px]">
-                Compassionate. Evidence-Based.
+              <h1 className="text-[34px] font-bold leading-[1.02] text-[#064834] min-[390px]:text-[37px] sm:text-[49px] md:text-[57px] lg:text-[59px] xl:text-[41px]">
+                <span className="block text-[#161126]">A New Way to</span>
+                Understand Autism,
                 <br />
-                Personalized Care for
-              </p>
-
-              <h1 className="mt-2 text-[34px] font-bold leading-[1.02] text-[#064834] min-[390px]:text-[37px] sm:text-[49px] md:text-[57px] lg:text-[59px] xl:text-[41px]">
-                Child Development &
-                <br />
-                Mental Wellness
+                ADHD & Mental Health
               </h1>
 
               <p className="mx-auto mt-4 max-w-[560px] text-[14.5px] font-medium leading-[1.6] text-[#4e4658] sm:text-[17px] lg:mx-0 xl:text-[16px]">
-                Helping children, teenagers, adults and families overcome
-                developmental, behavioural and emotional challenges through the
-                Neuro-Ayurveda Development System.
+                Dr. Ankush Garg, one of India’s leading Ayurvedic Neurologists
+                and developer of the Neuro-Ayurveda System, helps children,
+                teenagers, adults, and seniors heal complex brain, behaviour,
+                and mental health conditions through an integrated
+                Brain-Gut-Behaviour approach.
               </p>
 
               <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-6 sm:grid-cols-4 lg:max-w-[560px]">
