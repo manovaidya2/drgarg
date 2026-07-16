@@ -10,7 +10,7 @@ import {
   Sparkles,
   Users,
 } from "lucide-react";
-import heroBanner from "../images/dr-ankush-hero-banner-v2.png";
+import heroBanner from "../images/New.jpg.jpeg";
 import ConsultationPopup from "../components/ConsultationPopup";
 
 const supportAreas = [
@@ -52,7 +52,7 @@ export default function Hero() {
     <>
       <link rel="preload" as="image" href={heroBanner} fetchPriority="high" />
 
-      <main className="relative overflow-hidden bg-[#f6fbf8]">
+      <main className="relative overflow-hidden ">
         <section className="relative mx-auto min-h-[690px] w-full px-4 py-5 sm:min-h-[720px] sm:px-6 sm:py-8 lg:min-h-[560px] lg:px-[42px] lg:py-10">
           <div className="absolute inset-0">
             <img
@@ -63,7 +63,7 @@ export default function Hero() {
               fetchPriority="high"
               decoding="async"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-white/98 via-white/88 to-white/44 sm:from-white/95 sm:via-white/82 sm:to-white/24 lg:bg-gradient-to-r lg:from-white/95 lg:via-white/76 lg:to-white/4" />
+            <div className="absolute inset-0  " />
           </div>
 
           <div className="relative z-10 grid min-h-[650px] grid-cols-1 items-start gap-6 sm:min-h-[680px] sm:gap-8 lg:min-h-[500px] lg:block">
