@@ -1,32 +1,127 @@
 import React, { useState } from "react";
-import { ArrowRight, MessageCircleHeart, Quote, ShieldCheck, Star, Video } from "lucide-react";
+import { ArrowRight, MessageCircleHeart, Play, Quote, ShieldCheck, Star, Video, X } from "lucide-react";
 import ConsultationPopup from "../components/ConsultationPopup";
 import { GlobalSEO } from "../components/SEOProvider";
 
 const videoTestimonials = [
   {
-    id: "yDXgoCLLE7c",
-    title: "Parent Story: Autism Care Journey",
-    category: "Child Development",
-    note: "A family shares how structured guidance helped them understand progress more clearly.",
+    id: "P1EzrOrCBaQ",
+    title: "Patient Testimonial",
+    category: "Patient Stories",
+    note: "A patient shares their experience with the care and guidance received.",
   },
   {
-    id: "tELh7hghm0Y",
-    title: "Understanding ADHD & Behaviour",
-    category: "ADHD Support",
-    note: "Real concerns, practical direction, and a calmer way to look at behaviour challenges.",
+    id: "T5COBNiZBPA",
+    title: "Patient Review",
+    category: "Patient Stories",
+    note: "A real story of support, clarity, and step-by-step improvement.",
   },
   {
-    id: "ZpXSu4BIRiE",
-    title: "Mental Wellness Experience",
+    id: "CFmxG7ag8aw",
+    title: "Patient Testimonial",
+    category: "Patient Stories",
+    note: "A patient experience focused on trust and personalised guidance.",
+  },
+  {
+    id: "yE5B2b6Nz-I",
+    title: "Patient Review",
+    category: "Patient Stories",
+    note: "A family shares how structured care helped them move forward.",
+  },
+  {
+    id: "zWGZu4FyvZk",
+    title: "Patient Testimonial",
+    category: "Patient Stories",
+    note: "A real patient review about understanding the concern more clearly.",
+  },
+  {
+    id: "kpLxO-rhE4Y",
+    title: "Patient Review",
+    category: "Patient Stories",
+    note: "A testimonial about consistent care and practical direction.",
+  },
+  {
+    id: "DB_20OKcSPU",
+    title: "Patient Testimonial",
+    category: "Patient Stories",
+    note: "A patient story around confidence, listening, and treatment support.",
+  },
+  {
+    id: "txI3ibnhYsQ",
+    title: "Patient Review",
+    category: "Patient Stories",
+    note: "A real experience with calm guidance and continued support.",
+  },
+  {
+    id: "qrbAJOdX3u0",
+    title: "Patient Testimonial",
+    category: "Patient Stories",
+    note: "A testimonial sharing the journey toward better health and clarity.",
+  },
+  {
+    id: "-qY0JodSp20",
+    title: "Patient Review",
+    category: "Patient Stories",
+    note: "A patient review about helpful consultation and trusted care.",
+  },
+  {
+    id: "IcJ6fd0rbME",
+    title: "Patient Testimonial",
+    category: "Patient Stories",
+    note: "A patient shares their personal care experience and progress.",
+  },
+  {
+    id: "L2awCtw7Z10",
+    title: "Mental Health Testimonial",
     category: "Mental Health",
-    note: "A patient-focused story around trust, listening, and step-by-step support.",
+    note: "A mental health testimonial about support, comfort, and clear guidance.",
+  },
+  {
+    id: "H1X9SBY8lYc",
+    title: "Mental Health Review",
+    category: "Mental Health",
+    note: "A patient story around emotional wellness and structured support.",
+  },
+  {
+    id: "ethPzmvNBZI",
+    title: "Mental Health Testimonial",
+    category: "Mental Health",
+    note: "A mental wellness experience focused on trust and understanding.",
+  },
+  {
+    id: "yHBcuzzd4Po",
+    title: "Mental Health Review",
+    category: "Mental Health",
+    note: "A patient shares their mental health care journey and experience.",
+  },
+  {
+    id: "pAx7KRw2pkA",
+    title: "PCOD & Mental Stress Testimonial",
+    category: "PCOD & Stress",
+    note: "A testimonial related to PCOD, stress, and supportive care.",
+  },
+  {
+    id: "GV24TNwFo_k",
+    title: "Patient Testimonial",
+    category: "Patient Stories",
+    note: "A real patient video sharing their experience with care and support.",
+  },
+  {
+    id: "8A-lM_CQ1XU",
+    title: "Patient Review",
+    category: "Patient Stories",
+    note: "A testimonial about guidance, confidence, and treatment experience.",
   },
 ];
 
 export default function TestimonialVideosPage() {
-  const [activeVideo, setActiveVideo] = useState(videoTestimonials[0]);
+  const heroVideo = videoTestimonials[videoTestimonials.length - 1];
+  const [popupVideo, setPopupVideo] = useState(null);
   const [openPopup, setOpenPopup] = useState(false);
+
+  const openVideoPopup = (video) => {
+    setPopupVideo(video);
+  };
 
   return (
     <>
@@ -99,11 +194,12 @@ export default function TestimonialVideosPage() {
             <div className="overflow-hidden rounded-[18px] bg-[#061f17]">
               <div className="aspect-video">
                 <iframe
-                  key={activeVideo.id}
+                  key={heroVideo.id}
                   className="h-full w-full"
-                  src={`https://www.youtube.com/embed/${activeVideo.id}`}
-                  title={activeVideo.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  src={`https://www.youtube.com/embed/${heroVideo.id}?rel=0`}
+                  title={heroVideo.title}
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                 />
               </div>
@@ -111,10 +207,10 @@ export default function TestimonialVideosPage() {
             <div className="grid gap-4 px-2 py-4 sm:grid-cols-[1fr_auto] sm:items-center">
               <div>
                 <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-[#c77700]">
-                  {activeVideo.category}
+                  {heroVideo.category}
                 </p>
                 <h2 className="mt-1 text-[20px] font-bold text-[#08251d]">
-                  {activeVideo.title}
+                  {heroVideo.title}
                 </h2>
               </div>
               <button
@@ -151,19 +247,26 @@ export default function TestimonialVideosPage() {
               <article
                 key={video.id}
                 className={`group overflow-hidden rounded-[18px] border bg-white text-left shadow-[0_16px_38px_rgba(5,54,39,0.07)] transition hover:-translate-y-1 hover:shadow-[0_22px_54px_rgba(5,54,39,0.11)] ${
-                  activeVideo.id === video.id ? "border-[#d8a33d]" : "border-[#e3ddd2]"
+                  heroVideo.id === video.id ? "border-[#d8a33d]" : "border-[#e3ddd2]"
                 }`}
               >
-                <div className="overflow-hidden bg-[#08251d]">
-                  <iframe
-                    className="aspect-video h-full w-full"
-                    src={`https://www.youtube.com/embed/${video.id}`}
-                    title={video.title}
+                <button
+                  type="button"
+                  onClick={() => openVideoPopup(video)}
+                  className="relative block aspect-video w-full overflow-hidden bg-[#08251d] text-left"
+                  aria-label={`Play ${video.title}`}
+                >
+                  <img
+                    className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                    src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`}
+                    alt={video.title}
                     loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
                   />
-                </div>
+                  <span className="absolute inset-0 bg-black/20 transition group-hover:bg-black/10" />
+                  <span className="absolute left-1/2 top-1/2 inline-flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#064834] shadow-[0_14px_32px_rgba(0,0,0,0.25)] transition group-hover:scale-105">
+                    <Play size={24} className="ml-1 fill-current" />
+                  </span>
+                </button>
                 <div className="p-5">
                   <div className="mb-3 inline-flex rounded-full bg-[#edf6ef] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#064834]">
                     {video.category}
@@ -181,10 +284,10 @@ export default function TestimonialVideosPage() {
                   </p>
                   <button
                     type="button"
-                    onClick={() => setActiveVideo(video)}
+                    onClick={() => openVideoPopup(video)}
                     className="mt-4 inline-flex items-center gap-2 text-[13px] font-bold text-[#064834] transition hover:text-[#0a7a5b]"
                   >
-                    Show in featured player
+                    Watch video
                     <ArrowRight size={14} />
                   </button>
                 </div>
@@ -219,6 +322,48 @@ export default function TestimonialVideosPage() {
           </button>
         </div>
       </section>
+
+      {popupVideo && (
+        <div className="fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-black/72 px-4 py-24 sm:py-28">
+          <button
+            type="button"
+            className="absolute inset-0 cursor-default"
+            aria-label="Close video popup"
+            onClick={() => setPopupVideo(null)}
+          />
+          <div className="relative z-10 w-full max-w-3xl overflow-hidden rounded-[18px] bg-white shadow-[0_28px_90px_rgba(0,0,0,0.35)]">
+            <div className="flex items-center justify-between gap-4 border-b border-[#eee6d9] px-4 py-3 sm:px-5">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#c77700]">
+                  {popupVideo.category}
+                </p>
+                <h2 className="text-[18px] font-bold text-[#08251d]">
+                  {popupVideo.title}
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPopupVideo(null)}
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f4efe6] text-[#08251d] transition hover:bg-[#e8dccb]"
+                aria-label="Close video"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="aspect-video w-full bg-[#061f17]">
+              <iframe
+                key={popupVideo.id}
+                className="h-full w-full"
+                src={`https://www.youtube.com/embed/${popupVideo.id}?rel=0&autoplay=1`}
+                title={popupVideo.title}
+                referrerPolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       <ConsultationPopup isOpen={openPopup} onClose={() => setOpenPopup(false)} />
     </>

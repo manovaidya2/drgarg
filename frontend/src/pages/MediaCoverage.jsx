@@ -191,7 +191,7 @@ export default function MediaCoverage() {
           <div className="max-w-[700px]">
             <h2 className="font-serif text-white text-[26px] sm:text-[32px] lg:text-[36px] leading-[1.2] tracking-[-0.02em]">
               Looking to Interview or Collaborate?
-            </h2>
+            </h2> 
 
             <p className="mt-4 text-white/90 text-[15px] sm:text-[17px] lg:text-[18px] leading-relaxed font-medium">
               Reach out for media, awareness programs, or research collaboration.
