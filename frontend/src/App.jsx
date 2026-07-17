@@ -25,6 +25,7 @@ import Adult from "./pages/Adult";
 import Teenage from "./pages/Teenage";
 import Seniour from "./pages/Seniour";
 import NotFound from "./pages/NotFound";
+import ChildDevelopmentCarePage from "./child-development-care/ChildDevelopmentCarePage";
 
 import TestimonialsPage from "./pages/TestimonialsPage";
 import TestimonialVideosPage from "./pages/TestimonialVideosPage";
@@ -60,6 +61,10 @@ export default function App() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/neuro-ayurveda-system" element={<System />} />
           <Route path="/autism-adhd" element={<AutismADHDSection />} />
+          <Route
+            path="/child-development-care"
+            element={<ChildDevelopmentCarePage />}
+          />
           <Route path="/adult-mental-health" element={<Adult />} />
           <Route path="/teenage-mental-health" element={<Teenage />} />
           <Route path="/seniour-mental-health" element={<Seniour />} />

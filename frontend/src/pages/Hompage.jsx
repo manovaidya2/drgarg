@@ -20,7 +20,7 @@ import AutismFAQSection from "../Home/AutismFAQSection";
 import BlogCarousel from "../Home/BlogCarousel";
 
 // Import the image for preload URL
-import doctorImage from "../images/dr-ankush-hero-banner-v2.png";
+import doctorImage from "../images/2.jpg.jpeg";
 
 function Homepage() {
   const imageUrl = typeof doctorImage === 'string' ? doctorImage : doctorImage?.src;

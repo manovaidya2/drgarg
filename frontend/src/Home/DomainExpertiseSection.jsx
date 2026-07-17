@@ -2,26 +2,72 @@ import React from "react";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+function ChildDevelopmentIcon() {
+  return (
+    <svg viewBox="0 0 48 48" aria-hidden="true" className="h-11 w-11">
+      <circle
+        cx="24"
+        cy="10"
+        r="5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.7"
+      />
+      <path
+        d="M16 23c0-5 4-8 8-8s8 3 8 8v15H16V23Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.7"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14 27h20M20 38v-9m8 9v-9M25 8l5-5m0 0h-5m5 0v5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 const domains = [
+  {
+    title: "Child Development",
+    desc: "Autism, ADHD, Speech Delay, Learning Difficulties and Behavioural Challenges.",
+    link: "/child-development-care",
+    color: "#7b47be",
+    bg: "#eee5ff",
+    icon: ChildDevelopmentIcon,
+  },
   {
     title: "Autism & ADHD",
     desc: "Spectrum disorder, speech delay, eye contact, sensory issues, hyperactivity, behaviour & developmental delay.",
     link: "/autism-adhd",
+    color: "#064834",
+    bg: "#e7f2ed",
   },
   {
     title: "Adult Mental Health",
     desc: "Anxiety, depression, OCD, panic, overthinking, sleep disturbance, nervous system overload.",
     link: "/adult-mental-health",
+    color: "#d98923",
+    bg: "#fff2df",
   },
   {
     title: "Teenage Mental Health",
     desc: "Study stress, screen addiction, mood swings, low confidence, parent-child communication gap.",
     link: "/teenage-mental-health",
+    color: "#5f8a76",
+    bg: "#eaf3ee",
   },
   {
     title: "Senior Mental Health",
     desc: "Memory issues, sleep disorders, cognitive decline, anxiety, brain fog, age-related concerns.",
     link: "/seniour-mental-health",
+    color: "#557fae",
+    bg: "#eaf1fb",
   },
 ];
 
@@ -50,7 +96,9 @@ export default function DomainExpertiseSection() {
 
         {/* CARDS */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-8">
-          {domains.map((item, index) => (
+          {domains.map((item, index) => {
+            const Icon = item.icon;
+            return (
             <div
               key={index}
               onClick={() => navigate(item.link)}
@@ -62,15 +110,28 @@ export default function DomainExpertiseSection() {
                 className="absolute right-5 top-5 text-[#5f8a76] group-hover:translate-x-1 transition"
               />
 
-              <h3 className="font-serif text-[#002b18] text-[22px] leading-snug pr-8 mb-3">
-                {item.title}
-              </h3>
+              <div className="flex items-start gap-4 pr-8">
+                {Icon && (
+                  <span
+                    className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full"
+                    style={{ color: item.color, backgroundColor: item.bg }}
+                  >
+                    <Icon />
+                  </span>
+                )}
+                <div>
+                  <h3 className="font-serif text-[#002b18] text-[22px] leading-snug mb-3">
+                    {item.title}
+                  </h3>
 
-              <p className="text-[#33423d] text-[13px] md:text-[14px] leading-[1.6]">
-                {item.desc}
-              </p>
+                  <p className="text-[#33423d] text-[13px] md:text-[14px] leading-[1.6]">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
             </div>
-          ))}
+          );
+          })}
         </div>
       </div>
     </section>

@@ -6,7 +6,7 @@ const expertiseAreas = [
     title: "Child Development",
     description:
       "Autism, ADHD, Speech Delay, Learning Difficulties and Behavioural Challenges.",
-    link: "https://manovaidya.org/child-health-care",
+    link: "/child-development-care",
     color: "#7b47be",
     bg: "#eee5ff",
     icon: (

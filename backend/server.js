@@ -32,6 +32,7 @@ const spaRoutes = [
   "/gallery",
   "/neuro-ayurveda-system",
   "/autism-adhd",
+  "/child-development-care",
   "/adult-mental-health",
   "/teenage-mental-health",
   "/seniour-mental-health",
