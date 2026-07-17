@@ -192,7 +192,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
-import heroDoctor from "../images/sirimg.webp";
+import heroDoctor from "../images/doctsirimg.jpeg";
 import ConsultationPopup from "../components/ConsultationPopup";
 
 const liveAppointments = [
@@ -286,11 +286,11 @@ export default function Hero() {
           <div className="relative z-10 mx-auto mt-4 w-full max-w-[520px] lg:-top-14 lg:mt-0 lg:max-w-[560px] xl:-top-16">
             <div className="absolute inset-x-8 bottom-28 h-24 rounded-full bg-[#edf5ef] opacity-45" />
 
-            <div className="relative ml-auto overflow-hidden rounded-[28px] rounded-bl-[6px] border border-[#eadfc9] bg-[#efe5d4] shadow-[0_22px_52px_rgba(10,64,42,0.13)]">
+            <div className="relative mx-auto w-fit max-w-full overflow-hidden rounded-[28px] rounded-bl-[6px] border border-[#eadfc9] bg-[#efe5d4] shadow-[0_22px_52px_rgba(10,64,42,0.13)] lg:ml-auto">
               <img
                 src={heroDoctor}
                 alt="Dr. Ankush Garg in consultation room"
-                className="h-[420px] w-full object-cover object-center sm:h-[458px] lg:h-[458px]"
+                className="h-[420px] w-auto max-w-full object-contain object-center sm:h-[458px] lg:h-[458px]"
                 loading="eager"
                 fetchPriority="high"
                 decoding="async"

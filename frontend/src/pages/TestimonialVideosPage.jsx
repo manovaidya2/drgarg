@@ -124,6 +124,18 @@ const videoTestimonials = [
     category: "Patient Stories",
     note: "A patient review about trusted guidance and supportive treatment experience.",
   },
+  {
+    id: "9b_9gXQ2Lhs",
+    title: "Patient Testimonial",
+    category: "Patient Stories",
+    note: "A patient video testimonial sharing their experience with consultation and care.",
+  },
+  {
+    id: "VuaJJuh77gc",
+    title: "Patient Review",
+    category: "Patient Stories",
+    note: "A patient review about trusted guidance and supportive treatment experience.",
+  },
 ];
 
 export default function TestimonialVideosPage() {
