@@ -7,9 +7,12 @@ const cards = [
     icon: BookOpenCheck,
     title: "Education & Training",
     items: [
-      "MD (Ayurveda) - Recognized University",
-      "PGD.CAP (Clinical Ayurveda Practice)",
-      "IHAP (Singapore)",
+      "BAMS (Bachelor of Ayurvedic Medicine and Surgery)",
+   
+      "MPH (Master of Public Health)",
+      "Ph.D. (gut brain axis)",
+    
+     
       "Advanced certifications in Pain Management & Panchakarma",
       "Regularly updates knowledge through workshops, seminars and research.",
     ],
