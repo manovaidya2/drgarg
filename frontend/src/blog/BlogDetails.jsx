@@ -812,7 +812,7 @@ export default function BlogDetails() {
               </div>
               <p className="text-sm text-gray-600 mb-3" itemProp="description">
                 Dr. Ankush Garg is one of India's top autism doctors, leading Ayurvedic neurologist, 
-                and founder of Manovaidya. With over 9+ years of experience, he has helped 
+                and founder of Manovaidya. With over 7+ years of experience, he has helped 
                 thousands of patients achieve better mental health through his Neuro-Ayurveda System.
               </p>
               <div className="flex gap-2 pt-2 border-t border-green-100">
