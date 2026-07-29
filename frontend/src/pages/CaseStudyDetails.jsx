@@ -160,11 +160,14 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInstance";
 import { Plus, ChevronDown, ChevronUp } from "lucide-react";
 import { Helmet } from "react-helmet-async";
+import { useSsrData } from "../ssrData";
 
 export default function CaseStudyDetails() {
   const { slug } = useParams();
-  const [caseStudy, setCaseStudy] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const ssrData = useSsrData();
+  const initialCaseStudy = ssrData.caseStudy || null;
+  const [caseStudy, setCaseStudy] = useState(initialCaseStudy);
+  const [loading, setLoading] = useState(!initialCaseStudy);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   useEffect(() => {
@@ -205,6 +208,7 @@ export default function CaseStudyDetails() {
   // Process content to ensure links open in new tab and have proper security attributes
   const processContent = (content) => {
     if (!content) return '';
+    if (typeof document === "undefined") return content;
     
     // Create a temporary div to parse the content
     const tempDiv = document.createElement('div');

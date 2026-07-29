@@ -3,10 +3,15 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import axiosInstance from "../api/axiosInstance";
+import { useSsrData } from "../ssrData";
 
 export default function BlogPage() {
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const ssrData = useSsrData();
+  const initialBlogs = Array.isArray(ssrData.blogs) ? ssrData.blogs : [];
+  const [blogs, setBlogs] = useState(initialBlogs);
+  const [loading, setLoading] = useState(
+    typeof window !== "undefined" && initialBlogs.length === 0
+  );
   const [activeCategory, setActiveCategory] = useState("All");
   const [siteSettings, setSiteSettings] = useState({
     title: "Dr. Ankush Garg - Autism & Mental Health Expert",

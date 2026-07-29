@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import InfinityLoader from "./components/InfinityLoader";
 import ScrollToTop from "./components/ScrollToTop";
 
 import Homepage from "./pages/Hompage";
@@ -32,15 +31,6 @@ import TestimonialVideosPage from "./pages/TestimonialVideosPage";
 import ThankYou from "./pages/ThankYou";
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1200);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) return <InfinityLoader />;
-
   return (
     <div className="font-sans">
       <GlobalSEO includeAnalytics /> {/* Default global SEO */}

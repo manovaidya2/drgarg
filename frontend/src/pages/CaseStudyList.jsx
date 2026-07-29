@@ -3,10 +3,17 @@ import { Helmet } from "react-helmet-async";
 import { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInstance";
 import { GlobalSEO } from "../components/SEOProvider";
+import { useSsrData } from "../ssrData";
 
 export default function CaseStudyList() {
-  const [caseStudies, setCaseStudies] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const ssrData = useSsrData();
+  const initialCaseStudies = Array.isArray(ssrData.caseStudies)
+    ? ssrData.caseStudies
+    : [];
+  const [caseStudies, setCaseStudies] = useState(initialCaseStudies);
+  const [loading, setLoading] = useState(
+    typeof window !== "undefined" && initialCaseStudies.length === 0
+  );
   const [error, setError] = useState(null);
 
   // Breadcrumb Schema Data

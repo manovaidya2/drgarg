@@ -26,12 +26,15 @@ router.get("/sitemap.xml", async (req, res) => {
       "/mindwellness",
       "/case-study",
       "/media-coverage",
+      "/gallery",
       "/neuro-ayurveda-system",
       "/autism-adhd",
+      "/child-development-care",
       "/adult-mental-health",
       "/teenage-mental-health",
       "/seniour-mental-health",
       "/testimonials",
+      "/testimonial-videos",
     ];
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;

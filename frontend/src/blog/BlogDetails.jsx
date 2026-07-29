@@ -4,6 +4,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import axiosInstance from "../api/axiosInstance";
 import doctorImage from "../images/sirimg.webp";
+import { useSsrData } from "../ssrData";
 import {
   Calendar,
   ArrowLeft,
@@ -30,18 +31,29 @@ import {
   Download
 } from "lucide-react";
 
+const getReadingMinutes = (content) => {
+  const wordsPerMinute = 200;
+  const text = content?.replace(/<[^>]*>/g, '') || '';
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / wordsPerMinute));
+};
+
 export default function BlogDetails() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const ssrData = useSsrData();
+  const initialBlog = ssrData.blog || null;
 
-  const [blog, setBlog] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [blog, setBlog] = useState(initialBlog);
+  const [loading, setLoading] = useState(!initialBlog);
   const [liked, setLiked] = useState(false);
-  const [relatedPosts, setRelatedPosts] = useState([]);
+  const [relatedPosts, setRelatedPosts] = useState(ssrData.relatedPosts || []);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [openFaqs, setOpenFaqs] = useState([]);
   const [copied, setCopied] = useState(false);
-  const [readingTime, setReadingTime] = useState(0);
+  const [readingTime, setReadingTime] = useState(
+    initialBlog?.content ? getReadingMinutes(initialBlog.content) : 0
+  );
   const [tableOfContents, setTableOfContents] = useState([]);
 
   const sidebarRef = useRef(null);
@@ -52,11 +64,7 @@ export default function BlogDetails() {
 
   // Calculate reading time
   const calculateReadingTime = (content) => {
-    const wordsPerMinute = 200;
-    const text = content?.replace(/<[^>]*>/g, '') || '';
-    const words = text.trim().split(/\s+/).length;
-    const minutes = Math.max(1, Math.ceil(words / wordsPerMinute));
-    return minutes;
+    return getReadingMinutes(content);
   };
 
   // Generate table of contents from headings
