@@ -44,7 +44,7 @@ export const staticSeo = {
     description:
       "Book an appointment with Dr Ankush Garg for Ayurvedic neurology, mental wellness, autism, ADHD, stress, anxiety and holistic Neuro-Ayurveda care.",
     keywords:
-      "Book appointment Dr Ankush Garg, Ayurvedic neurologist appointment, Neuro Ayurveda consultation",
+      "Book appointment Dr Ankush Garg, Ayurvedacharya appointment, Neuro Ayurveda consultation",
     canonical: `${SITE_URL}/appointment`,
   },
   "/mindwellness": {

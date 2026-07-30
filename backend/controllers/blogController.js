@@ -2,11 +2,45 @@
 import Blog from "../models/Blog.js";
 import mongoose from "mongoose";
 
+const publicBlogFilter = {
+  published: { $ne: false },
+  status: { $nin: ["draft", "unpublished"] },
+};
+
+const publicBlogFields =
+  "title slug category date image shortDescription createdAt metaTitle metaDescription content publishedDate modifiedDate";
+
+const normalizePage = (value) => {
+  const page = Number.parseInt(value, 10);
+  return Number.isFinite(page) && page > 0 ? page : 1;
+};
+
+const normalizeLimit = (value) => {
+  const limit = Number.parseInt(value, 10);
+  if (!Number.isFinite(limit) || limit <= 0) return null;
+  return Math.min(limit, 50);
+};
+
+const removePerBlogAuthorBiography = (blogData = {}) => {
+  const cleaned = { ...blogData };
+  [
+    "authorBio",
+    "authorBiography",
+    "authorDescription",
+    "authorProfile",
+    "authorDetails",
+  ].forEach((field) => {
+    delete cleaned[field];
+  });
+
+  return cleaned;
+};
+
 // CREATE
 export const createBlog = async (req, res) => {
   try {
     const blogData = {
-      ...req.body,
+      ...removePerBlogAuthorBiography(req.body),
       // Ensure meta fields are properly set
       publishedDate: req.body.publishedDate || req.body.date || new Date(),
       modifiedDate: new Date()
@@ -24,10 +58,42 @@ export const createBlog = async (req, res) => {
 // GET ALL
 export const getBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find({})
-      .select("title slug category date image shortDescription createdAt metaTitle metaDescription")
+    const { category } = req.query;
+    const page = normalizePage(req.query.page);
+    const limit = normalizeLimit(req.query.limit);
+    const filter = { ...publicBlogFilter };
+
+    if (category && category !== "All") {
+      filter.category = category;
+    }
+
+    const query = Blog.find(filter)
+      .select(publicBlogFields)
       .sort({ createdAt: -1 })
       .lean();
+
+    if (limit) {
+      query.skip((page - 1) * limit).limit(limit);
+    }
+
+    const [blogs, total, allCategories] = await Promise.all([
+      query,
+      Blog.countDocuments(filter),
+      Blog.distinct("category", publicBlogFilter),
+    ]);
+
+    if (category || req.query.page) {
+      return res.status(200).json({
+        blogs,
+        categories: allCategories.filter(Boolean).sort(),
+        pagination: {
+          page,
+          limit: limit || total || 1,
+          total,
+          totalPages: limit ? Math.max(1, Math.ceil(total / limit)) : 1,
+        },
+      });
+    }
 
     res.status(200).json(blogs);
   } catch (error) {
@@ -47,7 +113,7 @@ export const getBlogBySlug = async (req, res) => {
     // Check if the parameter is a valid MongoDB ObjectId
     if (mongoose.Types.ObjectId.isValid(slug)) {
       // If it's a valid ID, try to find by ID first
-      const blogById = await Blog.findById(slug);
+      const blogById = await Blog.findOne({ _id: slug, ...publicBlogFilter });
       if (blogById) {
         // Increment view count
         await Blog.findByIdAndUpdate(slug, { $inc: { views: 1 } });
@@ -56,7 +122,7 @@ export const getBlogBySlug = async (req, res) => {
     }
     
     // If not a valid ID or no blog found by ID, try to find by slug
-    const blog = await Blog.findOne({ slug: slug });
+    const blog = await Blog.findOne({ slug: slug, ...publicBlogFilter });
     if (!blog) {
       return res.status(404).json({ message: "Blog not found" });
     }
@@ -82,7 +148,7 @@ export const updateBlog = async (req, res) => {
     }
     
     const updateData = {
-      ...req.body,
+      ...removePerBlogAuthorBiography(req.body),
       modifiedDate: new Date() // Always update modified date
     };
     

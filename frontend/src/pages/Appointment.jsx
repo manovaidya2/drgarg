@@ -82,9 +82,9 @@ export default function Appointment() {
     "image": "https://drankushgarg.in/clinic-image.jpg",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Near Vinayak Hospital, Atta Market, Pocket E, Sector 27",
+      "streetAddress": "VS Plaza, Near Vinayak Hospital, Atta Market, Pocket E, Sector 27",
       "addressLocality": "Noida",
-      "addressRegion": "UP",
+      "addressRegion": "Uttar Pradesh",
       "postalCode": "201301",
       "addressCountry": "IN"
     },
@@ -190,14 +190,15 @@ export default function Appointment() {
                 <div className="space-y-4 text-[#40514d] text-[14px]">
                   <p>
                     <strong>Address</strong><br />
-                    Near Vinayak Hospital, Atta Market, Pocket E, Sector 27,<br />
-                    Noida, Uttar Pradesh 201301
+                    VS Plaza, Near Vinayak Hospital,<br />
+                    Atta Market, Pocket E, Sector 27,<br />
+                    Noida, Uttar Pradesh – 201301
                   </p>
 
                   <p>
                     <strong>Phone</strong><br />
                     <a href="tel:+917823838638" className="hover:text-[#d8a63b] transition-colors">
-                      078238 38638
+                      +91 78238 38638
                     </a>
                   </p>
 
@@ -210,8 +211,8 @@ export default function Appointment() {
 
                   <p>
                     <strong>Email</strong><br />
-                    <a href="mailto:hello@manovaidya.in" className="hover:text-[#d8a63b] transition-colors">
-                      hello@manovaidya.in
+                    <a href="mailto:contact@drankushgarg.in" className="hover:text-[#d8a63b] transition-colors">
+                      contact@drankushgarg.in
                     </a>
                   </p>
 

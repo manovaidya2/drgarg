@@ -4,7 +4,7 @@ import { ChevronDown, HelpCircle } from "lucide-react";
 const faqs = [
   {
     q: "What is Dr. Ankush Garg's educational background?",
-    a: "Dr. Ankush Garg is an Ayurvedacharya with formal education and clinical training in Ayurveda. His work focuses on child development, mental wellness, behavioural concerns and mind-body wellbeing.",
+    a: "Dr. Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. He has 7+ years of focused experience in child development and mental wellness. His ongoing PhD research explores the relationship between the gut–brain axis, behaviour and emotional wellbeing.",
   },
   {
     q: "What areas has Dr. Ankush Garg worked in?",

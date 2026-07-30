@@ -12,6 +12,7 @@ import CaseStudiesList from "./pages/CaseStudiesList";
 import EditCaseStudy from "./pages/CaseStudyEdit";
 import CaseStudyEdit from "./pages/CaseStudyEdit";
 import GalleryManager from "./pages/GalleryManager";
+import AuthorProfile from "./pages/AuthorProfile";
 
 
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/add-casestudy" element={<Layout><AdminAddCaseStudy /></Layout>} />
           <Route path="/appointments" element={<Layout><AdminAppointments /></Layout>} />
           <Route path="/gallery" element={<Layout><GalleryManager /></Layout>} />
+          <Route path="/author-profile" element={<Layout><AuthorProfile /></Layout>} />
           <Route path="/blogs/edit/:id" element={<Layout><EditBlog/></Layout>} />
           <Route path="/blog-list" element={<Layout><BlogList /></Layout>} />
            <Route path="/case-studies" element={<Layout><CaseStudiesList /></Layout>} />

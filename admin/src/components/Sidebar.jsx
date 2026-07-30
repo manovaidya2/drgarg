@@ -10,6 +10,7 @@ import {
   FaPlusCircle,
   FaSignOutAlt,
   FaTachometerAlt,
+  FaUserEdit,
 } from "react-icons/fa";
 import { MdHealthAndSafety } from "react-icons/md";
 
@@ -20,6 +21,7 @@ const navItems = [
   { to: "/case-studies", icon: FaBrain, label: "Case Studies" },
   { to: "/add-casestudy", icon: FaPlusCircle, label: "Add Case Study" },
   { to: "/gallery", icon: FaImages, label: "Gallery" },
+  { to: "/author-profile", icon: FaUserEdit, label: "Author Profile" },
   { to: "/appointments", icon: FaCalendarAlt, label: "Appointments" },
 ];
 

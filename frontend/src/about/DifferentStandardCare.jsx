@@ -2,16 +2,16 @@ import React from "react";
 
 const carePoints = [
   {
-    title: "Root-Cause First",
-    desc: "He does not treat symptoms in isolation. Every case is mapped across brain, gut, sensory, sleep, hormones and behaviour — so improvement is structural, not superficial.",
+    title: "Whole-Person Assessment",
+    desc: "Each case is reviewed across development, behaviour, sleep, digestion, sensory responses, lifestyle and family routines.",
   },
   {
-    title: "Research-Backed",
-    desc: "His PhD work on the gut-brain axis directly informs treatment for autism, ADHD, anxiety and depression.",
+    title: "Research-Informed",
+    desc: "His gut-brain axis research focus supports a broader understanding of development, behaviour and mental wellness.",
   },
   {
-    title: "Measurable Progress",
-    desc: "Families see month-by-month change in response, behaviour, speech, sleep and emotional regulation.",
+    title: "Structured Guidance",
+    desc: "Families receive practical guidance, follow-up and education so they can understand concerns more clearly over time.",
   },
 ];
 
@@ -19,40 +19,39 @@ export default function DifferentStandardCare() {
   return (
     <section className="w-full bg-[#f7f1e8] py-6 md:py-8">
       <div className="mx-auto px-4 md:px-10">
-
-        {/* TOP TEXT */}
-        <p className="text-[#d98923] text-[13px] uppercase tracking-[0.3em] mb-3">
+        <p className="mb-3 text-[13px] uppercase tracking-[0.3em] text-[#d98923]">
           Why Families Seek His Guidance
         </p>
 
-        <h2 className="font-serif text-[#002b18] text-[26px] sm:text-[30px] md:text-[36px] leading-[1.15] tracking-[-0.02em] max-w-[620px]">
-          A Different Standard of Care
+        <h2 className="max-w-[620px] font-serif text-[26px] leading-[1.15] tracking-[-0.02em] text-[#002b18] sm:text-[30px] md:text-[36px]">
+          A Structured Standard of Care
           <br />
-          for Autism & Mental Health
+          for Development and Mental Wellness
         </h2>
 
-        <p className="mt-4 max-w-[700px] text-[#2f3f4a] text-[14px] sm:text-[18px] leading-[1.6]">
-        Most autism and mental health treatment stops at the symptom layer. Dr. Ankush Garg goes deeper — into the brain, the gut, the nervous system, sensory processing and behaviour together. That integrated approach shapes his work as an Ayurvedic neurologist focused on autism and mental health care.
+        <p className="mt-4 max-w-[700px] text-[14px] leading-[1.6] text-[#2f3f4a] sm:text-[18px]">
+          Dr. Ankush Garg looks at the brain, gut, nervous system, sensory
+          processing, lifestyle and behaviour together. This integrated view
+          shapes his work as an Ayurvedacharya focused on child development and
+          mental wellness.
         </p>
 
-        {/* CARDS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
           {carePoints.map((item) => (
             <div
               key={item.title}
-              className="bg-white border border-[#ddd7ce] rounded-[4px] px-5 py-5 min-h-[170px] hover:shadow-sm transition"
+              className="min-h-[170px] rounded-[4px] border border-[#ddd7ce] bg-white px-5 py-5 transition hover:shadow-sm"
             >
-              <h3 className="font-serif text-[#002b18] text-[20px] mb-2">
+              <h3 className="mb-2 font-serif text-[20px] text-[#002b18]">
                 {item.title}
               </h3>
 
-              <p className="text-[#4b5b55] text-[16px] leading-[1.5]">
+              <p className="text-[16px] leading-[1.5] text-[#4b5b55]">
                 {item.desc}
               </p>
             </div>
           ))}
         </div>
-
       </div>
     </section>
   );

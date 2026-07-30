@@ -7,12 +7,14 @@ import fs from "fs";
 import { fileURLToPath, pathToFileURL } from "url";
 
 import blogRoutes from "./routes/blogRoutes.js";
+import authorProfileRoutes from "./routes/authorProfileRoutes.js";
 import caseStudyRoutes from "./routes/caseStudyRoutes.js";
 import appointmentRoutes from "./routes/appointmentRoutes.js";
 import galleryRoutes from "./routes/galleryRoutes.js";
 import sitemapRoute from "./routes/sitemap.js";
 import Blog from "./models/Blog.js";
 import CaseStudy from "./models/CaseStudy.js";
+import { getCentralAuthorProfile } from "./controllers/authorProfileController.js";
 import {
   getStaticSeo,
   renderHtmlWithSeo,
@@ -71,6 +73,50 @@ const truncateDescription = (value = "") => {
   return `${clean.slice(0, 157).trim()}...`;
 };
 
+const publicBlogFilter = {
+  published: { $ne: false },
+  status: { $nin: ["draft", "unpublished"] },
+};
+
+const publicBlogFields =
+  "title slug category date image shortDescription createdAt metaTitle metaDescription content publishedDate modifiedDate";
+
+const getBlogListData = async (requestUrl = "/blog") => {
+  const parsedUrl = new URL(requestUrl, siteUrl);
+  const category = parsedUrl.searchParams.get("category") || "All";
+  const requestedPage = Number.parseInt(parsedUrl.searchParams.get("page"), 10);
+  const page = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+  const limit = 9;
+  const filter = { ...publicBlogFilter };
+
+  if (category !== "All") {
+    filter.category = category;
+  }
+
+  const [blogs, total, categories] = await Promise.all([
+    Blog.find(filter)
+      .select(publicBlogFields)
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean(),
+    Blog.countDocuments(filter),
+    Blog.distinct("category", publicBlogFilter),
+  ]);
+
+  return {
+    blogs,
+    categories: categories.filter(Boolean).sort(),
+    activeCategory: category,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.max(1, Math.ceil(total / limit)),
+    },
+  };
+};
+
 const buildRequestSeo = async (reqPath) => {
   const normalizedPath =
     reqPath === "" || reqPath === "/" ? "/" : reqPath.replace(/\/$/, "");
@@ -78,7 +124,7 @@ const buildRequestSeo = async (reqPath) => {
   const blogMatch = normalizedPath.match(/^\/blog\/([^/]+)$/);
   if (blogMatch) {
     const slug = decodeURIComponent(blogMatch[1]);
-    const blog = await Blog.findOne({ slug }).lean();
+    const blog = await Blog.findOne({ slug, ...publicBlogFilter }).lean();
 
     if (!blog) {
       return getStaticSeo(normalizedPath);
@@ -140,24 +186,24 @@ const getSsrRenderer = async () => {
 };
 
 const buildInitialData = async (reqPath) => {
+  const parsedUrl = new URL(reqPath || "/", siteUrl);
   const normalizedPath =
-    reqPath === "" || reqPath === "/" ? "/" : reqPath.replace(/\/$/, "");
+    parsedUrl.pathname === "" || parsedUrl.pathname === "/"
+      ? "/"
+      : parsedUrl.pathname.replace(/\/$/, "");
 
   if (normalizedPath === "/blog") {
-    const blogs = await Blog.find({})
-      .select("title slug category date image shortDescription createdAt metaTitle metaDescription content")
-      .sort({ createdAt: -1 })
-      .lean();
-
-    return { blogs };
+    return getBlogListData(reqPath);
   }
 
   const blogMatch = normalizedPath.match(/^\/blog\/([^/]+)$/);
   if (blogMatch) {
     const slug = decodeURIComponent(blogMatch[1]);
-    const blog = await Blog.findOne({ slug }).lean();
+    const blog = await Blog.findOne({ slug, ...publicBlogFilter }).lean();
+    const authorProfile = await getCentralAuthorProfile();
     const relatedPosts = blog?.category
       ? await Blog.find({
+          ...publicBlogFilter,
           category: blog.category,
           slug: { $ne: slug },
         })
@@ -167,7 +213,7 @@ const buildInitialData = async (reqPath) => {
           .lean()
       : [];
 
-    return { blog, relatedPosts };
+    return { blog, relatedPosts, authorProfile };
   }
 
   if (normalizedPath === "/case-study") {
@@ -198,6 +244,7 @@ mongoose
 
 /* API Routes */
 app.use("/api/blogs", blogRoutes);
+app.use("/api/author-profile", authorProfileRoutes);
 app.use("/api/case-studies", caseStudyRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/gallery", galleryRoutes);
@@ -235,7 +282,7 @@ if (fs.existsSync(frontendDist)) {
       const indexHtml = fs.readFileSync(frontendIndex, "utf8");
       let initialData = {};
       try {
-        initialData = await buildInitialData(normalizedPath);
+        initialData = await buildInitialData(req.originalUrl);
       } catch (dataError) {
         console.error("SSR initial data failed:", dataError.message);
       }

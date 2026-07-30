@@ -33,7 +33,7 @@ function Homepage() {
 
         <meta
           name="description"
-          content="Dr Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. His work focuses on child development and mental wellness."
+          content="Dr. Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. He has 7+ years of focused experience in child development and mental wellness. His ongoing PhD research explores the relationship between the gut–brain axis, behaviour and emotional wellbeing."
         />
 
         <meta
@@ -51,7 +51,7 @@ function Homepage() {
         <meta property="og:title" content="Dr Ankush Garg, Ayurvedacharya | Founder of Manovaidya" />
         <meta
           property="og:description"
-          content="Dr Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. His work focuses on child development and mental wellness."
+          content="Dr. Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. He has 7+ years of focused experience in child development and mental wellness. His ongoing PhD research explores the relationship between the gut–brain axis, behaviour and emotional wellbeing."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://drankushgarg.in/" />
@@ -65,7 +65,7 @@ function Homepage() {
         <meta name="twitter:title" content="Dr Ankush Garg, Ayurvedacharya | Founder of Manovaidya" />
         <meta
           name="twitter:description"
-          content="Dr Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. His work focuses on child development and mental wellness."
+          content="Dr. Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. He has 7+ years of focused experience in child development and mental wellness. His ongoing PhD research explores the relationship between the gut–brain axis, behaviour and emotional wellbeing."
         />
         <meta
           name="twitter:image"

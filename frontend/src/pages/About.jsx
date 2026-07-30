@@ -49,8 +49,8 @@
 //                   desc: "Worked with children and adults dealing with focus issues, anxiety, behavioural challenges, and mental health conditions.",
 //                 },
 //                 {
-//                   title: "Root Cause Treatment:",
-//                   desc: "Focus on treating internal biology (brain, gut, hormones) along with behaviour — not just symptom management.",
+//                   title: "Whole-Person Assessment:",
+//                   desc: "Focus on reviewing biology, behaviour, lifestyle, and support needs together.",
 //                 },
 //               ].map((item, index) => (
 //                 <li key={index} className="flex gap-4 items-start">

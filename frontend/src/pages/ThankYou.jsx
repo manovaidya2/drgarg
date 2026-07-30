@@ -47,7 +47,7 @@ export default function ThankYou() {
                 <div className="rounded-3xl border border-[#e4ded2] bg-[#f9f7f1] p-5 text-left">
                   <p className="text-sm font-semibold text-[#2b3b2e]">Need support now?</p>
                   <p className="mt-3 text-sm leading-6 text-[#5f6f63]">
-                    Call us at <a href="tel:+917823838638" className="font-medium text-[#d98923]">07823 838638</a> for urgent assistance.
+                    Call us at <a href="tel:+917823838638" className="font-medium text-[#d98923]">+91 78238 38638</a> for urgent assistance.
                   </p>
                 </div>
               </div>

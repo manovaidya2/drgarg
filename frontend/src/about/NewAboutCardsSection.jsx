@@ -10,7 +10,7 @@ const cards = [
       "BAMS (Bachelor of Ayurvedic Medicine and Surgery)",
    
       "MPH (Master of Public Health)",
-      "Ph.D. (gut brain axis)",
+      "PhD Research (Gut-Brain Axis)",
     
      
       "Advanced certifications in Pain Management & Panchakarma",
@@ -34,9 +34,9 @@ const cards = [
     items: [
       "7+ Years of Focused Experience",
       "Personalized & compassionate care",
-      "Root-cause approach",
+      "Whole-person assessment",
       "Advanced Ayurvedic therapies",
-      "Progress-focused guidance and patient satisfaction",
+      "Progress-focused guidance",
       "Guidance for long-term wellness",
     ],
     checks: true,
@@ -91,11 +91,11 @@ export default function NewAboutCardsSection() {
             </div>
             <div>
               <h2 className="font-serif text-[25px] font-semibold text-[#075640]">
-                Begin your journey towards natural healing.
+                Begin with a structured consultation.
               </h2>
               <p className="mt-2 max-w-[610px] text-[15px] font-medium leading-[1.75] text-[#40514a]">
-                Book a personalized consultation and take the first step towards a
-                pain-free, balanced life.
+                Book a personalised consultation to understand your concerns
+                and receive appropriate guidance.
               </p>
             </div>
             <div className="text-center lg:text-left">

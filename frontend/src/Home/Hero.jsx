@@ -86,7 +86,7 @@
 //               </h1>
 
 //               <p className="mx-auto mt-4 max-w-[560px] text-[14.5px] font-medium leading-[1.6] text-[#4e4658] sm:text-[17px] lg:mx-0 xl:text-[16px]">
-//                 Dr. Ankush Garg, an Ayurvedic neurologist
+//                 Dr. Ankush Garg, an Ayurvedacharya
 //                 and developer of the Neuro-Ayurveda System, helps children,
 //                 teenagers, adults, and seniors heal complex brain, behaviour,
 //                 and mental health conditions through an integrated
@@ -244,8 +244,8 @@ export default function Hero() {
             <div className="mt-10 border-t border-[#e5e0d6] pt-7 text-[14px] leading-relaxed text-[#12362b] sm:text-[15px]">
               <p className="font-medium">Dr. Ankush Garg</p>
               <p>
-                BAMS, MPH, PhD (Gut-Brain Axis ) - Ayurvedacharya -
-                Founder, Manovaidya
+                BAMS, MPH | Ayurvedacharya - PhD Research Scholar
+                (Gut-Brain Axis) - Founder, Manovaidya
               </p>
             </div>
 

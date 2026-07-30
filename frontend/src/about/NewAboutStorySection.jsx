@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 const aboutBullets = [
-  "Dr. Ankush Garg is an Ayurvedacharya, Child Development & Mental Wellness Specialist and Founder of Manovaidya.",
+  "Dr. Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. He has 7+ years of focused experience in child development and mental wellness. His ongoing PhD research explores the relationship between the gut–brain axis, behaviour and emotional wellbeing.",
   "His work focuses on helping children, teenagers, adults and families better understand the factors influencing development, behaviour, emotional wellbeing and long-term health.",
   "Over the years, he has worked with individuals and families seeking guidance for concerns related to Autism Spectrum Disorder (ASD), ADHD, developmental delays, behavioural challenges, emotional wellbeing, stress-related concerns and mind-body health issues.",
   "His approach is based on the understanding that development, behaviour and wellbeing are influenced by multiple interconnected factors rather than a single isolated symptom.",

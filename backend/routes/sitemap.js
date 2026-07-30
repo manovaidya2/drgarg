@@ -15,7 +15,13 @@ const escapeXml = (value = "") =>
 
 router.get("/sitemap.xml", async (req, res) => {
   try {
-    const blogs = await Blog.find({}, "slug updatedAt createdAt");
+    const blogs = await Blog.find(
+      {
+        published: { $ne: false },
+        status: { $nin: ["draft", "unpublished"] },
+      },
+      "slug updatedAt createdAt"
+    );
 
     const staticPages = [
       "",

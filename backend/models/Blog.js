@@ -30,6 +30,8 @@ const blogSchema = new mongoose.Schema(
     twitterTitle: { type: String },
     twitterDescription: { type: String },
     twitterImage: { type: String },
+    published: { type: Boolean, default: true },
+    status: { type: String, default: "published" },
     // For search engine indexing
     noIndex: { type: Boolean, default: false },
     noFollow: { type: Boolean, default: false }

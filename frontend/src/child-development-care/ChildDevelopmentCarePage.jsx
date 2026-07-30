@@ -137,7 +137,7 @@ const trustPoints = [
 const faqs = [
   {
     q: "Who is Dr. Ankush Garg?",
-    a: "Dr. Ankush Garg is a Child Development and Mental Wellness Specialist, Founder of Manovaidya and Creator of the Neuro-Ayurveda Development System.",
+    a: "Dr. Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. He has 7+ years of focused experience in child development and mental wellness. His ongoing PhD research explores the relationship between the gut–brain axis, behaviour and emotional wellbeing.",
   },
   {
     q: "What does Dr. Ankush Garg specialize in?",
@@ -313,9 +313,11 @@ export default function ChildDevelopmentCarePage() {
                 Helping Individuals and Families Move From Confusion To Clarity
               </h2>
               <p className="mt-4 text-[15px] font-medium leading-[1.7] text-[#5d5168]">
-                Dr. Ankush Garg is a Child Development and Mental Wellness
-                Specialist, Founder of Manovaidya and Creator of the
-                Neuro-Ayurveda Development System.
+                Dr. Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and
+                developer of the Neuro-Ayurveda Development System. He has 7+
+                years of focused experience in child development and mental
+                wellness. His ongoing PhD research explores the relationship
+                between the gut–brain axis, behaviour and emotional wellbeing.
               </p>
               <p className="mt-3 text-[15px] font-medium leading-[1.7] text-[#5d5168]">
                 His work focuses on understanding developmental, behavioural,

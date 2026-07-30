@@ -31,6 +31,18 @@ import {
   Download
 } from "lucide-react";
 
+const DEFAULT_AUTHOR_PROFILE = {
+  name: "Dr. Ankush Garg",
+  title: "Ayurvedacharya",
+  credentials: "BAMS, MPH, PhD Research · Ayurvedacharya",
+  biography:
+    "Dr. Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. He has 7+ years of focused experience in child development and mental wellness. His ongoing PhD research explores the relationship between the gut–brain axis, behaviour and emotional wellbeing.",
+  profileUrl: "https://drankushgarg.in/about",
+  image: "https://drankushgarg.in/images/dr-ankush-garg.webp",
+  email: "contact@drankushgarg.in",
+  phone: "",
+};
+
 const getReadingMinutes = (content) => {
   const wordsPerMinute = 200;
   const text = content?.replace(/<[^>]*>/g, '') || '';
@@ -43,8 +55,10 @@ export default function BlogDetails() {
   const navigate = useNavigate();
   const ssrData = useSsrData();
   const initialBlog = ssrData.blog || null;
+  const initialAuthorProfile = ssrData.authorProfile || DEFAULT_AUTHOR_PROFILE;
 
   const [blog, setBlog] = useState(initialBlog);
+  const [authorProfile, setAuthorProfile] = useState(initialAuthorProfile);
   const [loading, setLoading] = useState(!initialBlog);
   const [liked, setLiked] = useState(false);
   const [relatedPosts, setRelatedPosts] = useState(ssrData.relatedPosts || []);
@@ -61,6 +75,15 @@ export default function BlogDetails() {
   const contentRef = useRef(null);
   const normalizeSiteUrl = (url) =>
     url?.replace(/https:\/\/drankushgarg\.com/g, "https://drankushgarg.in");
+  const authorBio = authorProfile?.biography || DEFAULT_AUTHOR_PROFILE.biography;
+  const authorName = authorProfile?.name || DEFAULT_AUTHOR_PROFILE.name;
+  const authorTitle = authorProfile?.title || DEFAULT_AUTHOR_PROFILE.title;
+  const authorCredentials =
+    authorProfile?.credentials || DEFAULT_AUTHOR_PROFILE.credentials;
+  const authorProfileUrl =
+    authorProfile?.profileUrl || DEFAULT_AUTHOR_PROFILE.profileUrl;
+  const authorImage = authorProfile?.image || DEFAULT_AUTHOR_PROFILE.image;
+  const authorEmail = authorProfile?.email || DEFAULT_AUTHOR_PROFILE.email;
 
   // Calculate reading time
   const calculateReadingTime = (content) => {
@@ -165,6 +188,19 @@ export default function BlogDetails() {
 
     fetchBlog();
   }, [slug, parseHtmlContent]);
+
+  useEffect(() => {
+    const fetchAuthorProfile = async () => {
+      try {
+        const res = await axiosInstance.get("/author-profile");
+        setAuthorProfile(res.data || DEFAULT_AUTHOR_PROFILE);
+      } catch (error) {
+        console.error("Error fetching author profile", error);
+      }
+    };
+
+    fetchAuthorProfile();
+  }, []);
 
   // Update meta tags and document head
   useEffect(() => {
@@ -326,20 +362,20 @@ export default function BlogDetails() {
       "@context": "https://schema.org",
       "@type": "Person",
       "@id": "https://drankushgarg.in/about#author",
-      "name": "Dr. Ankush Garg",
-      "alternateName": "Dr. Ankush Garg - Ayurvedic Neurologist",
-      "description": "Ayurvedic neurologist specializing in Autism, ADHD, and Mental Health. Founder of Neuro-Ayurveda System and Manovaidya.",
-      "url": "https://drankushgarg.in/about",
-      "image": "https://drankushgarg.in/images/dr-ankush-garg.webp",
-      "email": "info@manovaidya.com",
-      "telephone": "+91-XXXXXXXXXX",
-      "jobTitle": "Ayurvedic Neurologist & Founder",
+      "name": authorName,
+      "alternateName": `${authorName} - ${authorTitle}`,
+      "description": authorBio,
+      "url": authorProfileUrl,
+      "image": authorImage,
+      "email": authorEmail,
+      "telephone": authorProfile?.phone || undefined,
+      "jobTitle": `${authorTitle} & Founder`,
       "worksFor": {
         "@type": "MedicalOrganization",
         "name": "Manovaidya",
         "url": "https://drankushgarg.in",
         "logo": "https://drankushgarg.in/logo.png",
-        "description": "India's Premier Ayurvedic Mental Health Clinic",
+        "description": "Child development and mental wellness consultation clinic",
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "Gurgaon",
@@ -365,8 +401,8 @@ export default function BlogDetails() {
         },
         {
           "@type": "EducationalOccupationalCredential",
-          "name": "PhD - Gut-Brain Axis Research",
-          "credentialCategory": "Doctoral Degree"
+          "name": "Ongoing PhD Research - Gut-Brain Axis",
+          "credentialCategory": "Research"
         },
         {
           "@type": "EducationalOccupationalCredential",
@@ -398,8 +434,8 @@ export default function BlogDetails() {
         "Autism, ADHD and Mental Health Education"
       ],
       "knowsLanguage": ["English", "Hindi"],
-      "specialty": "Ayurvedic Neurology",
-      "medicalSpecialty": "Neurology",
+      "specialty": "Child Development and Mental Wellness",
+      "medicalSpecialty": "Mental Health",
       "availableService": [
         "Autism Consultation",
         "ADHD Treatment",
@@ -419,8 +455,8 @@ export default function BlogDetails() {
       "@context": "https://schema.org",
       "@type": "ProfilePage",
       "@id": "https://drankushgarg.in/about#profilepage",
-      "name": "Dr. Ankush Garg - Ayurvedic Neurologist Profile",
-      "description": "Professional profile of Dr. Ankush Garg, Ayurvedic neurologist",
+      "name": "Dr. Ankush Garg - Ayurvedacharya Profile",
+      "description": authorBio,
       "author": {
         "@id": "https://drankushgarg.in/about#author"
       },
@@ -463,9 +499,9 @@ export default function BlogDetails() {
       "dateModified": blog.modifiedDate || blog.updatedAt || blog.date,
       "author": {
         "@type": "Person",
-        "name": "Dr. Ankush Garg",
+        "name": authorName,
         "@id": "https://drankushgarg.in/about#author",
-        "url": "https://drankushgarg.in/about",
+        "url": authorProfileUrl,
         "sameAs": [
           "https://twitter.com/drankushgarg",
           "https://linkedin.com/in/drankushgarg",
@@ -539,7 +575,7 @@ export default function BlogDetails() {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "@id": "https://drankushgarg.in#website",
-      "name": "Dr. Ankush Garg - Ayurvedic Neurologist",
+      "name": "Dr. Ankush Garg - Ayurvedacharya",
       "description": "Articles on Autism, ADHD and mental health from Dr. Ankush Garg and the Neuro-Ayurveda System",
       "url": "https://drankushgarg.in",
       "potentialAction": {
@@ -805,15 +841,13 @@ export default function BlogDetails() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">About the Author</h3>
-                  <p className="text-sm font-medium text-green-700" itemProp="name">Dr. Ankush Garg</p>
-                  <meta itemProp="jobTitle" content="Ayurvedic Neurologist" />
-                  <meta itemProp="url" content="https://drankushgarg.in/about" />
+                  <p className="text-sm font-medium text-green-700" itemProp="name">{authorName}</p>
+                  <meta itemProp="jobTitle" content={authorTitle} />
+                  <meta itemProp="url" content={authorProfileUrl} />
                 </div>
               </div>
               <p className="text-sm text-gray-600 mb-3" itemProp="description">
-                Dr. Ankush Garg is an Ayurvedic doctor focused on autism care, neurodevelopmental health, 
-                and founder of Manovaidya. With 7+ Years of Focused Experience, he supports
-                families through the Neuro-Ayurveda System.
+                {authorBio}
               </p>
               <div className="flex gap-2 pt-2 border-t border-green-100">
                 <span className="text-xs text-gray-500 flex items-center gap-1">
@@ -944,7 +978,7 @@ export default function BlogDetails() {
               </h3>
               <p className="text-gray-500 text-sm">
                 Have questions about this article? Contact Dr. Ankush Garg directly at 
-                <a href="mailto:info@manovaidya.com" className="text-green-700 ml-1">info@manovaidya.com</a>
+                <a href="mailto:contact@drankushgarg.in" className="text-green-700 ml-1">contact@drankushgarg.in</a>
               </p>
             </div>
           </div>
@@ -958,23 +992,20 @@ export default function BlogDetails() {
                   <div className="mx-auto mb-4 h-32 w-32 overflow-hidden rounded-2xl border-4 border-green-50 shadow-md">
                     <img
                       src={doctorImage}
-                      alt="Dr. Ankush Garg Ayurvedic Neurologist"
+                      alt="Dr. Ankush Garg Ayurvedacharya"
                       className="h-full w-full object-cover object-top"
                       loading="lazy"
                     />
                   </div>
-                  <h3 className="font-bold text-gray-900 text-lg">Dr. Ankush Garg</h3>
-                  <p className="text-sm text-green-700 mb-2">Ayurvedic Neurologist</p>
-                  <p className="text-xs text-gray-500 mb-3">BAMS, MPH, PhD · Ayurvedacharya</p>
+                  <h3 className="font-bold text-gray-900 text-lg">{authorName}</h3>
+                  <p className="text-sm text-green-700 mb-2">{authorTitle}</p>
+                  <p className="text-xs text-gray-500 mb-3">{authorCredentials}</p>
                   <div className="flex justify-center gap-2 mb-3">
                     <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">7+ Years of Focused Experience</span>
                   </div>
                   <ul className="mb-4 space-y-2 border-t border-green-100 pt-4 text-left text-sm leading-6 text-gray-600">
                     {[
-                      "Autism, ADHD, child development and mental health clinic in India",
-                      "Care led by a BAMS, MPH, PhD qualified doctor",
-                      "7+ Years of Focused Experience",
-                      "Founder of Manovaidya, Noida and developer of the Neuro-Ayurveda System",
+                      authorBio,
                     ].map((point) => (
                       <li key={point} className="flex gap-2">
                         <Check size={16} className="mt-1 shrink-0 text-green-700" />

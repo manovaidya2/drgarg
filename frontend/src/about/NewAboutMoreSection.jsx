@@ -2,12 +2,12 @@ import React from "react";
 import { BookOpen, Heart, Leaf, Sprout, UserRound, UsersRound } from "lucide-react";
 
 const items = [
-  { icon: Leaf, title: "Holistic Healer", text: "Believes in treating the root cause, not just the symptoms." },
+  { icon: Leaf, title: "Holistic Health Approach", text: "Looks at symptoms, lifestyle, history and wellbeing together." },
   { icon: UserRound, title: "Patient-Centric Care", text: "Every treatment plan is personalized for each individual." },
   { icon: BookOpen, title: "Lifelong Learner", text: "Continuously updates knowledge and integrates modern insights." },
   { icon: Sprout, title: "Ayurveda Advocate", text: "Works towards reviving authentic Ayurveda for modern times." },
   { icon: UsersRound, title: "Empowering Communities", text: "Committed to spreading awareness and building healthier communities." },
-  { icon: Heart, title: "Driven by Purpose", text: "Passionate about transforming lives through natural healing." },
+  { icon: Heart, title: "Driven by Purpose", text: "Passionate about education, support and practical wellness guidance." },
 ];
 
 export default function NewAboutMoreSection() {

@@ -82,7 +82,7 @@ export default function MediaCoverage() {
           description:
             "Read media coverage and public features about Dr. Ankush Garg's work in autism care, Ayurveda, Neuro-Ayurveda, mental health awareness, and research.",
           keywords:
-            "Dr Ankush Garg media, autism care Ayurveda, Neuro Ayurveda news, Manovaidya media coverage, Ayurvedic neurologist",
+            "Dr Ankush Garg media, autism care Ayurveda, Neuro Ayurveda news, Manovaidya media coverage, Ayurvedacharya",
           canonical: "https://drankushgarg.in/media-coverage",
           image: "https://drankushgarg.in/og-image.jpg",
         }}

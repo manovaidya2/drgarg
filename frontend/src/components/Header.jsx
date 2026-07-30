@@ -349,10 +349,10 @@ export default function Header() {
 
             <div className="hidden lg:flex items-center gap-3 shrink-0">
               <a
-                href="tel:07823838638"
+                href="tel:+917823838638"
 className="hidden lg:inline-flex items-center gap-2 text-[14px] text-[#656b66] hover:text-[#002b18] whitespace-nowrap"              >
                 <Phone size={16} className="text-[#c77700]" />
-                078238 38638
+                +91 78238 38638
               </a>
 
               <button
@@ -465,11 +465,11 @@ className="hidden lg:inline-flex items-center gap-2 text-[14px] text-[#656b66] h
               })}
 
               <a
-                href="tel:07823838638"
+                href="tel:+917823838638"
                 className="mt-3 flex items-center justify-center gap-2 rounded-[5px] border border-[#ece8df] px-4 py-3 text-[14px] font-medium text-[#002b18]"
               >
                 <Phone size={16} className="text-[#c77700]" />
-                078238 38638
+                +91 78238 38638
               </a>
 <button
   onClick={() => {

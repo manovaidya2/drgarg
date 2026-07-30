@@ -1,55 +1,56 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Phone, Mail } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 
 export default function Footer() {
   return (
     <footer className="bg-[#003f25] text-[#b9c9bf]">
-      <div className="max-w-[1360px] mx-auto px-5 sm:px-8 lg:px-12 pt-10 sm:pt-12 pb-10">
-        <div className="grid grid-cols-1 md:grid-cols-[1.6fr_0.8fr_0.9fr] gap-8 lg:gap-16">
-          
+      <div className="mx-auto max-w-[1360px] px-5 pb-10 pt-10 sm:px-8 sm:pt-12 lg:px-12">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.6fr_0.8fr_0.9fr] lg:gap-16">
           <div>
-            <h2 className="font-serif text-white text-[22px] leading-tight mb-2">
+            <h2 className="mb-2 font-serif text-[22px] leading-tight text-white">
               Dr. Ankush Garg
             </h2>
 
-            <p className="text-[13px] font-semibold mb-4">
-              BAMS, MPH, PhD ( Gut-Brain Axis )
-            </p>
+            <div className="space-y-1 text-[14px] font-semibold leading-[1.6]">
+              <p>BAMS, MPH | Ayurvedacharya</p>
+              <p>PhD Research Scholar – Gut–Brain Axis</p>
+              <p>Founder of Manovaidya</p>
+              <p>Developer of the Neuro-Ayurveda Development System</p>
+            </div>
 
-            <p className="max-w-[560px] text-[15px] leading-[1.55] font-semibold">
-              Ayurvedacharya, Neuro-Ayurveda Specialist, and developer of the
-              Neuro-Ayurveda System — a root-cause Brain–Gut–Behaviour treatment
-              model for autism, ADHD, and mental health across all ages.
-            </p>
-
-            <div className="mt-6 space-y-2 text-[14px] font-semibold">
+            <div className="mt-6 space-y-3 text-[14px] font-semibold">
               <div className="flex items-start gap-2.5">
-                <MapPin size={15} className="text-[#d5b33d] mt-1 flex-shrink-0" />
+                <MapPin size={15} className="mt-1 shrink-0 text-[#d5b33d]" />
                 <span>
-                  Manovaidya, near Vinayak Hospital, Atta Market, Pocket E,
-                  Sector 27, Noida, UP 201301
+                  Manovaidya Clinic
+                  <br />
+                  VS Plaza, Near Vinayak Hospital,
+                  <br />
+                  Atta Market, Pocket E, Sector 27,
+                  <br />
+                  Noida, Uttar Pradesh – 201301
                 </span>
               </div>
 
               <div className="flex items-center gap-2.5">
-                <Phone size={15} className="text-[#d5b33d] flex-shrink-0" />
-                <a href="tel:07823838638" className="hover:text-white">
-                  078238 38638
+                <Phone size={15} className="shrink-0 text-[#d5b33d]" />
+                <a href="tel:+917823838638" className="hover:text-white">
+                  +91 78238 38638
                 </a>
               </div>
 
               <div className="flex items-center gap-2.5">
-                <Mail size={15} className="text-[#d5b33d] flex-shrink-0" />
-                <a href="mailto:hello@manovaidya.in" className="hover:text-white">
-                  manovaidya2@gmail.com
+                <Mail size={15} className="shrink-0 text-[#d5b33d]" />
+                <a href="mailto:contact@drankushgarg.in" className="hover:text-white">
+                  contact@drankushgarg.in
                 </a>
               </div>
             </div>
           </div>
 
           <div>
-            <h3 className="text-white text-[11px] tracking-[0.32em] uppercase font-serif mb-4">
+            <h3 className="mb-4 font-serif text-[11px] uppercase tracking-[0.32em] text-white">
               Explore
             </h3>
 
@@ -63,7 +64,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white text-[11px] tracking-[0.32em] uppercase font-serif mb-4">
+            <h3 className="mb-4 font-serif text-[11px] uppercase tracking-[0.32em] text-white">
               Care
             </h3>
 
@@ -79,7 +80,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="max-w-[1360px] mx-auto px-5 sm:px-8 lg:px-12 py-5 flex flex-col md:flex-row justify-between gap-2 text-[12px] font-semibold text-[#91a79b]">
+        <div className="mx-auto flex max-w-[1360px] flex-col justify-between gap-2 px-5 py-5 text-[12px] font-semibold text-[#91a79b] sm:px-8 md:flex-row lg:px-12">
           <p>© 2026 Dr. Ankush Garg · Manovaidya. All rights reserved.</p>
           <p>Online & In-clinic consultations available across India.</p>
         </div>
