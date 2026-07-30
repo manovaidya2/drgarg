@@ -16,17 +16,17 @@ function Adult() {
     <>
    <Helmet>
   <title>
-    Adult Mental Health Treatment | Anxiety, Depression & OCD Care
+    Adult Mental Health | Dr. Ankush Garg
   </title>
 
   <meta
     name="description"
-    content="Adult mental health care by Dr. Ankush Garg using the Neuro-Ayurveda System for anxiety, depression, OCD, stress, emotional imbalance, sleep issues, and brain-gut health."
+    content="Adult mental health is connected to the brain, gut, nervous system, hormones, sleep, lifestyle and emotional patterns. Begin with a complete, structured approach."
   />
 
   <meta
     name="keywords"
-    content="adult mental health treatment, anxiety treatment India, depression treatment, OCD treatment, stress management, Neuro Ayurveda, Dr Ankush Garg, Manovaidya, brain gut health, Ayurvedic mental health doctor"
+    content="adult mental health, anxiety, depression, OCD, stress, emotional imbalance, sleep, Neuro Ayurveda, Dr Ankush Garg, Manovaidya, brain gut health"
   />
 
   <meta name="robots" content="index, follow" />
@@ -38,11 +38,11 @@ function Adult() {
 
   <meta
     property="og:title"
-    content="Adult Mental Health Treatment | Neuro-Ayurveda Care"
+    content="Adult Mental Health | Neuro-Ayurveda Care"
   />
   <meta
     property="og:description"
-    content="Holistic care for anxiety, depression, OCD, stress, sleep issues, and emotional health through Dr. Ankush Garg’s Neuro-Ayurveda System."
+    content="A complete, structured approach to adult mental health through brain, gut, nervous system, hormones, sleep, lifestyle and emotional patterns."
   />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://drankushgarg.in/adult-mental-health" />
@@ -52,11 +52,11 @@ function Adult() {
   <meta name="twitter:url" content="https://drankushgarg.in/adult-mental-health" />
   <meta
     name="twitter:title"
-    content="Adult Mental Health Treatment | Dr. Ankush Garg"
+    content="Adult Mental Health | Dr. Ankush Garg"
   />
   <meta
     name="twitter:description"
-    content="Neuro-Ayurveda based support for adult anxiety, depression, OCD, stress, emotional imbalance, and brain-gut health."
+    content="A structured approach to adult mental health through brain, gut, nervous system, hormones, sleep, lifestyle and emotional patterns."
   />
   <meta name="twitter:image" content="https://drankushgarg.in/og-image.jpg" />
 </Helmet>

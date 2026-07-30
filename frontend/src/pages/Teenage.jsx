@@ -12,11 +12,11 @@ function Adult() {
     <>
       <GlobalSEO
         seo={{
-          title: "Teenage Mental Health | Dr. Ankush Garg Neuro-Ayurveda",
+          title: "Teenage Mental Health | Dr. Ankush Garg",
           description:
-            "Holistic teenage mental health support using Neuro-Ayurveda. Address anxiety, behaviour issues, screen addiction, mood swings, and emotional struggles in teens.",
+            "Teenagers may show struggle through silence, anger, isolation or screen addiction. Understanding comes first, then the right support.",
           keywords:
-            "teenage mental health, teen anxiety, teen depression, behaviour issues teens, screen addiction teens, neuro ayurveda teens, Dr Ankush Garg",
+            "teenage mental health, teen anxiety, teen depression, behaviour patterns, screen addiction, isolation, mood swings, emotional support, Dr Ankush Garg",
           canonical: "https://drankushgarg.in/teenage-mental-health",
           image: "https://drankushgarg.in/og-image.jpg",
         }}

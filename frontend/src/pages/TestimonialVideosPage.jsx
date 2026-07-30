@@ -201,7 +201,7 @@ export default function TestimonialVideosPage() {
             <div className="mt-7 grid max-w-[620px] grid-cols-3 overflow-hidden rounded-[14px] border border-[#e4ddd0] bg-white/86 shadow-[0_18px_45px_rgba(5,54,39,0.07)]">
               {[
                 ["4.9", "Google Rating"],
-                ["7+", "Year Experience"],
+                ["7+", "Years of Focused Experience"],
                 ["Family", "Centred Care"],
               ].map(([value, label]) => (
                 <div key={label} className="border-r border-[#ebe5da] px-3 py-4 text-center last:border-r-0">

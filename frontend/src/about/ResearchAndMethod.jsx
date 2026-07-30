@@ -19,7 +19,7 @@ export default function ResearchAndMethod() {
           <div className="mt-6 max-w-[880px] space-y-5 text-[#2f3f4a] text-[16px] md:text-[18px] leading-[1.6]">
             <p>
               The reason Dr. Ankush Garg is regarded as the{" "}
-              <strong>best autism doctor in India</strong> is not only his
+              <strong>autism care specialist in India</strong> is not only his
               clinical results — it is his research. His PhD work centres on the{" "}
               <strong>gut-brain axis:</strong> the bi-directional communication
               between the gut microbiome and the nervous system. Modern science
@@ -63,8 +63,8 @@ export default function ResearchAndMethod() {
                 5-pillar Brain–Gut–Behaviour model
               </strong>{" "}
               that addresses the body and mind as one connected system: Brain
-              Nourishment, Gut Repair, Neural Activation, Sensory Integration
-              and Behaviour Guidance.
+              Nourishment System, Gut Response System, Neural Network System,
+              Sensory Integration System and Behaviour Guidance System.
             </p>
 
             <p>
@@ -99,9 +99,9 @@ export default function ResearchAndMethod() {
               beyond — and consults online with Indian families living in the{" "}
               <strong>USA, UK, UAE, Canada, Australia and Singapore</strong>.
               This reach is one reason he is widely searched for as the{" "}
-              <em>best autism doctor near me</em>, the{" "}
-              <em>top Ayurvedic doctor for ADHD</em> and the{" "}
-              <em>best Ayurvedic doctor for anxiety and depression in India.</em>
+              <em>autism care near me</em>,{" "}
+              <em>Ayurvedic support for ADHD</em> and{" "}
+              <em>Ayurvedic care for anxiety and depression in India.</em>
             </p>
           </div>
 

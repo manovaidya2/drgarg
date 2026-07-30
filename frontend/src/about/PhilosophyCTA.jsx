@@ -40,8 +40,8 @@ export default function PhilosophyCTA() {
               </h3>
 
               <p className="mt-5 text-white/90 text-[16px] md:text-[18px] leading-[1.6] max-w-[750px]">
-                Book a consultation with Dr. Ankush Garg — one of India's top autism doctors
-                and leading Ayurvedic neurologist — and understand your child's or
+                Book a consultation with Dr. Ankush Garg — an Ayurvedic doctor focused on autism care
+                and neurodevelopmental health — and understand your child's or
                 your own condition through the Neuro-Ayurveda System.
               </p>
 

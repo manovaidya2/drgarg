@@ -5,31 +5,31 @@ const methods = [
   {
     icon: Brain,
     no: "01",
-    title: "Brain Nourishment",
+    title: "Brain Nourishment System",
     desc: "Supporting attention, response, learning, and cognitive processing.",
   },
   {
     icon: Leaf,
     no: "02",
-    title: "Gut Repair",
+    title: "Gut Response System",
     desc: "Healing the gut–brain axis for better mood, sleep, and behaviour.",
   },
   {
     icon: Activity,
     no: "03",
-    title: "Neural Activation",
+    title: "Neural Network System",
     desc: "Stimulating weak neural pathways for alertness and engagement.",
   },
   {
     icon: Sparkles,
     no: "04",
-    title: "Sensory Integration",
+    title: "Sensory Integration System",
     desc: "Helping the child process sound, touch, and environment calmly.",
   },
   {
     icon: Users,
     no: "05",
-    title: "Behaviour Guidance",
+    title: "Behaviour Guidance System",
     desc: "Parent education, structured routine, and emotional support.",
   },
 ];

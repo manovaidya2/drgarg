@@ -30,11 +30,11 @@ export default function AutismADHDSection() {
     <>
       <GlobalSEO
         seo={{
-          title: "Autism & ADHD Treatment | Dr. Ankush Garg Neuro-Ayurveda",
+          title: "Autism & ADHD Are Not Just Behaviour Problems | Dr. Ankush Garg",
           description:
-            "Structured Autism and ADHD care using Dr. Ankush Garg's Brain-Gut-Behaviour and Neuro-Ayurveda approach for attention, sensory, communication, and behaviour support.",
+            "Autism and ADHD are neurodevelopmental patterns that need a structured Brain-Gut-Behaviour approach, not isolated therapy alone.",
           keywords:
-            "autism treatment India, ADHD treatment, autism doctor, neuro ayurveda autism, brain gut behaviour, Dr Ankush Garg",
+            "Autism, ADHD, neurodevelopmental patterns, Brain Gut Behaviour approach, Neuro Ayurveda, attention, sensory processing, communication, behaviour support, Dr Ankush Garg",
           canonical: "https://drankushgarg.in/autism-adhd",
           image: "https://drankushgarg.in/og-image.jpg",
         }}

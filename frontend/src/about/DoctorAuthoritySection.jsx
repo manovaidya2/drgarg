@@ -24,13 +24,13 @@ export default function DoctorAuthoritySection() {
 
               <ul className="space-y-3 text-[#1f2f2a] text-[14px] leading-[1.45]">
                 <li>
-                  • Recognized as one of India's <strong>top autism doctors</strong>
+                  • Recognized for work in <strong>autism care</strong>
                 </li>
                 <li>
-                  • Best <strong>Ayurvedic neurologist</strong> for ADHD & speech delay
+                  • Focused <strong>Ayurvedic neurologist</strong> for ADHD & speech delay
                 </li>
                 <li>
-                  • Top <strong>mental health Ayurveda doctor</strong> — anxiety,
+                  • <strong>Mental health Ayurveda doctor</strong> for anxiety,
                   OCD, depression
                 </li>
                 <li>

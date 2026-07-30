@@ -32,7 +32,7 @@
 //     text: "Mental Wellness Specialist",
 //     icon: Users,
 //   },
-//   { title: "7+ Years of", text: "Clinical Experience", icon: CalendarCheck },
+//   { title: "7+ Years of", text: "Focused Experience", icon: CalendarCheck },
 //   { title: "Trusted by Families", text: "Across India", icon: ShieldCheck },
 // ];
 
@@ -86,7 +86,7 @@
 //               </h1>
 
 //               <p className="mx-auto mt-4 max-w-[560px] text-[14.5px] font-medium leading-[1.6] text-[#4e4658] sm:text-[17px] lg:mx-0 xl:text-[16px]">
-//                 Dr. Ankush Garg, one of India’s leading Ayurvedic Neurologists
+//                 Dr. Ankush Garg, an Ayurvedic neurologist
 //                 and developer of the Neuro-Ayurveda System, helps children,
 //                 teenagers, adults, and seniors heal complex brain, behaviour,
 //                 and mental health conditions through an integrated
@@ -195,42 +195,15 @@ import { FcGoogle } from "react-icons/fc";
 import heroDoctor from "../images/doctsirimg.jpeg";
 import ConsultationPopup from "../components/ConsultationPopup";
 
-const liveAppointments = [
-  { name: "Aarav Sharma", time: "10:15 AM", status: "Confirmed" },
-  { name: "Priya Mehta", time: "10:30 AM", status: "Online" },
-  { name: "Rohan Gupta", time: "10:45 AM", status: "In clinic" },
-  { name: "Ananya Singh", time: "11:00 AM", status: "Confirmed" },
-  { name: "Kavya Jain", time: "11:20 AM", status: "Online" },
-  { name: "Neha Verma", time: "11:40 AM", status: "Confirmed" },
-  { name: "Aditya Rao", time: "12:05 PM", status: "In clinic" },
-  { name: "Meera Kapoor", time: "12:30 PM", status: "Online" },
-];
-
 export default function Hero() {
   const [openPopup, setOpenPopup] = useState(false);
 
   return (
     <>
       <link rel="preload" as="image" href={heroDoctor} fetchPriority="high" />
-      <style>
-        {`
-          @keyframes liveAppointmentScroll {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(0, -50%, 0); }
-          }
-          .live-appointment-scroll {
-            animation: liveAppointmentScroll 18s linear infinite;
-            backface-visibility: hidden;
-            will-change: transform;
-          }
-          .live-appointment-scroll:hover {
-            animation-play-state: paused;
-          }
-        `}
-      </style>
 
       <main className="relative overflow-hidden border-t border-[#eee8dc] bg-[#fbfaf6]">
-        <section className="relative mx-auto grid min-h-[640px] w-full max-w-[1320px] items-center gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:px-12 lg:py-16 xl:px-16">
+        <section className="relative mx-auto grid min-h-[640px] w-full max-w-[1320px] items-center gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:px-12 lg:py-20 xl:px-16">
           <div className="relative z-10 max-w-[680px]">
             <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-[#cdd9d0] bg-white/80 px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#063f2c] shadow-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-[#e2ad38]" />
@@ -238,22 +211,17 @@ export default function Hero() {
             </div>
 
             <h1
-              className="max-w-[690px] text-[42px] font-normal leading-[1.08] text-[#043c28] sm:text-[58px] lg:text-[62px] xl:text-[56px] 2xl:text-[62px]"
+              className="max-w-[690px] text-[36px] font-normal leading-[1.08] text-[#161126] sm:text-[58px] lg:text-[62px] xl:text-[46px] "
               style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
             >
-              A New Way to
+              Dr. Ankush Garg -
               <br />
-              Understand{" "}
-              <span className="text-[#dfad3d]">Autism,</span>
-              <br />
-              <span className="text-[#dfad3d]">ADHD</span> & Mental Health
+              <span className="text-[#043c28]">Child Development</span> and{" "}
+              <span className="text-[#043c28]">Mental Wellness Specialist</span>
             </h1>
 
-            <p className="mt-8 max-w-[650px] text-[18px] font-normal leading-[1.65] text-[#2d3f48] sm:text-[20px] lg:text-[21px]">
-              Dr. Ankush Garg, No.1 Ayurvedic Neurologist and developer of the
-              Neuro-Ayurveda System, helps children, teenagers, adults, and
-              seniors heal complex brain, behaviour, and mental health
-              conditions through an integrated Brain-Gut-Behaviour approach.
+            <p className="mt-8 max-w-[650px] text-[18px] font-normal leading-[1.5] text-[#2d3f48] sm:text-[20px] lg:text-[20px]">
+             Dr. Ankush Garg provides integrative Neuro-Ayurveda care through a Brain-Gut-Behaviour approach, supporting child health, teen mental wellness, adult mental health, senior mind & memory care, women's mental health, and overall mind & body wellbeing with personalized care plans.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -276,7 +244,7 @@ export default function Hero() {
             <div className="mt-10 border-t border-[#e5e0d6] pt-7 text-[14px] leading-relaxed text-[#12362b] sm:text-[15px]">
               <p className="font-medium">Dr. Ankush Garg</p>
               <p>
-                BAMS, MPH, PhD (Gut-Brain Axis Research) - Ayurvedacharya -
+                BAMS, MPH, PhD (Gut-Brain Axis ) - Ayurvedacharya -
                 Founder, Manovaidya
               </p>
             </div>
@@ -319,46 +287,10 @@ export default function Hero() {
             </div>
 
             <div className="mt-4 grid gap-3 sm:grid-cols-[1.25fr_0.75fr]">
-              <div className="overflow-hidden rounded-[16px] border border-[#e8decf] bg-white/90 p-3 shadow-[0_12px_28px_rgba(11,58,40,0.08)]">
-                <div className="mb-2 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
-                    <span className="relative flex h-2.5 w-2.5">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#e64a35] opacity-70" />
-                      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#e64a35]" />
-                    </span>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#063f2c]">
-                      Live Appointments
-                    </p>
-                  </div>
-                  <span className="rounded-full bg-[#f8efe0] px-2 py-1 text-[10px] font-bold text-[#9a6812]">
-                    234+ today
-                  </span>
-                </div>
-
-                <div className="relative h-[58px] overflow-hidden">
-                  <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-3 bg-gradient-to-b from-white to-transparent" />
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-3 bg-gradient-to-t from-white to-transparent" />
-                  <div className="live-appointment-scroll">
-                    {[...liveAppointments, ...liveAppointments].map(
-                      (appointment, index) => (
-                        <div
-                          key={`${appointment.name}-${index}`}
-                          className="grid h-[29px] grid-cols-[54px_1fr_auto] items-center gap-2 border-b border-[#f0e7d9] px-1 text-[12px] text-[#24443a]"
-                        >
-                          <span className="rounded-full bg-[#f7efe2] px-1.5 py-0.5 text-center text-[10px] font-bold text-[#8a641d]">
-                            {appointment.time}
-                          </span>
-                          <span className="truncate font-semibold">
-                            {appointment.name}
-                          </span>
-                          <span className="rounded-full bg-[#eaf5ef] px-2 py-0.5 text-[10px] font-bold text-[#07543a]">
-                            {appointment.status}
-                          </span>
-                        </div>
-                      )
-                    )}
-                  </div>
-                </div>
+              <div className="flex min-h-[92px] items-center rounded-[16px] border border-[#e8decf] bg-white/90 p-4 shadow-[0_12px_28px_rgba(11,58,40,0.08)]">
+                <p className="text-[14px] font-bold leading-snug text-[#063f2c]">
+                  Online and In-Clinic Consultations Available Across India
+                </p>
               </div>
 
               <div className="flex min-h-[92px] items-center gap-3 rounded-[16px] border border-[#e8decf] bg-white/90 p-3 ">

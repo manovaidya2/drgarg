@@ -29,16 +29,16 @@ function Homepage() {
     <>
       {/* SEO META TAGS */}
       <Helmet>
-        <title>Dr. Ankush Garg | Ayurvedic Mental Wellness Expert</title>
+        <title>Dr Ankush Garg, Ayurvedacharya | Founder of Manovaidya</title>
 
         <meta
           name="description"
-          content="Dr. Ankush Garg is an Ayurvedic mental wellness expert offering holistic treatments for stress, anxiety, depression, OCD, and overall mind health."
+          content="Dr Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. His work focuses on child development and mental wellness."
         />
 
         <meta
           name="keywords"
-          content="Dr Ankush Garg, Ayurvedic mental wellness, anxiety treatment, stress management, depression therapy, holistic mind care, Ayurveda doctor"
+          content="Dr Ankush Garg, Neuro Ayurveda care, Autism, ADHD, child health, teen mental wellness, adult mental health, senior mind memory care, mind body wellbeing"
         />
 
         <meta name="robots" content="index, follow" />
@@ -48,10 +48,10 @@ function Homepage() {
         <link rel="canonical" href="https://drankushgarg.in/" />
 
         {/* Open Graph / Facebook */}
-        <meta property="og:title" content="Dr. Ankush Garg | Ayurvedic Mental Wellness Expert" />
+        <meta property="og:title" content="Dr Ankush Garg, Ayurvedacharya | Founder of Manovaidya" />
         <meta
           property="og:description"
-          content="Personalized Ayurvedic treatments for mental wellness, stress, anxiety, and holistic mind care."
+          content="Dr Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. His work focuses on child development and mental wellness."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://drankushgarg.in/" />
@@ -62,10 +62,10 @@ function Homepage() {
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Dr. Ankush Garg | Mental Wellness" />
+        <meta name="twitter:title" content="Dr Ankush Garg, Ayurvedacharya | Founder of Manovaidya" />
         <meta
           name="twitter:description"
-          content="Holistic Ayurvedic mental wellness treatments by Dr. Ankush Garg."
+          content="Dr Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. His work focuses on child development and mental wellness."
         />
         <meta
           name="twitter:image"

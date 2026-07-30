@@ -78,7 +78,7 @@ export default function Appointment() {
     "@context": "https://schema.org",
     "@type": "MedicalBusiness",
     "name": "Manovaidya Clinic",
-    "description": "Ayurvedic mental health and autism treatment clinic by Dr. Ankush Garg",
+    "description": "Manovaidya Clinic offers online and in-clinic consultations with structured Neuro-Ayurveda assessment.",
     "image": "https://drankushgarg.in/clinic-image.jpg",
     "address": {
       "@type": "PostalAddress",
@@ -105,8 +105,8 @@ export default function Appointment() {
       {/* SEO and Schema */}
       <Helmet>
         <title>Book Consultation | Dr. Ankush Garg - Ayurvedic Neurologist</title>
-        <meta name="description" content="Book online or in-clinic consultation with Dr. Ankush Garg, one of India's top Autism Doctors and Ayurvedic Neurologists. Get personalized Neuro-Ayurveda assessment for autism, ADHD, and mental health." />
-        <meta name="keywords" content="book consultation, Dr. Ankush Garg appointment, autism doctor appointment, ADHD treatment, Ayurvedic neurologist, Manovaidya clinic" />
+        <meta name="description" content="Book online or in-clinic consultation with Dr. Ankush Garg for Neuro-Ayurveda assessment for autism, ADHD, and mental health." />
+        <meta name="keywords" content="book consultation, Dr. Ankush Garg appointment, Neuro-Ayurveda assessment, autism ADHD concern, mental health concern, Manovaidya clinic" />
         
         {/* Canonical URL */}
         <link rel="canonical" href="https://drankushgarg.in/appointment" />
@@ -115,13 +115,13 @@ export default function Appointment() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://drankushgarg.in/appointment" />
         <meta property="og:title" content="Book Consultation | Dr. Ankush Garg" />
-        <meta property="og:description" content="Book a consultation with one of India's top Autism Doctors and Ayurvedic Neurologists. Online and in-clinic appointments available." />
+        <meta property="og:description" content="Book an online or in-clinic consultation and begin with a structured Neuro-Ayurveda assessment." />
         <meta property="og:image" content="https://drankushgarg.in/consultation-og-image.jpg" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Book Consultation | Dr. Ankush Garg" />
-        <meta name="twitter:description" content="Book a consultation with one of India's top Autism Doctors and Ayurvedic Neurologists." />
+        <meta name="twitter:description" content="Book an online or in-clinic consultation and begin with a structured Neuro-Ayurveda assessment." />
         
         {/* Robots */}
         <meta name="robots" content="index, follow" />

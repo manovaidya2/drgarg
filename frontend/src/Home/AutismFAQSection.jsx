@@ -14,9 +14,9 @@ export default function AutismFAQSection() {
         "Yes, autism improvement is possible, but the timeline is different for every child. It depends on the treatment approach and the child’s internal condition. Structured autism treatment in India, especially approaches that work on both brain and gut, have shown better improvement outcomes.",
     },
     {
-      question: "What is the best treatment for autism?",
+      question: "What treatment approach can help with autism?",
       answer:
-        "There is no single treatment that works for every child. The best autism treatment in India is usually a personalized approach that combines therapies with Ayurveda autism treatment focused on brain development, digestion, and the gut–brain connection. Early intervention often leads to better autism improvement.",
+        "There is no single treatment that works for every child. A personalized autism treatment approach in India usually combines therapies with Ayurveda autism treatment focused on brain development, digestion, and the gut–brain connection. Early intervention often leads to better autism improvement.",
     },
     {
       question: "At what age should autism treatment start?",

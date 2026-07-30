@@ -14,8 +14,8 @@ export default function BlogPage() {
   );
   const [activeCategory, setActiveCategory] = useState("All");
   const [siteSettings, setSiteSettings] = useState({
-    title: "Dr. Ankush Garg - Autism & Mental Health Expert",
-    description: "Real Answers on Autism, ADHD & Mental Health - Plain-language, parent-friendly, research-backed articles from Dr. Ankush Garg"
+    title: "Real Answers on Autism, ADHD & Mental Health | Dr. Ankush Garg",
+    description: "Plain-language, parent-friendly, research-backed articles on Autism, ADHD and mental health from Dr. Ankush Garg."
   });
 
   useEffect(() => {
@@ -124,7 +124,7 @@ export default function BlogPage() {
         {/* Primary Meta Tags */}
         <title>{siteSettings.title}</title>
         <meta name="description" content={siteSettings.description} />
-        <meta name="keywords" content="autism, ADHD, mental health, Ayurveda, Dr. Ankush Garg, neuro-ayurveda, child psychology, mental wellness, anxiety treatment, depression help" />
+        <meta name="keywords" content="autism, ADHD, mental health, Ayurveda, Dr. Ankush Garg, neuro-ayurveda, child psychology, mental wellness, anxiety support, depression support" />
         
         {/* Canonical URL */}
         <link rel="canonical" href="https://drankushgarg.in/blog" />
@@ -196,8 +196,8 @@ export default function BlogPage() {
 
             <p className="mt-6 max-w-[780px] text-[#3d4f4a] text-[16px] sm:text-[18px] md:text-[20px] leading-[1.7]">
               Plain-language, parent-friendly, research-backed articles from Dr.
-              Ankush Garg — one of India's top autism doctors, leading Ayurvedic
-              neurologist, and founder of Manovaidya.
+              Ankush Garg — an Ayurvedic doctor focused on autism,
+              neurodevelopmental and mental health care, and founder of Manovaidya.
             </p>
           </div>
         </section>
@@ -213,9 +213,8 @@ export default function BlogPage() {
               Most parents and patients leave a doctor's clinic with a diagnosis
               and no real understanding. This blog exists to fix that. Every
               article here is written or personally guided by{" "}
-              <strong>Dr. Ankush Garg</strong> — widely recognized as one of India's{" "}
-              <strong>top autism doctors</strong>, the country's leading{" "}
-              <strong>Ayurvedic neurologist</strong>, and the developer of the{" "}
+              <strong>Dr. Ankush Garg</strong> — recognized for his work in{" "}
+              <strong>autism care</strong>, Ayurvedic neurology, and the development of the{" "}
               <strong>Neuro-Ayurveda System</strong> at{" "}
               <strong>Manovaidya</strong>. No jargon. No fear-mongering. Just
               clarity.

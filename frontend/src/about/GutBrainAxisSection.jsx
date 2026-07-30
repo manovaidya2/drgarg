@@ -15,7 +15,7 @@ export default function GutBrainAxisSection() {
         <div className="mt-10 space-y-6 text-[#263b33] text-[18px] leading-[1.5]">
           <p>
             The reason Dr. Ankush Garg is regarded as the{" "}
-            <strong>best autism doctor in India</strong> is not only his clinical
+            <strong>autism care specialist in India</strong> is not only his clinical
             results — it is his research. His PhD work centres on the{" "}
             <strong>gut-brain axis:</strong> the bi-directional communication
             between the gut microbiome and the nervous system. Modern science now

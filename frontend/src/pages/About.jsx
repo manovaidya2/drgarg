@@ -34,7 +34,7 @@
 //               {[
 //                 {
 //                   title: "Experience & Expertise:",
-//                   desc: "7+ years of experience in Teen Mental Wellness, Autism, ADHD, Anxiety, Depression, OCD, and Neurodevelopmental conditions.",
+//                   desc: "7+ Years of Focused Experience in teen mental wellness, Autism, ADHD, anxiety, depression, OCD, and neurodevelopmental conditions.",
 //                 },
 //                 {
 //                   title: "Neuro-Ayurveda Approach:",
@@ -46,7 +46,7 @@
 //                 },
 //                 {
 //                   title: "Clinical Experience:",
-//                   desc: "Worked with Thousands of children and adults dealing with focus issues, anxiety, behavioural challenges, and mental health conditions.",
+//                   desc: "Worked with children and adults dealing with focus issues, anxiety, behavioural challenges, and mental health conditions.",
 //                 },
 //                 {
 //                   title: "Root Cause Treatment:",
@@ -167,17 +167,17 @@ function About() {
     <>
       <Helmet>
         <title>
-          About Dr. Ankush Garg | Neuro-Ayurveda & Autism Specialist in India
+          About Dr. Ankush Garg | Neuro-Ayurveda Development System
         </title>
 
         <meta
           name="description"
-          content="Learn about Dr. Ankush Garg, founder of the Neuro-Ayurveda System and Manovaidya. Expert in Autism, ADHD, anxiety, OCD, gut-brain health, and holistic neurological care."
+          content="Learn about Dr. Ankush Garg, Founder of Manovaidya and the Neuro-Ayurveda Development System, with work focused on Autism, ADHD, child development, mental wellness, emotional wellbeing and mind-body health."
         />
 
         <meta
           name="keywords"
-          content="About Dr Ankush Garg, Neuro Ayurveda Doctor India, Autism Specialist India, ADHD Doctor, Ayurvedic Neurologist, Gut Brain Axis Expert, Manovaidya Founder, Holistic Brain Health"
+          content="About Dr Ankush Garg, Neuro Ayurveda Development System, Manovaidya Founder, Autism, ADHD, child development, mental wellness, emotional wellbeing, mind body health"
         />
 
         <meta name="robots" content="index, follow" />
@@ -188,11 +188,11 @@ function About() {
         {/* Open Graph */}
         <meta
           property="og:title"
-          content="About Dr. Ankush Garg | Neuro-Ayurveda Specialist"
+          content="About Dr. Ankush Garg | Neuro-Ayurveda Development System"
         />
         <meta
           property="og:description"
-          content="Discover Dr. Ankush Garg's journey, research, and Neuro-Ayurveda approach for Autism, ADHD, mental wellness, and brain health."
+          content="Discover Dr. Ankush Garg's journey, Manovaidya, and his Neuro-Ayurveda Development System for development, behaviour, emotional wellbeing and mind-body health."
         />
         <meta property="og:type" content="website" />
         <meta
@@ -211,11 +211,11 @@ function About() {
         />
         <meta
           name="twitter:title"
-          content="About Dr. Ankush Garg | Autism & Brain Health Expert"
+          content="About Dr. Ankush Garg | Manovaidya Founder"
         />
         <meta
           name="twitter:description"
-          content="Founder of the Neuro-Ayurveda System helping patients with Autism, ADHD, anxiety, OCD, and neurological conditions."
+          content="Founder of Manovaidya and the Neuro-Ayurveda Development System, with work focused on Autism, ADHD, child development, mental wellness and mind-body health."
         />
         <meta
           name="twitter:image"

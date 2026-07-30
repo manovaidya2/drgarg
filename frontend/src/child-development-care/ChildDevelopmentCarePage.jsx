@@ -39,7 +39,7 @@ const authorityPoints = [
     text: "Neuro-Ayurveda Development System",
     icon: Brain,
   },
-  { title: "7+ Years of", text: "Clinical Experience", icon: CalendarCheck },
+  { title: "7+ Years of", text: "Focused Experience", icon: CalendarCheck },
   { title: "Trusted by Families", text: "Across India", icon: Users },
 ];
 

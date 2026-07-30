@@ -18,7 +18,7 @@ const MindWellness = () => {
           </span>
 
           <p className="text-gray-600 mt-4">
-            Welcome to Mano Vaidya, your ultimate destination for holistic mental wellness.
+            Welcome to Mano Vaidya, a clinic focused on holistic mental wellness.
             In a world brimming with stressors and challenges, nurturing your mental well-being
             is paramount. At Mano Vaidya, we believe in empowering individuals to unlock their
             true potential through a blend of traditional wisdom and modern approaches to mental health.
@@ -46,7 +46,7 @@ const MindWellness = () => {
           </h2>
           <p className="text-gray-600">
             Our approach integrates time-tested practices from Ayurveda, yoga, and mindfulness
-            with cutting-edge scientific research in psychology and neuroscience.
+            with current scientific research in psychology and neuroscience.
           </p>
         </div>
 

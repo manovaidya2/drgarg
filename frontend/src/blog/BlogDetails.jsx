@@ -328,7 +328,7 @@ export default function BlogDetails() {
       "@id": "https://drankushgarg.in/about#author",
       "name": "Dr. Ankush Garg",
       "alternateName": "Dr. Ankush Garg - Ayurvedic Neurologist",
-      "description": "India's leading Ayurvedic Neurologist specializing in Autism, ADHD, and Mental Health. Founder of Neuro-Ayurveda System and Manovaidya.",
+      "description": "Ayurvedic neurologist specializing in Autism, ADHD, and Mental Health. Founder of Neuro-Ayurveda System and Manovaidya.",
       "url": "https://drankushgarg.in/about",
       "image": "https://drankushgarg.in/images/dr-ankush-garg.webp",
       "email": "info@manovaidya.com",
@@ -393,9 +393,9 @@ export default function BlogDetails() {
         "https://www.youtube.com/c/drankushgarg"
       ],
       "award": [
-        "One of India's Top Autism Doctors",
-        "Best Ayurvedic Neurologist Award 2023",
-        "Excellence in Neuro-Ayurveda Research"
+        "Neuro-Ayurveda System Development",
+        "Gut-Brain Axis Research",
+        "Autism, ADHD and Mental Health Education"
       ],
       "knowsLanguage": ["English", "Hindi"],
       "specialty": "Ayurvedic Neurology",
@@ -420,7 +420,7 @@ export default function BlogDetails() {
       "@type": "ProfilePage",
       "@id": "https://drankushgarg.in/about#profilepage",
       "name": "Dr. Ankush Garg - Ayurvedic Neurologist Profile",
-      "description": "Professional profile of Dr. Ankush Garg, India's leading Ayurvedic Neurologist",
+      "description": "Professional profile of Dr. Ankush Garg, Ayurvedic neurologist",
       "author": {
         "@id": "https://drankushgarg.in/about#author"
       },
@@ -540,7 +540,7 @@ export default function BlogDetails() {
       "@type": "WebSite",
       "@id": "https://drankushgarg.in#website",
       "name": "Dr. Ankush Garg - Ayurvedic Neurologist",
-      "description": "Expert Ayurvedic Neurologist specializing in Autism, ADHD, and Mental Health using Neuro-Ayurveda System",
+      "description": "Articles on Autism, ADHD and mental health from Dr. Ankush Garg and the Neuro-Ayurveda System",
       "url": "https://drankushgarg.in",
       "potentialAction": {
         "@type": "SearchAction",
@@ -811,16 +811,16 @@ export default function BlogDetails() {
                 </div>
               </div>
               <p className="text-sm text-gray-600 mb-3" itemProp="description">
-                Dr. Ankush Garg is one of India's top autism doctors, leading Ayurvedic neurologist, 
-                and founder of Manovaidya. With over 7+ years of experience, he has helped 
-                thousands of patients achieve better mental health through his Neuro-Ayurveda System.
+                Dr. Ankush Garg is an Ayurvedic doctor focused on autism care, neurodevelopmental health, 
+                and founder of Manovaidya. With 7+ Years of Focused Experience, he supports
+                families through the Neuro-Ayurveda System.
               </p>
               <div className="flex gap-2 pt-2 border-t border-green-100">
                 <span className="text-xs text-gray-500 flex items-center gap-1">
                   <Award size={12} /> Expert in Neuro-Ayurveda
                 </span>
                 <span className="text-xs text-gray-500 flex items-center gap-1">
-                  <TrendingUp size={12} /> 7+ Years Experience
+                  <TrendingUp size={12} /> 7+ Years of Focused Experience
                 </span>
               </div>
             </div>
@@ -967,14 +967,13 @@ export default function BlogDetails() {
                   <p className="text-sm text-green-700 mb-2">Ayurvedic Neurologist</p>
                   <p className="text-xs text-gray-500 mb-3">BAMS, MPH, PhD · Ayurvedacharya</p>
                   <div className="flex justify-center gap-2 mb-3">
-                    <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">7+ Years Exp</span>
-                    <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">10,000+ Patients</span>
+                    <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">7+ Years of Focused Experience</span>
                   </div>
                   <ul className="mb-4 space-y-2 border-t border-green-100 pt-4 text-left text-sm leading-6 text-gray-600">
                     {[
                       "Autism, ADHD, child development and mental health clinic in India",
                       "Care led by a BAMS, MPH, PhD qualified doctor",
-                      "7+ years of experience in child development and mental health care",
+                      "7+ Years of Focused Experience",
                       "Founder of Manovaidya, Noida and developer of the Neuro-Ayurveda System",
                     ].map((point) => (
                       <li key={point} className="flex gap-2">

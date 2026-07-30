@@ -14,7 +14,7 @@ export default function Footer() {
             </h2>
 
             <p className="text-[13px] font-semibold mb-4">
-              BAMS, MPH, PhD (Gut-Brain Axis Research)
+              BAMS, MPH, PhD ( Gut-Brain Axis )
             </p>
 
             <p className="max-w-[560px] text-[15px] leading-[1.55] font-semibold">
@@ -42,7 +42,7 @@ export default function Footer() {
               <div className="flex items-center gap-2.5">
                 <Mail size={15} className="text-[#d5b33d] flex-shrink-0" />
                 <a href="mailto:hello@manovaidya.in" className="hover:text-white">
-                  hello@manovaidya.in
+                  manovaidya2@gmail.com
                 </a>
               </div>
             </div>

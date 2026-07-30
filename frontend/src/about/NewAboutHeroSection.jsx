@@ -1,11 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { CalendarCheck, HeartPulse, Leaf, Sprout, UsersRound } from "lucide-react";
+import { CalendarCheck, HeartPulse, Leaf, Sprout } from "lucide-react";
 import doctorImage from "../images/White coat.webp";
 
 const stats = [
-  { icon: CalendarCheck, value: "7+", label: "Year Experience" },
-  { icon: UsersRound, value: "Thousands", label: "of Patients Treated" },
+  { icon: CalendarCheck, value: "7+", label: "Years of Focused Experience" },
   { icon: Leaf, value: "Holistic", label: "Ayurvedic Care" },
 ];
 
@@ -69,7 +68,7 @@ export default function NewAboutHeroSection() {
           />
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-3 lg:grid-cols-1">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
           {stats.map((item) => {
             const Icon = item.icon;
             return (

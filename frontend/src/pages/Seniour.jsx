@@ -13,9 +13,9 @@ function Seniour() {
     <>
       <GlobalSEO
         seo={{
-          title: "Senior Mental Health Care | Dr. Ankush Garg Neuro-Ayurveda",
+          title: "Senior Mental Health | Dr. Ankush Garg",
           description:
-            "Gentle and root-cause based mental health care for seniors. Address memory decline, anxiety, sleep problems, brain fog, and emotional well-being.",
+            "Senior mental health needs gentle, root-cause care. Memory decline, sleep disturbance, anxiety and brain fog deserve attention.",
           keywords:
             "senior mental health, memory loss elderly, anxiety in seniors, sleep issues elderly, brain fog elderly, Dr Ankush Garg",
           canonical: "https://drankushgarg.in/seniour-mental-health",

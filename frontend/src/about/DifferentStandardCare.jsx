@@ -22,7 +22,7 @@ export default function DifferentStandardCare() {
 
         {/* TOP TEXT */}
         <p className="text-[#d98923] text-[13px] uppercase tracking-[0.3em] mb-3">
-          Why He Is Considered No.1
+          Why Families Seek His Guidance
         </p>
 
         <h2 className="font-serif text-[#002b18] text-[26px] sm:text-[30px] md:text-[36px] leading-[1.15] tracking-[-0.02em] max-w-[620px]">
@@ -32,7 +32,7 @@ export default function DifferentStandardCare() {
         </h2>
 
         <p className="mt-4 max-w-[700px] text-[#2f3f4a] text-[14px] sm:text-[18px] leading-[1.6]">
-        Most autism and mental health treatment stops at the symptom layer. Dr. Ankush Garg goes deeper — into the brain, the gut, the nervous system, sensory processing and behaviour together. That integrated approach is what makes him India's top autism doctor and one of the most trusted Ayurvedic neurologists in the country.
+        Most autism and mental health treatment stops at the symptom layer. Dr. Ankush Garg goes deeper — into the brain, the gut, the nervous system, sensory processing and behaviour together. That integrated approach shapes his work as an Ayurvedic neurologist focused on autism and mental health care.
         </p>
 
         {/* CARDS */}

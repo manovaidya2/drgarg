@@ -2,15 +2,15 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 
 const defaultSEO = {
-  title: "Dr. Ankush Garg | Ayurvedic Mental Wellness Expert",
+  title: "Dr. Ankush Garg | Neuro-Ayurveda Care",
   description:
-    "Dr. Ankush Garg provides Ayurvedic mental wellness treatments for stress, anxiety, depression, and holistic mind care.",
+    "Dr. Ankush Garg provides integrative Neuro-Ayurveda care for Autism, ADHD, mental health and mind-body wellbeing.",
   keywords:
-    "Dr Ankush Garg, Ayurvedic mental wellness, anxiety treatment, stress management, depression therapy, holistic mind care, Ayurveda doctor",
+    "Dr Ankush Garg, Neuro Ayurveda care, Autism, ADHD, mental health, mind body wellbeing, Ayurveda doctor",
   author: "Dr. Ankush Garg",
   canonical: "https://drankushgarg.in/",
   image: "https://drankushgarg.in/og-image.jpg",
-  imageAlt: "Dr. Ankush Garg Ayurvedic mental wellness expert",
+  imageAlt: "Dr. Ankush Garg Neuro-Ayurveda care",
   type: "website",
   locale: "en_IN",
   robots: "index, follow",
