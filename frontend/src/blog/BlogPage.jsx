@@ -21,11 +21,15 @@ const isPublicBlog = (blog) =>
   blog.title &&
   blog.slug &&
   blog.published !== false &&
-  !["draft", "unpublished"].includes(String(blog.status || "").toLowerCase());
+  !["draft", "unpublished", "ongoing"].includes(String(blog.status || "").toLowerCase());
+
+const isOngoingCategory = (category = "") =>
+  String(category).trim().toLowerCase() === "ongoing";
 
 const getCategoryFromSearch = (search) => {
   const params = new URLSearchParams(search);
-  return params.get("category") || "All";
+  const category = params.get("category") || "All";
+  return isOngoingCategory(category) ? "All" : category;
 };
 
 const getPageFromSearch = (search) => {
@@ -71,7 +75,7 @@ export default function BlogPage() {
     ? ssrData.blogs.filter(isPublicBlog)
     : [];
   const initialCategories = Array.isArray(ssrData.categories)
-    ? ssrData.categories.filter(Boolean)
+    ? ssrData.categories.filter((category) => category && !isOngoingCategory(category))
     : [];
 
   const [blogs, setBlogs] = useState(initialBlogs);
@@ -105,7 +109,7 @@ export default function BlogPage() {
             ? res.data.categories
             : previousCategories
           )
-            .filter(Boolean)
+            .filter((category) => category && !isOngoingCategory(category))
             .sort()
         );
         if (res.data?.pagination) {
@@ -122,7 +126,9 @@ export default function BlogPage() {
   }, [activeCategory, currentPage]);
 
   const categoryOptions = useMemo(() => {
-    const blogCategories = blogs.map((blog) => blog.category).filter(Boolean);
+    const blogCategories = blogs
+      .map((blog) => blog.category)
+      .filter((category) => category && !isOngoingCategory(category));
     return ["All", ...new Set([...categories, ...blogCategories].sort())];
   }, [blogs, categories]);
 
@@ -328,12 +334,14 @@ export default function BlogPage() {
                     <div>
                       <div className="flex items-start justify-between gap-4 mb-5">
                         <div>
-                          <span
-                            className="text-[11px] tracking-[0.35em] text-[#c37a12] uppercase font-serif"
-                            itemProp="articleSection"
-                          >
-                            {blog.category || "Uncategorized"}
-                          </span>
+                          {!isOngoingCategory(blog.category) && (
+                            <span
+                              className="text-[11px] tracking-[0.35em] text-[#c37a12] uppercase font-serif"
+                              itemProp="articleSection"
+                            >
+                              {blog.category || "Uncategorized"}
+                            </span>
+                          )}
 
                           <div className="mt-4 h-[1px] w-[120px] bg-[#e5c98d]" />
                         </div>

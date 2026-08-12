@@ -20,6 +20,8 @@ export default function BlogCarousel() {
 
   // Minimum swipe distance (in px)
   const minSwipeDistance = 30;
+  const isOngoingCategory = (category = "") =>
+    String(category).trim().toLowerCase() === "ongoing";
 
   // Fetch blogs
   useEffect(() => {
@@ -301,7 +303,7 @@ export default function BlogCarousel() {
                           }}
                         />
                         {/* Category Badge */}
-                        {blog.category && (
+                        {blog.category && !isOngoingCategory(blog.category) && (
                           <span className="absolute top-3 left-3 bg-[#d8a63b]/90 text-white text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded">
                             {blog.category}
                           </span>

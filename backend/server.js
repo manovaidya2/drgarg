@@ -75,7 +75,7 @@ const truncateDescription = (value = "") => {
 
 const publicBlogFilter = {
   published: { $ne: false },
-  status: { $nin: ["draft", "unpublished"] },
+  status: { $nin: ["draft", "unpublished", "ongoing", "Ongoing", "ONGOING"] },
 };
 
 const publicBlogFields =

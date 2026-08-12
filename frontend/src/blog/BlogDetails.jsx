@@ -50,6 +50,14 @@ const getReadingMinutes = (content) => {
   return Math.max(1, Math.ceil(words / wordsPerMinute));
 };
 
+const removeOngoingPhdText = (value = "") =>
+  String(value)
+    .replace(/\bongoing\s+ph\.?\s*d\.?\b/gi, "PhD")
+    .replace(/\bongoing\s+doctoral\s+research\b/gi, "doctoral research")
+    .replace(/\bongoing\s+phd\s+research\b/gi, "PhD research")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
 export default function BlogDetails() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -75,15 +83,21 @@ export default function BlogDetails() {
   const contentRef = useRef(null);
   const normalizeSiteUrl = (url) =>
     url?.replace(/https:\/\/drankushgarg\.com/g, "https://drankushgarg.in");
-  const authorBio = authorProfile?.biography || DEFAULT_AUTHOR_PROFILE.biography;
+  const authorBio = removeOngoingPhdText(
+    authorProfile?.biography || DEFAULT_AUTHOR_PROFILE.biography
+  );
   const authorName = authorProfile?.name || DEFAULT_AUTHOR_PROFILE.name;
   const authorTitle = authorProfile?.title || DEFAULT_AUTHOR_PROFILE.title;
   const authorCredentials =
-    authorProfile?.credentials || DEFAULT_AUTHOR_PROFILE.credentials;
+    removeOngoingPhdText(
+      authorProfile?.credentials || DEFAULT_AUTHOR_PROFILE.credentials
+    );
   const authorProfileUrl =
     authorProfile?.profileUrl || DEFAULT_AUTHOR_PROFILE.profileUrl;
   const authorImage = authorProfile?.image || DEFAULT_AUTHOR_PROFILE.image;
   const authorEmail = authorProfile?.email || DEFAULT_AUTHOR_PROFILE.email;
+  const isOngoingCategory = (category = "") =>
+    String(category).trim().toLowerCase() === "ongoing";
 
   // Calculate reading time
   const calculateReadingTime = (content) => {
@@ -487,6 +501,7 @@ export default function BlogDetails() {
   // Generate BlogPosting Schema with Author Reference
   const generateBlogPostingSchema = () => {
     if (!blog) return null;
+    const category = !isOngoingCategory(blog.category) ? blog.category : undefined;
     
     return {
       "@context": "https://schema.org",
@@ -528,14 +543,14 @@ export default function BlogDetails() {
         "@id": normalizeSiteUrl(blog.canonicalUrl) || `https://drankushgarg.in/blog/${slug}`
       },
       "keywords": blog.metaKeywords,
-      "articleSection": blog.category,
+      "articleSection": category,
       "inLanguage": "en-US",
       "wordCount": blog.content?.length || 0,
       "isAccessibleForFree": true,
       "readingTime": `${readingTime} minutes`,
       "about": {
         "@type": "Thing",
-        "name": blog.category || "Ayurvedic Mental Health"
+        "name": category || "Ayurvedic Mental Health"
       }
     };
   };
@@ -669,7 +684,9 @@ export default function BlogDetails() {
         <meta property="article:modified_time" content={blog.modifiedDate || blog.updatedAt || blog.date} />
         <meta property="article:author" content="https://drankushgarg.in/about" />
         <meta property="article:author:name" content="Dr. Ankush Garg" />
-        {blog.category && <meta property="article:section" content={blog.category} />}
+        {blog.category && !isOngoingCategory(blog.category) && (
+          <meta property="article:section" content={blog.category} />
+        )}
         
         {/* Robots Meta */}
         <meta name="robots" content={blog.noIndex || blog.noFollow ? 
@@ -758,7 +775,7 @@ export default function BlogDetails() {
           <div className="max-w-3xl">
             {/* Category and Meta Info */}
             <div className="flex items-center gap-3 mb-3 flex-wrap">
-              {blog.category && (
+              {blog.category && !isOngoingCategory(blog.category) && (
                 <span className="bg-green-700 text-white px-3 py-1 rounded-full text-xs font-semibold">
                   {blog.category}
                 </span>
@@ -1048,7 +1065,7 @@ export default function BlogDetails() {
                             </div>
                           )}
                           <div className="flex-1 p-2 pr-3">
-                            {relatedPost.category && (
+                            {relatedPost.category && !isOngoingCategory(relatedPost.category) && (
                               <span className="text-[10px] font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded-full inline-block mb-1">
                                 {relatedPost.category}
                               </span>
