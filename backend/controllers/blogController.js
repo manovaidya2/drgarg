@@ -70,6 +70,7 @@ export const getBlogs = async (req, res) => {
     const query = Blog.find(filter)
       .select(publicBlogFields)
       .sort({ createdAt: -1 })
+      .allowDiskUse(true)
       .lean();
 
     if (limit) {

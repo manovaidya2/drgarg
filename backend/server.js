@@ -97,6 +97,7 @@ const getBlogListData = async (requestUrl = "/blog") => {
     Blog.find(filter)
       .select(publicBlogFields)
       .sort({ createdAt: -1 })
+      .allowDiskUse(true)
       .skip((page - 1) * limit)
       .limit(limit)
       .lean(),
@@ -209,6 +210,7 @@ const buildInitialData = async (reqPath) => {
         })
           .select("title slug category date image shortDescription createdAt metaTitle metaDescription")
           .sort({ createdAt: -1 })
+          .allowDiskUse(true)
           .limit(4)
           .lean()
       : [];

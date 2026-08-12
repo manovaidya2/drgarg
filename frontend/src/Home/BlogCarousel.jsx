@@ -26,7 +26,8 @@ export default function BlogCarousel() {
     const fetchBlogs = async () => {
       try {
         const res = await axiosInstance.get("/blogs?limit=10");
-        setBlogs(res.data.slice(0, 10));
+        const responseBlogs = Array.isArray(res.data?.blogs) ? res.data.blogs : res.data;
+        setBlogs((Array.isArray(responseBlogs) ? responseBlogs : []).slice(0, 10));
       } catch (error) {
         console.error("Error fetching blogs for carousel", error);
       } finally {

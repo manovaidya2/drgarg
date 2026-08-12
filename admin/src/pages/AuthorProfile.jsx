@@ -6,7 +6,7 @@ const defaultProfile = {
   title: "Ayurvedacharya",
   credentials: "BAMS, MPH, PhD Research · Ayurvedacharya",
   biography:
-    "Dr. Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. He has 7+ years of focused experience in child development and mental wellness. His ongoing PhD research explores the relationship between the gut–brain axis, behaviour and emotional wellbeing.",
+    "Dr. Ankush Garg is an Ayurvedacharya, Founder of Manovaidya and developer of the Neuro-Ayurveda Development System. He has 7+ years of focused experience in child development and mental wellness. His PhD research explores the relationship between the gut–brain axis, behaviour and emotional wellbeing.",
   profileUrl: "https://drankushgarg.in/about",
   image: "https://drankushgarg.in/images/dr-ankush-garg.webp",
   email: "contact@drankushgarg.in",

@@ -39,6 +39,9 @@ const blogSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+blogSchema.index({ published: 1, status: 1, category: 1, createdAt: -1 });
+blogSchema.index({ createdAt: -1 });
+
 // Pre-save middleware to set meta defaults
 blogSchema.pre('save', function(next) {
   // Set metaTitle to title if not provided
