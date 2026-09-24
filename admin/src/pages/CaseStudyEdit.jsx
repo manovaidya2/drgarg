@@ -574,8 +574,10 @@ export default function AdminEditCaseStudy() {
   const fetchCaseStudy = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get('/case-studies');
-      const caseStudy = response.data.find(cs => cs._id === id);
+      const response = await axiosInstance.get(`/case-studies/id/${id}`, {
+        timeout: 120000,
+      });
+      const caseStudy = response.data;
       
       if (!caseStudy) {
         toast.error('Case study not found');

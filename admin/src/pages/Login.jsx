@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import {
   Activity,
   ArrowRight,
@@ -77,12 +78,14 @@ const Login = () => {
           localStorage.setItem("rememberMe", "true");
         }
 
+        toast.success("Login successful");
         navigate("/dashboard");
       } else {
         setErrors({
           username: "Invalid credentials",
           password: "Invalid credentials",
         });
+        toast.error("Invalid username or password");
         setIsLoading(false);
       }
     }, 900);

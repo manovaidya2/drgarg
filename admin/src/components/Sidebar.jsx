@@ -13,6 +13,7 @@ import {
   FaUserEdit,
 } from "react-icons/fa";
 import { MdHealthAndSafety } from "react-icons/md";
+import toast from "react-hot-toast";
 
 const navItems = [
   { to: "/dashboard", icon: FaTachometerAlt, label: "Dashboard" },
@@ -32,6 +33,7 @@ const Sidebar = ({ collapsed = false, onToggle, isMobile = false, onNavigate }) 
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("username");
     localStorage.removeItem("rememberMe");
+    toast.success("Logged out successfully");
     navigate("/");
   };
 

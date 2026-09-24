@@ -59,7 +59,12 @@ blogSchema.pre('save', function(next) {
   }
   
   // Set publishedDate to date if not provided
-  if (!this.publishedDate && this.date) {
+  if (
+    !this.publishedDate &&
+    this.date &&
+    this.published !== false &&
+    this.status !== "draft"
+  ) {
     this.publishedDate = this.date;
   }
   

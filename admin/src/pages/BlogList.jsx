@@ -1,7 +1,8 @@
 // src/pages/BlogList.jsx
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
+import toast from "react-hot-toast";
 import {
   PencilIcon,
   TrashIcon,
@@ -10,10 +11,15 @@ import {
   DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 
+let blogListCache = null;
+const isDraftBlog = (blog) =>
+  blog.published === false || String(blog.status).toLowerCase() === "draft";
+
 const BlogList = () => {
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useState(blogListCache || []);
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!blogListCache);
+  const [error, setError] = useState("");
   const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
     blogId: null,
@@ -21,17 +27,27 @@ const BlogList = () => {
   });
 
   useEffect(() => {
-    fetchBlogs();
+    const controller = new AbortController();
+    fetchBlogs(controller.signal);
+    return () => controller.abort();
   }, []);
 
-  const fetchBlogs = async () => {
+  const fetchBlogs = async (signal) => {
     try {
-      const res = await axios.get("https://api.drankushgarg.com/api/blogs");
-      setBlogs(res.data);
+      setError("");
+      const res = await axiosInstance.get(
+        "/blogs?admin=true&limit=50&page=1",
+        { signal }
+      );
+      const nextBlogs = Array.isArray(res.data) ? res.data : res.data.blogs || [];
+      blogListCache = nextBlogs;
+      setBlogs(nextBlogs);
     } catch (err) {
-      console.log(err);
+      if (err.code === "ERR_CANCELED") return;
+      console.error("Failed to fetch blogs", err);
+      setError("Blogs could not be loaded. Please try again.");
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) setLoading(false);
     }
   };
 
@@ -45,13 +61,14 @@ const BlogList = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(
-        `https://api.drankushgarg.com/api/blogs/${deleteModal.blogId}`
-      );
-      setBlogs(blogs.filter((b) => b._id !== deleteModal.blogId));
+      await axiosInstance.delete(`/blogs/${deleteModal.blogId}`);
+      const nextBlogs = blogs.filter((b) => b._id !== deleteModal.blogId);
+      blogListCache = nextBlogs;
+      setBlogs(nextBlogs);
       setDeleteModal({ isOpen: false, blogId: null, blogTitle: "" });
+      toast.success("Blog deleted successfully");
     } catch (err) {
-      alert("Delete failed");
+      toast.error(err.response?.data?.message || "Delete failed");
     }
   };
 
@@ -65,14 +82,6 @@ const BlogList = () => {
       month: "short",
       year: "numeric",
     });
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-[400px]">
-        <div className="animate-spin rounded-full h-14 w-14 border-b-4 border-indigo-600"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen">
@@ -96,7 +105,7 @@ const BlogList = () => {
       </div>
 
       {/* STATS */}
-      <div className="grid md:grid-cols-3 gap-4 mb-5">
+      <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">
 
         <div className="bg-white p-4 rounded-xl shadow flex items-center gap-4">
           <div className="bg-indigo-100 p-3 rounded-lg">
@@ -114,7 +123,21 @@ const BlogList = () => {
           </div>
           <div>
             <p className="text-gray-500 text-sm">Published</p>
-            <h2 className="text-2xl font-bold">{blogs.length}</h2>
+            <h2 className="text-2xl font-bold">
+              {blogs.filter((blog) => !isDraftBlog(blog)).length}
+            </h2>
+          </div>
+        </div>
+
+        <div className="bg-white p-4 rounded-xl shadow flex items-center gap-4">
+          <div className="bg-amber-100 p-3 rounded-lg">
+            <DocumentTextIcon className="h-6 w-6 text-amber-600" />
+          </div>
+          <div>
+            <p className="text-gray-500 text-sm">Drafts</p>
+            <h2 className="text-2xl font-bold">
+              {blogs.filter(isDraftBlog).length}
+            </h2>
           </div>
         </div>
 
@@ -153,11 +176,28 @@ const BlogList = () => {
               <th className="p-4">Category</th>
               <th className="p-4">Date</th>
               <th className="p-4">Description</th>
+              <th className="p-4">Status</th>
               <th className="p-4">Actions</th>
             </tr>
           </thead>
 
           <tbody>
+
+            {loading && blogs.length === 0 && (
+              <tr>
+                <td colSpan="6" className="p-8 text-center text-gray-500">
+                  Loading blogs...
+                </td>
+              </tr>
+            )}
+
+            {!loading && error && blogs.length === 0 && (
+              <tr>
+                <td colSpan="6" className="p-8 text-center text-red-600">
+                  {error}
+                </td>
+              </tr>
+            )}
 
             {filteredBlogs.map((blog) => (
               <tr
@@ -193,6 +233,18 @@ const BlogList = () => {
                   {blog.shortDescription}
                 </td>
 
+                <td className="p-4">
+                  <span
+                    className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${
+                      isDraftBlog(blog)
+                        ? "bg-amber-100 text-amber-700"
+                        : "bg-emerald-100 text-emerald-700"
+                    }`}
+                  >
+                    {isDraftBlog(blog) ? "Draft" : "Published"}
+                  </span>
+                </td>
+
                 <td className="p-4 flex gap-3">
                   <Link
                     to={`/blogs/edit/${blog._id}`}
@@ -211,9 +263,9 @@ const BlogList = () => {
               </tr>
             ))}
 
-            {filteredBlogs.length === 0 && (
+            {!loading && !error && filteredBlogs.length === 0 && (
               <tr>
-                <td colSpan="5" className="text-center p-8 text-gray-500">
+                <td colSpan="6" className="text-center p-8 text-gray-500">
                   No blogs found
                 </td>
               </tr>

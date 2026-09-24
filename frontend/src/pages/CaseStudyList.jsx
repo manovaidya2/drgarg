@@ -5,11 +5,13 @@ import axiosInstance from "../api/axiosInstance";
 import { GlobalSEO } from "../components/SEOProvider";
 import { useSsrData } from "../ssrData";
 
+let caseStudyListCache = null;
+
 export default function CaseStudyList() {
   const ssrData = useSsrData();
-  const initialCaseStudies = Array.isArray(ssrData.caseStudies)
-    ? ssrData.caseStudies
-    : [];
+  const initialCaseStudies =
+    caseStudyListCache ||
+    (Array.isArray(ssrData.caseStudies) ? ssrData.caseStudies : []);
   const [caseStudies, setCaseStudies] = useState(initialCaseStudies);
   const [loading, setLoading] = useState(
     typeof window !== "undefined" && initialCaseStudies.length === 0
@@ -37,31 +39,30 @@ export default function CaseStudyList() {
   };
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchCaseStudies = async () => {
       try {
-        setLoading(true);
+        setLoading(caseStudies.length === 0);
         setError(null);
-        
-        // Add timeout to prevent infinite loading
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error("Request timeout")), 10000)
-        );
-        
-        const fetchPromise = axiosInstance.get("/case-studies");
-        const res = await Promise.race([fetchPromise, timeoutPromise]);
-        
-        setCaseStudies(res.data);
+
+        const res = await axiosInstance.get("/case-studies?summary=true", {
+          signal: controller.signal,
+        });
+        const nextCaseStudies = Array.isArray(res.data) ? res.data : [];
+        caseStudyListCache = nextCaseStudies;
+        setCaseStudies(nextCaseStudies);
       } catch (error) {
+        if (error.code === "ERR_CANCELED") return;
         console.error("Error fetching case studies", error);
         setError(error.message || "Failed to load case studies. Please try again.");
-        // Fallback data for demo
-        setCaseStudies([]);
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     };
 
     fetchCaseStudies();
+    return () => controller.abort();
   }, []);
 
   // Skeleton Loader Component
@@ -190,12 +191,12 @@ export default function CaseStudyList() {
                 >
                   <div className="overflow-hidden">
                     <img
-                      src={item.image || "/placeholder-image.jpg"}
+                      src={item.image || "/sirimg.webp"}
                       alt={item.title}
                       className="w-full h-44 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                       loading="lazy"
                       onError={(e) => {
-                        e.target.src = "/placeholder-image.jpg";
+                        e.target.src = "/sirimg.webp";
                       }}
                     />
                   </div>

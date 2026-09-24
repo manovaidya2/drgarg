@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axiosInstance";
+import toast from "react-hot-toast";
 import { 
   Phone, Mail, Calendar, MessageCircle, User, 
   AlertCircle, Clock, ChevronRight, Search, 
@@ -45,7 +46,9 @@ export default function AdminAppointments() {
       setError(null);
     } catch (err) {
       console.error("Error fetching appointments:", err);
-      setError(err.response?.data?.message || "Failed to fetch appointments");
+      const message = err.response?.data?.message || "Failed to fetch appointments";
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -64,9 +67,12 @@ export default function AdminAppointments() {
         setSelectedAppointment(null);
         setShowDetailsModal(false);
       }
+      toast.success("Appointment deleted successfully");
     } catch (err) {
       console.error("Error deleting appointment:", err);
-      setDeleteError(err.response?.data?.message || "Unable to delete appointment. Please try again.");
+      const message = err.response?.data?.message || "Unable to delete appointment. Please try again.";
+      setDeleteError(message);
+      toast.error(message);
     } finally {
       setDeleteLoading(false);
     }

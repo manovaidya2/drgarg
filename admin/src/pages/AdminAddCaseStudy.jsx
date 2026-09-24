@@ -278,6 +278,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import axiosInstance from "../api/axiosInstance";
+import toast from "react-hot-toast";
 
 export default function AdminAddCaseStudy() {
   const editorRef = useRef(null);
@@ -353,11 +354,11 @@ export default function AdminAddCaseStudy() {
   /* 🔹 FAQ Functions */
   const handleAddFaq = () => {
     if (!currentFaq.question.trim()) {
-      alert("Please enter a question");
+      toast.error("Please enter a question");
       return;
     }
     if (!currentFaq.answer.trim()) {
-      alert("Please enter an answer");
+      toast.error("Please enter an answer");
       return;
     }
 
@@ -631,7 +632,7 @@ export default function AdminAddCaseStudy() {
   /* 🔹 Reset image size */
   const resetImageSize = () => {
     if (!selectedImage) {
-      alert("Please select an image first");
+      toast.error("Please select an image first");
       return;
     }
     
@@ -644,7 +645,7 @@ export default function AdminAddCaseStudy() {
   /* 🔹 Set preset size */
   const setImageSize = (width, height) => {
     if (!selectedImage) {
-      alert("Please select an image first");
+      toast.error("Please select an image first");
       return;
     }
     
@@ -655,7 +656,7 @@ export default function AdminAddCaseStudy() {
   /* 🔹 Add link to selected image */
   const addLinkToSelectedImage = () => {
     if (!selectedImage) {
-      alert("Please click on an image to select it first");
+      toast.error("Please click on an image to select it first");
       return;
     }
 
@@ -667,13 +668,13 @@ export default function AdminAddCaseStudy() {
   /* 🔹 Handle link submit */
   const handleLinkSubmit = () => {
     if (!selectedImage) {
-      alert("No image selected");
+      toast.error("No image selected");
       setShowLinkDialog(false);
       return;
     }
 
     if (!linkUrl) {
-      alert("Please enter a URL");
+      toast.error("Please enter a URL");
       return;
     }
 
@@ -710,10 +711,10 @@ export default function AdminAddCaseStudy() {
       // Keep image selected
       selectedImage.classList.add('selected-image');
       
-      alert('Link added successfully!');
+      toast.success('Link added successfully!');
     } catch (error) {
       console.error('Error adding link:', error);
-      alert('Error adding link. Please try again.');
+      toast.error('Error adding link. Please try again.');
     }
 
     setShowLinkDialog(false);
@@ -723,7 +724,7 @@ export default function AdminAddCaseStudy() {
   /* 🔹 Edit existing link */
   const editImageLink = () => {
     if (!selectedImage) {
-      alert("Please click on an image to select it first");
+      toast.error("Please click on an image to select it first");
       return;
     }
 
@@ -732,14 +733,14 @@ export default function AdminAddCaseStudy() {
       setLinkUrl(parentAnchor.href || '');
       setShowLinkDialog(true);
     } else {
-      alert("Selected image doesn't have a link. Use 'Add Link to Image' instead.");
+      toast.error("Selected image doesn't have a link. Use 'Add Link to Image' instead.");
     }
   };
 
   /* 🔹 Remove link */
   const removeImageLink = () => {
     if (!selectedImage) {
-      alert("Please click on an image to select it first");
+      toast.error("Please click on an image to select it first");
       return;
     }
 
@@ -752,9 +753,9 @@ export default function AdminAddCaseStudy() {
       parentAnchor.parentNode.replaceChild(selectedImage, parentAnchor);
       selectedImage.classList.add('selected-image');
       
-      alert('Link removed successfully!');
+      toast.success('Link removed successfully!');
     } else {
-      alert("Selected image doesn't have a link to remove");
+      toast.error("Selected image doesn't have a link to remove");
     }
   };
 
@@ -842,7 +843,7 @@ export default function AdminAddCaseStudy() {
 
     try {
       await axiosInstance.post("/case-studies", payload);
-      alert("✅ Case Study Saved Successfully");
+      toast.success("Case study saved successfully");
 
       setFormData({
         title: "",
@@ -860,7 +861,7 @@ export default function AdminAddCaseStudy() {
       setSelectedImage(null);
     } catch (error) {
       console.error(error);
-      alert("❌ Server Error");
+      toast.error(error.response?.data?.message || "Server error. Please try again.");
     }
   };
 

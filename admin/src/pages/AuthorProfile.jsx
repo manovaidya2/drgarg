@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInstance";
+import toast from "react-hot-toast";
 
 const defaultProfile = {
   name: "Dr. Ankush Garg",
@@ -17,7 +18,6 @@ export default function AuthorProfile() {
   const [profile, setProfile] = useState(defaultProfile);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -25,7 +25,7 @@ export default function AuthorProfile() {
         const res = await axiosInstance.get("/author-profile");
         setProfile({ ...defaultProfile, ...res.data });
       } catch (error) {
-        setMessage("Could not load author profile. Default text is shown.");
+        toast.error("Could not load author profile. Default text is shown.");
       } finally {
         setLoading(false);
       }
@@ -41,14 +41,13 @@ export default function AuthorProfile() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSaving(true);
-    setMessage("");
 
     try {
       const res = await axiosInstance.put("/author-profile", profile);
       setProfile({ ...defaultProfile, ...res.data });
-      setMessage("Author profile updated. Published blog pages now use this biography.");
+      toast.success("Author profile updated successfully");
     } catch (error) {
-      setMessage(error.response?.data?.message || "Could not update author profile.");
+      toast.error(error.response?.data?.message || "Could not update author profile.");
     } finally {
       setSaving(false);
     }
@@ -72,12 +71,6 @@ export default function AuthorProfile() {
           separate author biographies inside individual blog posts.
         </p>
       </div>
-
-      {message && (
-        <div className="mb-5 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
-          {message}
-        </div>
-      )}
 
       <form onSubmit={handleSubmit} className="space-y-5 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
         <div className="grid gap-5 md:grid-cols-2">

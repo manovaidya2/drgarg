@@ -26,6 +26,9 @@ import {
   createBlog,
   getBlogs,
   getBlogBySlug,
+  getAdminBlogById,
+  getAdminBlogContent,
+  getAdminBlogImage,
   updateBlog,
   deleteBlog
 } from "../controllers/blogController.js";
@@ -39,6 +42,11 @@ router.post("/", createBlog);
 
 // Get all blogs - GET /api/blogs
 router.get("/", getBlogs);
+
+// Includes drafts for the admin editor.
+router.get("/admin/:id/image", getAdminBlogImage);
+router.get("/admin/:id/content", getAdminBlogContent);
+router.get("/admin/:id", getAdminBlogById);
 
 // Update blog - PUT /api/blogs/:id (place before slug route)
 router.put("/:id", updateBlog);

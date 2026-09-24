@@ -168,12 +168,20 @@ export default function CaseStudyDetails() {
   const initialCaseStudy = ssrData.caseStudy || null;
   const [caseStudy, setCaseStudy] = useState(initialCaseStudy);
   const [loading, setLoading] = useState(!initialCaseStudy);
+  const [contentLoading, setContentLoading] = useState(
+    Boolean(initialCaseStudy && !initialCaseStudy.content)
+  );
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchCaseStudy = async () => {
       try {
-        const res = await axiosInstance.get(`/case-studies/${slug}`);
+        const res = await axiosInstance.get(`/case-studies/${slug}`, {
+          signal: controller.signal,
+        });
+        if (import.meta.env.VITE_DEBUG_CASE_STUDY === "true") {
         console.log("✅ Fetched case study:", res.data);
         
         // Log FAQ data
@@ -189,15 +197,27 @@ export default function CaseStudyDetails() {
         console.log("🔗 Contains links?", res.data.content.includes('<a '));
         console.log("🖼️ Contains linked images?", res.data.content.includes('<a') && res.data.content.includes('<img'));
         
-        setCaseStudy(res.data);
+        }
+        setCaseStudy((current) => ({ ...current, ...res.data }));
+        setLoading(false);
+        setContentLoading(true);
+
+        const contentRes = await axiosInstance.get(
+          `/case-studies/${slug}/content`,
+          { signal: controller.signal, timeout: 120000 }
+        );
+        setCaseStudy((current) => ({ ...current, ...contentRes.data }));
       } catch (error) {
+        if (error.code === "ERR_CANCELED") return;
         console.error("❌ Error fetching case study", error);
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
+        if (!controller.signal.aborted) setContentLoading(false);
       }
     };
 
     fetchCaseStudy();
+    return () => controller.abort();
   }, [slug]);
 
   // Toggle FAQ accordion
@@ -404,6 +424,14 @@ export default function CaseStudyDetails() {
 
         {/* Content - Processed for linked images */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 mt-10 sm:mt-14 pb-16">
+          {contentLoading && (
+            <div className="mb-8 animate-pulse" role="status">
+              <div className="h-5 w-full rounded bg-gray-200" />
+              <div className="mt-3 h-5 w-11/12 rounded bg-gray-200" />
+              <div className="mt-3 h-5 w-4/5 rounded bg-gray-200" />
+              <p className="mt-4 text-sm text-gray-500">Loading article content...</p>
+            </div>
+          )}
           <div
             className="prose prose-base sm:prose-lg max-w-none
                        prose-headings:text-gray-800 prose-headings:font-bold prose-headings:mt-8 prose-headings:mb-4

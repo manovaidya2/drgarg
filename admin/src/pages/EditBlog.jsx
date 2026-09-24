@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
 import slugify from 'slugify';
+import toast from 'react-hot-toast';
 
 const EditBlog = () => {
   const { id } = useParams();
@@ -21,10 +22,14 @@ const EditBlog = () => {
     shortDescription: '',
     content: '',
     faq: [{ question: '', answer: '' }],
+    published: false,
+    status: 'draft',
   });
   const [loading, setLoading] = useState(true);
+  const [contentLoading, setContentLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [existingImageUrl, setExistingImageUrl] = useState('');
 
   // Image link states
   const [selectedImage, setSelectedImage] = useState(null);
@@ -59,20 +64,34 @@ const EditBlog = () => {
   const fetchBlog = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`/blogs/${id}`);
+      const response = await axiosInstance.get(`/blogs/admin/${id}`);
       const blog = response.data;
       
       // Format date for input
       if (blog.date) {
         blog.date = new Date(blog.date).toISOString().split('T')[0];
       }
-      
-      setFormData(blog);
-      
-      // Set editor content after blog is loaded
+
+      setExistingImageUrl(blog.imagePreviewUrl || '');
+      setFormData((current) => ({
+        ...current,
+        ...blog,
+        image: '',
+        content: '',
+      }));
+      setLoading(false);
+      setContentLoading(true);
+
+      const contentResponse = await axiosInstance.get(
+        `/blogs/admin/${id}/content`,
+        { timeout: 120000 }
+      );
+      const content = contentResponse.data.content || '';
+      setFormData((current) => ({ ...current, content }));
+
       setTimeout(() => {
-        if (editorRef.current && blog.content) {
-          editorRef.current.innerHTML = blog.content;
+        if (editorRef.current) {
+          editorRef.current.innerHTML = content;
           // Add click handlers to existing images
           addClickHandlersToImages();
         }
@@ -84,6 +103,7 @@ const EditBlog = () => {
       console.error('Error fetching blog:', err);
     } finally {
       setLoading(false);
+      setContentLoading(false);
     }
   };
 
@@ -295,7 +315,7 @@ const EditBlog = () => {
   // Reset image to original size
   const resetImageSize = () => {
     if (!selectedImage) {
-      alert("Please select an image first");
+      toast.error("Please select an image first");
       return;
     }
     
@@ -308,7 +328,7 @@ const EditBlog = () => {
   // Set image to specific size
   const setImageSize = (width, height) => {
     if (!selectedImage) {
-      alert("Please select an image first");
+      toast.error("Please select an image first");
       return;
     }
     
@@ -355,7 +375,7 @@ const removeFaq = (index) => {
   // Add link to selected image
   const addLinkToSelectedImage = () => {
     if (!selectedImage) {
-      alert("Please click on an image to select it first");
+      toast.error("Please click on an image to select it first");
       return;
     }
 
@@ -373,13 +393,13 @@ const removeFaq = (index) => {
   // Handle link submission
   const handleLinkSubmit = () => {
     if (!selectedImage) {
-      alert("No image selected");
+      toast.error("No image selected");
       setShowLinkDialog(false);
       return;
     }
 
     if (!linkUrl) {
-      alert("Please enter a URL");
+      toast.error("Please enter a URL");
       return;
     }
 
@@ -413,10 +433,10 @@ const removeFaq = (index) => {
       selectedImage.classList.add('selected-image');
       addResizeHandles(selectedImage);
       
-      alert('Link added successfully!');
+      toast.success('Link added successfully!');
     } catch (error) {
       console.error('Error adding link:', error);
-      alert('Error adding link. Please try again.');
+      toast.error('Error adding link. Please try again.');
     }
 
     setShowLinkDialog(false);
@@ -426,7 +446,7 @@ const removeFaq = (index) => {
   // Edit existing image link
   const editImageLink = () => {
     if (!selectedImage) {
-      alert("Please click on an image to select it first");
+      toast.error("Please click on an image to select it first");
       return;
     }
 
@@ -435,14 +455,14 @@ const removeFaq = (index) => {
       setLinkUrl(parentAnchor.href || '');
       setShowLinkDialog(true);
     } else {
-      alert("Selected image doesn't have a link. Use 'Add Link to Image' instead.");
+      toast.error("Selected image doesn't have a link. Use 'Add Link to Image' instead.");
     }
   };
 
   // Remove link from image
   const removeImageLink = () => {
     if (!selectedImage) {
-      alert("Please click on an image to select it first");
+      toast.error("Please click on an image to select it first");
       return;
     }
 
@@ -455,9 +475,9 @@ const removeFaq = (index) => {
       selectedImage.classList.add('selected-image');
       addResizeHandles(selectedImage);
       
-      alert('Link removed successfully!');
+      toast.success('Link removed successfully!');
     } else {
-      alert("Selected image doesn't have a link to remove");
+      toast.error("Selected image doesn't have a link to remove");
     }
   };
 
@@ -521,6 +541,8 @@ const removeFaq = (index) => {
   // Submit updated blog to API
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const action = e.nativeEvent.submitter?.value || formData.status || 'draft';
+    const isDraft = action === 'draft';
     
     // Remove selection class and resize handles before saving
     if (selectedImage) {
@@ -532,18 +554,25 @@ const removeFaq = (index) => {
     setError('');
 
     const htmlContent = editorRef.current.innerHTML;
-    const blogData = { ...formData, content: htmlContent };
+    const blogData = {
+      ...formData,
+      content: htmlContent,
+      published: !isDraft,
+      status: isDraft ? 'draft' : 'published',
+    };
 
     try {
       const response = await axiosInstance.put(`/blogs/${id}`, blogData);
       if (response.data.success) {
-        alert('Blog updated successfully!');
-        navigate('/blogs');
+        toast.success(isDraft ? 'Draft updated successfully!' : 'Blog published successfully!');
+        navigate('/blog-list');
       } else {
-        alert(response.data.message || 'Failed to update blog');
+        toast.error(response.data.message || 'Failed to update blog');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to update blog');
+      const message = err.response?.data?.message || 'Failed to update blog';
+      setError(message);
+      toast.error(message);
       console.error('Error updating blog:', err);
     } finally {
       setSaving(false);
@@ -716,20 +745,22 @@ const removeFaq = (index) => {
               onChange={handleMainImageUpload}
               className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
             />
-            {formData.image && (
+            {(formData.image || existingImageUrl) && (
               <div className="mt-2">
                 <img
-                  src={formData.image}
+                  src={formData.image || existingImageUrl}
                   alt="Preview"
                   className="w-48 h-auto rounded-lg border border-gray-300"
                 />
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, image: '' })}
-                  className="mt-2 text-sm text-red-600 hover:text-red-800"
-                >
-                  Remove Image
-                </button>
+                {formData.image && existingImageUrl && (
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, image: '' })}
+                    className="mt-2 text-sm text-gray-600 hover:text-gray-800"
+                  >
+                    Keep existing image
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -880,6 +911,9 @@ const removeFaq = (index) => {
           </div>
 
           {/* Rich Text Editor */}
+          {contentLoading && (
+            <p className="mt-2 text-sm text-gray-500">Loading blog content...</p>
+          )}
           <div
             ref={editorRef}
             contentEditable
@@ -891,17 +925,26 @@ const removeFaq = (index) => {
           <div className="flex justify-end gap-4">
             <button
               type="button"
-              onClick={() => navigate('/blogs')}
+              onClick={() => navigate('/blog-list')}
               className="bg-gray-200 text-gray-800 px-6 py-3 rounded-xl font-semibold hover:bg-gray-300 transition duration-200"
             >
               Cancel
             </button>
             <button
               type="submit"
-              disabled={saving}
+              value="draft"
+              disabled={saving || contentLoading || Boolean(error)}
+              className="border border-gray-300 bg-white text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 disabled:opacity-50"
+            >
+              {saving ? 'Saving...' : 'Save as Draft'}
+            </button>
+            <button
+              type="submit"
+              value="published"
+              disabled={saving || contentLoading || Boolean(error)}
               className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {saving ? 'Updating...' : 'Update Blog'}
+              {saving ? 'Saving...' : formData.status === 'draft' ? 'Publish Blog' : 'Update Published Blog'}
             </button>
           </div>
         </form>

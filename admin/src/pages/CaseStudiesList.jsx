@@ -291,15 +291,11 @@ const CaseStudiesList = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [filterStatus, setFilterStatus] = useState('all');
 
-  // Fetch case studies with 2-second loading simulation
+  // Fetch lightweight case-study summaries for the table.
   const fetchCaseStudies = useCallback(async () => {
     setLoading(true);
     try {
-      // Simulate 2 second loading
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      const response = await axiosInstance.get('/case-studies');
-      console.log('Fetched case studies:', response.data);
+      const response = await axiosInstance.get('/case-studies?summary=true');
       setCaseStudies(response.data);
     } catch (error) {
       toast.error('Failed to fetch case studies');

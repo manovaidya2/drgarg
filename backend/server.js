@@ -150,7 +150,9 @@ const buildRequestSeo = async (reqPath) => {
   const caseStudyMatch = normalizedPath.match(/^\/case-study\/([^/]+)$/);
   if (caseStudyMatch) {
     const slug = decodeURIComponent(caseStudyMatch[1]);
-    const caseStudy = await CaseStudy.findOne({ slug }).lean();
+    const caseStudy = await CaseStudy.findOne({ slug })
+      .select("title slug shortDescription createdAt updatedAt")
+      .lean();
 
     if (!caseStudy) {
       return getStaticSeo(normalizedPath);
@@ -204,14 +206,19 @@ const buildInitialData = async (reqPath) => {
   }
 
   if (normalizedPath === "/case-study") {
-    const caseStudies = await CaseStudy.find().sort({ createdAt: -1 }).lean();
+    const caseStudies = await CaseStudy.find()
+      .select("title slug shortDescription createdAt updatedAt")
+      .sort({ createdAt: -1 })
+      .lean();
     return { caseStudies };
   }
 
   const caseStudyMatch = normalizedPath.match(/^\/case-study\/([^/]+)$/);
   if (caseStudyMatch) {
     const slug = decodeURIComponent(caseStudyMatch[1]);
-    const caseStudy = await CaseStudy.findOne({ slug }).lean();
+    const caseStudy = await CaseStudy.findOne({ slug })
+      .select("title slug shortDescription faqs createdAt updatedAt")
+      .lean();
     return { caseStudy };
   }
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axiosInstance from "../api/axiosInstance";
+import toast from "react-hot-toast";
 import {
   FaEdit,
   FaEye,
@@ -79,7 +80,7 @@ export default function GalleryManager() {
       const res = await axiosInstance.get("/gallery?admin=true");
       setItems(res.data || []);
     } catch (error) {
-      alert("Gallery fetch failed");
+      toast.error("Gallery fetch failed");
     } finally {
       setLoading(false);
     }
@@ -177,12 +178,12 @@ export default function GalleryManager() {
     e.preventDefault();
 
     if (!form.title.trim()) {
-      alert("Please enter title");
+      toast.error("Please enter title");
       return;
     }
 
     if (!editingItem && !imageFile) {
-      alert("Please select image");
+      toast.error("Please select image");
       return;
     }
 
@@ -209,9 +210,9 @@ export default function GalleryManager() {
 
       await fetchGallery();
       closeModal();
-      alert(editingItem ? "Gallery item updated" : "Gallery item added");
+      toast.success(editingItem ? "Gallery item updated" : "Gallery item added");
     } catch (error) {
-      alert(error.response?.data?.message || "Save failed");
+      toast.error(error.response?.data?.message || "Save failed");
     } finally {
       setSaving(false);
     }
@@ -223,8 +224,9 @@ export default function GalleryManager() {
     try {
       await axiosInstance.delete(`/gallery/${item._id}`);
       setItems((prev) => prev.filter((galleryItem) => galleryItem._id !== item._id));
+      toast.success("Gallery item deleted");
     } catch (error) {
-      alert("Delete failed");
+      toast.error(error.response?.data?.message || "Delete failed");
     }
   };
 

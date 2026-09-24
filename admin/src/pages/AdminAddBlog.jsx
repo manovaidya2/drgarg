@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import axiosInstance from "../api/axiosInstance";
+import toast from "react-hot-toast";
 
 export default function AdminAddBlog() {
   const editorRef = useRef(null);
@@ -36,6 +37,7 @@ export default function AdminAddBlog() {
   const [linkUrl, setLinkUrl] = useState("");
   const [showSEOSection, setShowSEOSection] = useState(false);
   const [showAdvancedSEO, setShowAdvancedSEO] = useState(false);
+  const [savingAction, setSavingAction] = useState("");
 
   // Image resize states
   const [isResizing, setIsResizing] = useState(false);
@@ -393,7 +395,7 @@ export default function AdminAddBlog() {
 
   const resetImageSize = () => {
     if (!selectedImage) {
-      alert("Please select an image first");
+      toast.error("Please select an image first");
       return;
     }
     
@@ -405,7 +407,7 @@ export default function AdminAddBlog() {
 
   const setImageSize = (width, height) => {
     if (!selectedImage) {
-      alert("Please select an image first");
+      toast.error("Please select an image first");
       return;
     }
     
@@ -415,7 +417,7 @@ export default function AdminAddBlog() {
 
   const addLinkToSelectedImage = () => {
     if (!selectedImage) {
-      alert("Please click on an image to select it first");
+      toast.error("Please click on an image to select it first");
       return;
     }
 
@@ -431,13 +433,13 @@ export default function AdminAddBlog() {
 
   const handleLinkSubmit = () => {
     if (!selectedImage) {
-      alert("No image selected");
+      toast.error("No image selected");
       setShowLinkDialog(false);
       return;
     }
 
     if (!linkUrl) {
-      alert("Please enter a URL");
+      toast.error("Please enter a URL");
       return;
     }
 
@@ -468,10 +470,10 @@ export default function AdminAddBlog() {
 
       selectedImage.classList.add('selected-image');
       
-      alert('Link added successfully!');
+      toast.success('Link added successfully!');
     } catch (error) {
       console.error('Error adding link:', error);
-      alert('Error adding link. Please try again.');
+      toast.error('Error adding link. Please try again.');
     }
 
     setShowLinkDialog(false);
@@ -480,7 +482,7 @@ export default function AdminAddBlog() {
 
   const editImageLink = () => {
     if (!selectedImage) {
-      alert("Please click on an image to select it first");
+      toast.error("Please click on an image to select it first");
       return;
     }
 
@@ -489,13 +491,13 @@ export default function AdminAddBlog() {
       setLinkUrl(parentAnchor.href || '');
       setShowLinkDialog(true);
     } else {
-      alert("Selected image doesn't have a link. Use 'Add Link to Image' instead.");
+      toast.error("Selected image doesn't have a link. Use 'Add Link to Image' instead.");
     }
   };
 
   const removeImageLink = () => {
     if (!selectedImage) {
-      alert("Please click on an image to select it first");
+      toast.error("Please click on an image to select it first");
       return;
     }
 
@@ -507,9 +509,9 @@ export default function AdminAddBlog() {
       
       selectedImage.classList.add('selected-image');
       
-      alert('Link removed successfully!');
+      toast.success('Link removed successfully!');
     } else {
-      alert("Selected image doesn't have a link to remove");
+      toast.error("Selected image doesn't have a link to remove");
     }
   };
 
@@ -567,9 +569,16 @@ export default function AdminAddBlog() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const action = e.nativeEvent.submitter?.value || "publish";
+    const isDraft = action === "draft";
+
+    if (!formData.title.trim() || !formData.slug.trim()) {
+      toast.error("Title and slug are required before saving.");
+      return;
+    }
     
     // Validate SEO
-    const seoErrors = validateSEO();
+    const seoErrors = isDraft ? [] : validateSEO();
     if (seoErrors.length > 0) {
       if (!window.confirm(`SEO Recommendations:\n${seoErrors.join('\n')}\n\nDo you want to continue anyway?`)) {
         return;
@@ -585,14 +594,19 @@ export default function AdminAddBlog() {
     const blogData = { 
       ...formData, 
       content: htmlContent,
-      publishedDate: formData.publishedDate || formData.date || new Date(),
+      published: !isDraft,
+      status: isDraft ? "draft" : "published",
+      publishedDate: isDraft
+        ? null
+        : formData.publishedDate || formData.date || new Date(),
       modifiedDate: new Date()
     };
 
     try {
+      setSavingAction(action);
       const response = await axiosInstance.post("/blogs", blogData);
       if (response.data.success) {
-        alert("Blog saved successfully with SEO optimization!");
+        toast.success(isDraft ? "Blog saved as draft!" : "Blog published successfully!");
 
         setFormData({
           title: "",
@@ -622,11 +636,13 @@ export default function AdminAddBlog() {
         setShowSEOSection(false);
         setShowAdvancedSEO(false);
       } else {
-        alert(response.data.message || "Failed to save blog");
+        toast.error(response.data.message || "Failed to save blog");
       }
     } catch (error) {
       console.error(error);
-      alert("Server error. Check console.");
+      toast.error(error.response?.data?.message || "Server error. Please try again.");
+    } finally {
+      setSavingAction("");
     }
   };
 
@@ -1130,12 +1146,24 @@ export default function AdminAddBlog() {
             style={{ whiteSpace: "pre-wrap" }}
           ></div>
 
-          <button
-            type="submit"
-            className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700"
-          >
-            Publish Blog with SEO
-          </button>
+          <div className="flex flex-wrap justify-end gap-3">
+            <button
+              type="submit"
+              value="draft"
+              disabled={Boolean(savingAction)}
+              className="border border-gray-300 bg-white text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 disabled:opacity-50"
+            >
+              {savingAction === "draft" ? "Saving Draft..." : "Save as Draft"}
+            </button>
+            <button
+              type="submit"
+              value="publish"
+              disabled={Boolean(savingAction)}
+              className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 disabled:opacity-50"
+            >
+              {savingAction === "publish" ? "Publishing..." : "Publish Blog"}
+            </button>
+          </div>
         </form>
       </div>
 

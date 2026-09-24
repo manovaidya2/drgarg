@@ -8,7 +8,7 @@ const publicBlogFilter = {
 };
 
 const publicBlogFields =
-  "title slug category date shortDescription createdAt metaTitle metaDescription publishedDate modifiedDate";
+  "title slug category date shortDescription createdAt metaTitle metaDescription publishedDate modifiedDate published status";
 
 const normalizePage = (value) => {
   const page = Number.parseInt(value, 10);
@@ -20,6 +20,9 @@ const normalizeLimit = (value) => {
   if (!Number.isFinite(limit) || limit <= 0) return null;
   return Math.min(limit, 50);
 };
+
+const getAdminBlogImageUrl = (req, id) =>
+  `${req.protocol}://${req.get("host")}/api/blogs/admin/${id}/image`;
 
 const removePerBlogAuthorBiography = (blogData = {}) => {
   const cleaned = { ...blogData };
@@ -39,10 +42,14 @@ const removePerBlogAuthorBiography = (blogData = {}) => {
 // CREATE
 export const createBlog = async (req, res) => {
   try {
+    const isDraft = req.body.status === "draft" || req.body.published === false;
     const blogData = {
       ...removePerBlogAuthorBiography(req.body),
-      // Ensure meta fields are properly set
-      publishedDate: req.body.publishedDate || req.body.date || new Date(),
+      published: !isDraft,
+      status: isDraft ? "draft" : "published",
+      publishedDate: isDraft
+        ? null
+        : req.body.publishedDate || req.body.date || new Date(),
       modifiedDate: new Date()
     };
     
@@ -60,9 +67,14 @@ export const getBlogs = async (req, res) => {
   try {
     res.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
     const { category, excludeSlug } = req.query;
+    const isAdmin = req.query.admin === "true";
     const page = normalizePage(req.query.page);
     const limit = normalizeLimit(req.query.limit);
-    const filter = { ...publicBlogFilter };
+    const filter = isAdmin ? {} : { ...publicBlogFilter };
+
+    if (isAdmin) {
+      res.set("Cache-Control", "private, no-store");
+    }
 
     if (category && category !== "All") {
       filter.category = category;
@@ -85,9 +97,12 @@ export const getBlogs = async (req, res) => {
     // started together. These small indexed reads are faster sequentially.
     const blogs = await query;
     const total = await Blog.countDocuments(filter);
-    const allCategories = await Blog.distinct("category", publicBlogFilter);
+    const allCategories = await Blog.distinct(
+      "category",
+      isAdmin ? {} : publicBlogFilter
+    );
 
-    if (category || excludeSlug || req.query.page || limit) {
+    if (isAdmin || category || excludeSlug || req.query.page || limit) {
       return res.status(200).json({
         blogs,
         categories: allCategories.filter(Boolean).sort(),
@@ -107,6 +122,74 @@ export const getBlogs = async (req, res) => {
       success: false,
       message: error.message,
     });
+  }
+};
+
+export const getAdminBlogById = async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: "Invalid blog ID format" });
+    }
+
+    const blog = await Blog.findById(req.params.id)
+      .select("-image -content -ogImage -twitterImage")
+      .lean();
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    res.set("Cache-Control", "private, no-store");
+    const hasImage = Boolean(
+      await Blog.exists({
+        _id: req.params.id,
+        image: { $type: "string", $ne: "" },
+      })
+    );
+    return res.json({
+      ...blog,
+      hasImage,
+      imagePreviewUrl: hasImage
+        ? getAdminBlogImageUrl(req, req.params.id)
+        : null,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
+export const getAdminBlogContent = async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: "Invalid blog ID format" });
+    }
+    const blog = await Blog.findById(req.params.id).select("content").lean();
+    if (!blog) return res.status(404).json({ message: "Blog not found" });
+    res.set("Cache-Control", "private, no-store");
+    return res.json({ content: blog.content || "" });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
+export const getAdminBlogImage = async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).end();
+    }
+    const blog = await Blog.findById(req.params.id).select("image").lean();
+    const image = blog?.image;
+    if (!image) return res.status(404).end();
+    if (/^https?:\/\//i.test(image)) return res.redirect(image);
+
+    const dataImage = image.match(/^data:([^;]+);base64,(.+)$/s);
+    if (dataImage) {
+      res.set("Cache-Control", "private, max-age=3600");
+      res.type(dataImage[1]);
+      return res.send(Buffer.from(dataImage[2], "base64"));
+    }
+    return res.redirect(image.startsWith("/") ? image : `/${image}`);
+  } catch (error) {
+    return res.status(500).end();
   }
 };
 
@@ -157,9 +240,17 @@ export const updateBlog = async (req, res) => {
       return res.status(400).json({ message: "Invalid blog ID format" });
     }
     
+    const isDraft = req.body.status === "draft" || req.body.published === false;
+    const cleanedBlogData = removePerBlogAuthorBiography(req.body);
+    if (!cleanedBlogData.image) delete cleanedBlogData.image;
     const updateData = {
-      ...removePerBlogAuthorBiography(req.body),
-      modifiedDate: new Date() // Always update modified date
+      ...cleanedBlogData,
+      published: !isDraft,
+      status: isDraft ? "draft" : "published",
+      publishedDate: isDraft
+        ? null
+        : req.body.publishedDate || req.body.date || new Date(),
+      modifiedDate: new Date()
     };
     
     const blog = await Blog.findByIdAndUpdate(

@@ -65,7 +65,6 @@ ChartJS.register(
 
 const Dashboard = () => {
   const [role, setRole] = useState("admin");
-  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [stats, setStats] = useState({
     appointments: { total: 0, today: 0, upcoming: 0, completed: 0, growth: 0 },
@@ -92,18 +91,36 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setRefreshing(true);
-      
-      // Fetch appointments
-      const appointmentsRes = await axiosInstance.get("/appointments/admin/all");
-      const appointments = appointmentsRes.data.appointments || [];
-      
-      // Fetch blogs
-      const blogsRes = await axiosInstance.get("/blogs");
-      const blogs = blogsRes.data || [];
-      
-      // Fetch case studies
-      const caseStudiesRes = await axiosInstance.get("/case-studies");
-      const caseStudies = caseStudiesRes.data || [];
+
+      const [appointmentsResult, blogsResult, caseStudiesResult] =
+        await Promise.allSettled([
+          axiosInstance.get("/appointments/admin/all"),
+          axiosInstance.get("/blogs?admin=true&limit=50&page=1"),
+          axiosInstance.get("/case-studies?summary=true"),
+        ]);
+
+      const appointments =
+        appointmentsResult.status === "fulfilled"
+          ? appointmentsResult.value.data.appointments || []
+          : [];
+      const blogsPayload =
+        blogsResult.status === "fulfilled" ? blogsResult.value.data : [];
+      const blogs = Array.isArray(blogsPayload)
+        ? blogsPayload
+        : blogsPayload.blogs || [];
+      const caseStudies =
+        caseStudiesResult.status === "fulfilled" &&
+        Array.isArray(caseStudiesResult.value.data)
+          ? caseStudiesResult.value.data
+          : [];
+
+      if (
+        [appointmentsResult, blogsResult, caseStudiesResult].some(
+          (result) => result.status === "rejected"
+        )
+      ) {
+        toast.error("Some dashboard data could not be loaded");
+      }
 
       // Calculate stats
       const today = new Date().toDateString();
@@ -217,7 +234,6 @@ const Dashboard = () => {
       console.error("Error fetching dashboard data:", error);
       toast.error("Failed to load dashboard data");
     } finally {
-      setLoading(false);
       setRefreshing(false);
     }
   };
@@ -428,22 +444,6 @@ const Dashboard = () => {
     );
   };
 
-  if (loading) {
-    return (
-      <div className="flex min-h-[360px] items-center justify-center">
-        <div className="text-center">
-          <div className="relative">
-            <div className="w-20 h-20 rounded-full border-4 border-indigo-200 border-t-indigo-600"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <FaHeartbeat className="w-8 h-8 text-indigo-600" />
-            </div>
-          </div>
-          <p className="mt-4 text-gray-600 font-medium">Loading dashboard...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="relative min-h-screen">
       {/* Header */}
@@ -459,7 +459,11 @@ const Dashboard = () => {
                 className="p-2 hover:bg-white rounded-full"
                 disabled={refreshing}
               >
-                <MdRefresh className="w-5 h-5 text-gray-500" />
+                <MdRefresh
+                  className={`w-5 h-5 text-gray-500 ${
+                    refreshing ? "animate-spin" : ""
+                  }`}
+                />
               </button>
             </h1>
             <p className="text-gray-500 mt-1">Welcome back, Dr. Ankush Garg</p>

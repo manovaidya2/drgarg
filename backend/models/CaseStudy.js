@@ -44,7 +44,11 @@ const caseStudySchema = new mongoose.Schema(
       default: [],
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    autoIndex: false,
+    autoCreate: false,
+  }
 );
 
 export default mongoose.model("CaseStudy", caseStudySchema);

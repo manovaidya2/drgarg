@@ -13,6 +13,7 @@ import EditCaseStudy from "./pages/CaseStudyEdit";
 import CaseStudyEdit from "./pages/CaseStudyEdit";
 import GalleryManager from "./pages/GalleryManager";
 import AuthorProfile from "./pages/AuthorProfile";
+import { Toaster } from "react-hot-toast";
 
 
 
@@ -35,8 +36,20 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
-      {/* Move ToastContainer **outside Router** so it always exists */}
-      
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            borderRadius: "8px",
+            background: "#ffffff",
+            color: "#172033",
+            boxShadow: "0 12px 30px rgba(15, 23, 42, 0.16)",
+          },
+          success: { duration: 3000 },
+          error: { duration: 4500 },
+        }}
+      />
     </>
   );
 }
