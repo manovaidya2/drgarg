@@ -79,7 +79,7 @@ const publicBlogFilter = {
 };
 
 const publicBlogFields =
-  "title slug category date image shortDescription createdAt metaTitle metaDescription content publishedDate modifiedDate";
+  "title slug category date shortDescription createdAt metaTitle metaDescription publishedDate modifiedDate";
 
 const getBlogListData = async (requestUrl = "/blog") => {
   const parsedUrl = new URL(requestUrl, siteUrl);
@@ -93,17 +93,14 @@ const getBlogListData = async (requestUrl = "/blog") => {
     filter.category = category;
   }
 
-  const [blogs, total, categories] = await Promise.all([
-    Blog.find(filter)
-      .select(publicBlogFields)
-      .sort({ createdAt: -1 })
-      .allowDiskUse(true)
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .lean(),
-    Blog.countDocuments(filter),
-    Blog.distinct("category", publicBlogFilter),
-  ]);
+  const blogs = await Blog.find(filter)
+    .select(publicBlogFields)
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .lean();
+  const total = await Blog.countDocuments(filter);
+  const categories = await Blog.distinct("category", publicBlogFilter);
 
   return {
     blogs,
@@ -202,20 +199,8 @@ const buildInitialData = async (reqPath) => {
     const slug = decodeURIComponent(blogMatch[1]);
     const blog = await Blog.findOne({ slug, ...publicBlogFilter }).lean();
     const authorProfile = await getCentralAuthorProfile();
-    const relatedPosts = blog?.category
-      ? await Blog.find({
-          ...publicBlogFilter,
-          category: blog.category,
-          slug: { $ne: slug },
-        })
-          .select("title slug category date image shortDescription createdAt metaTitle metaDescription")
-          .sort({ createdAt: -1 })
-          .allowDiskUse(true)
-          .limit(4)
-          .lean()
-      : [];
 
-    return { blog, relatedPosts, authorProfile };
+    return { blog, relatedPosts: [], authorProfile };
   }
 
   if (normalizedPath === "/case-study") {
@@ -237,10 +222,21 @@ app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
-app.use("/uploads", express.static("uploads"));
+app.use(
+  "/uploads",
+  express.static("uploads", {
+    maxAge: "30d",
+    immutable: true,
+  })
+);
 
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(process.env.MONGODB_URI, {
+    // Indexes are managed separately. Re-checking them during startup was
+    // blocking the first Blog model query even though the indexes exist.
+    autoIndex: false,
+    autoCreate: false,
+  })
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("❌ MongoDB Error:", err.message));
 
@@ -264,7 +260,17 @@ app.use("/", sitemapRoute);
 
 /* Static Frontend */
 if (fs.existsSync(frontendDist)) {
-  app.use(express.static(frontendDist, { index: false }));
+  app.use(
+    express.static(frontendDist, {
+      index: false,
+      maxAge: "1d",
+      setHeaders: (res, filePath) => {
+        if (/\.(?:js|css|woff2?|png|jpe?g|webp|svg|ico)$/i.test(filePath)) {
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        }
+      },
+    })
+  );
 
   app.get("*", async (req, res, next) => {
     if (req.path.startsWith("/api")) {
@@ -314,6 +320,7 @@ if (fs.existsSync(frontendDist)) {
       }
 
       if (spaRouteRegex.some((rx) => rx.test(normalizedPath))) {
+        res.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
         return res.status(200).send(renderedHtml);
       }
 

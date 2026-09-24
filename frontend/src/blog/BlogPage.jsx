@@ -6,6 +6,9 @@ import { useSsrData } from "../ssrData";
 
 const SITE_URL = "https://drankushgarg.in";
 const PAGE_SIZE = 9;
+const blogPageCache = new Map();
+
+const getBlogPageKey = (category, page) => `${category}:${page}`;
 
 const stripHtml = (value = "") =>
   String(value)
@@ -70,6 +73,7 @@ export default function BlogPage() {
   const ssrData = useSsrData();
   const activeCategory = getCategoryFromSearch(location.search);
   const currentPage = getPageFromSearch(location.search);
+  const pageKey = getBlogPageKey(activeCategory, currentPage);
 
   const initialBlogs = Array.isArray(ssrData.blogs)
     ? ssrData.blogs.filter(isPublicBlog)
@@ -88,22 +92,67 @@ export default function BlogPage() {
       totalPages: Math.max(1, Math.ceil(initialBlogs.length / PAGE_SIZE)),
     }
   );
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(initialBlogs.length === 0);
+  const [loadError, setLoadError] = useState("");
+  const [loadedPageKey, setLoadedPageKey] = useState(() => {
+    const ssrCategory = ssrData.activeCategory || "All";
+    const ssrPage = ssrData.pagination?.page || 1;
+    return initialBlogs.length > 0
+      ? getBlogPageKey(ssrCategory, ssrPage)
+      : null;
+  });
 
   useEffect(() => {
+    let ignore = false;
+    const controller = new AbortController();
+
     const fetchBlogs = async () => {
       if (typeof window === "undefined") return;
 
+      if (loadedPageKey === pageKey) {
+        blogPageCache.set(pageKey, {
+          blogs,
+          categories,
+          pagination,
+        });
+        return;
+      }
+
+      const cachedPage = blogPageCache.get(pageKey);
+      if (cachedPage) {
+        setBlogs(cachedPage.blogs);
+        setCategories(cachedPage.categories);
+        setPagination(cachedPage.pagination);
+        setLoadedPageKey(pageKey);
+        return;
+      }
+
       try {
-        setLoading(true);
+        setLoadError("");
+        setLoading(blogs.length === 0);
         const params = new URLSearchParams();
         params.set("limit", String(PAGE_SIZE));
         params.set("page", String(currentPage));
         if (activeCategory !== "All") params.set("category", activeCategory);
 
-        const res = await axiosInstance.get(`/blogs?${params.toString()}`);
+        const res = await axiosInstance.get(`/blogs?${params.toString()}`, {
+          signal: controller.signal,
+        });
+        if (ignore) return;
+
         const responseBlogs = Array.isArray(res.data?.blogs) ? res.data.blogs : res.data;
-        setBlogs((Array.isArray(responseBlogs) ? responseBlogs : []).filter(isPublicBlog));
+        const nextBlogs = (Array.isArray(responseBlogs) ? responseBlogs : []).filter(
+          isPublicBlog
+        );
+        const nextCategories = (Array.isArray(res.data?.categories)
+          ? res.data.categories
+          : categories
+        )
+          .filter((category) => category && !isOngoingCategory(category))
+          .sort();
+        const nextPagination = res.data?.pagination || pagination;
+
+        setBlogs(nextBlogs);
         setCategories((previousCategories) =>
           (Array.isArray(res.data?.categories)
             ? res.data.categories
@@ -115,15 +164,28 @@ export default function BlogPage() {
         if (res.data?.pagination) {
           setPagination(res.data.pagination);
         }
+        setLoadedPageKey(pageKey);
+        blogPageCache.set(pageKey, {
+          blogs: nextBlogs,
+          categories: nextCategories,
+          pagination: nextPagination,
+        });
       } catch (error) {
-        console.error("Error fetching blogs", error);
+        if (error.code !== "ERR_CANCELED") {
+          console.error("Error fetching blogs", error);
+          setLoadError("Articles could not be loaded. Please refresh the page.");
+        }
       } finally {
-        setLoading(false);
+        if (!ignore) setLoading(false);
       }
     };
 
     fetchBlogs();
-  }, [activeCategory, currentPage]);
+    return () => {
+      ignore = true;
+      controller.abort();
+    };
+  }, [activeCategory, currentPage, pageKey]);
 
   const categoryOptions = useMemo(() => {
     const blogCategories = blogs
@@ -316,13 +378,28 @@ export default function BlogPage() {
               ))}
             </nav>
 
-            {loading && (
-              <p className="mb-6 text-[#40514d]" role="status">
-                Updating articles...
-              </p>
-            )}
-
-            {hasArticles ? (
+            {loading && !hasArticles ? (
+              <div
+                className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+                role="status"
+                aria-label="Loading articles"
+              >
+                {Array.from({ length: 6 }, (_, index) => (
+                  <div
+                    key={index}
+                    className="min-h-[320px] animate-pulse rounded-[8px] border border-[#e6e0d6] bg-[#fbfaf7] p-6"
+                    aria-hidden="true"
+                  >
+                    <div className="h-3 w-24 rounded bg-[#eadfca]" />
+                    <div className="mt-8 h-6 w-full rounded bg-[#e4e2dc]" />
+                    <div className="mt-3 h-6 w-4/5 rounded bg-[#e4e2dc]" />
+                    <div className="mt-8 h-4 w-full rounded bg-[#ebe8e1]" />
+                    <div className="mt-3 h-4 w-full rounded bg-[#ebe8e1]" />
+                    <div className="mt-3 h-4 w-2/3 rounded bg-[#ebe8e1]" />
+                  </div>
+                ))}
+              </div>
+            ) : hasArticles ? (
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {blogs.map((blog) => (
                   <article
@@ -347,7 +424,7 @@ export default function BlogPage() {
                         </div>
 
                         <span className="text-[12px] text-[#0b3b2e] whitespace-nowrap">
-                          {getReadTime(blog.content || blog.shortDescription)} min read
+                          {getReadTime(blog.shortDescription)} min read
                         </span>
                       </div>
 
@@ -391,7 +468,7 @@ export default function BlogPage() {
             ) : (
               <div className="text-center py-12">
                 <p className="text-[#40514d] mb-4">
-                  No published articles are available yet.
+                  {loadError || "No published articles are available yet."}
                 </p>
                 {activeCategory !== "All" && (
                   <Link

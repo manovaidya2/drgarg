@@ -36,7 +36,11 @@ const blogSchema = new mongoose.Schema(
     noIndex: { type: Boolean, default: false },
     noFollow: { type: Boolean, default: false }
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    autoIndex: false,
+    autoCreate: false,
+  }
 );
 
 blogSchema.index({ published: 1, status: 1, category: 1, createdAt: -1 });

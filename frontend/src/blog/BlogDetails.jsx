@@ -43,6 +43,10 @@ const DEFAULT_AUTHOR_PROFILE = {
   phone: "",
 };
 
+const blogDetailCache = new Map();
+const relatedPostsCache = new Map();
+let authorProfileCache = null;
+
 const getReadingMinutes = (content) => {
   const wordsPerMinute = 200;
   const text = content?.replace(/<[^>]*>/g, '') || '';
@@ -161,53 +165,127 @@ export default function BlogDetails() {
 
   // Fetch blog data
   useEffect(() => {
-    const fetchBlog = async () => {
-      try {
-        setLoading(true);
-        const res = await axiosInstance.get(`/blogs/${slug}`);
-        const blogData = res.data;
-        
-        // Calculate reading time
-        const time = calculateReadingTime(blogData.content);
-        setReadingTime(time);
-        
-        // Parse content
-        const parsedHtml = parseHtmlContent(blogData.content);
-        setBlog({ ...blogData, content: parsedHtml });
-        
-        // Generate table of contents
-        const toc = generateTableOfContents(blogData.content);
-        setTableOfContents(toc);
+    let ignore = false;
+    const controller = new AbortController();
+    const relatedCacheKey = (category) => `${category || "all"}:${slug}`;
 
-        // Fetch related posts
-        if (blogData?.category) {
-          try {
-            const allBlogsRes = await axiosInstance.get(`/blogs`);
-            const related = allBlogsRes.data
-              .filter(
-                (post) => post.category === blogData.category && post.slug !== slug
-              )
-              .slice(0, 4);
-            setRelatedPosts(related);
-          } catch (error) {
-            console.error("Error fetching related posts:", error);
-          }
-        }
+    const applyBlogData = (blogData) => {
+      const parsedHtml = parseHtmlContent(blogData.content);
+      const nextBlog = { ...blogData, content: parsedHtml };
+
+      setBlog(nextBlog);
+      setReadingTime(calculateReadingTime(blogData.content));
+      setTableOfContents(generateTableOfContents(blogData.content));
+      setLoading(false);
+      blogDetailCache.set(slug, nextBlog);
+      return nextBlog;
+    };
+
+    const fetchRelatedPosts = async (category) => {
+      if (!category || isOngoingCategory(category)) return;
+
+      const cacheKey = relatedCacheKey(category);
+      const cachedRelatedPosts = relatedPostsCache.get(cacheKey);
+      if (cachedRelatedPosts) {
+        setRelatedPosts(cachedRelatedPosts);
+        return;
+      }
+
+      try {
+        const relatedParams = new URLSearchParams({
+          category,
+          excludeSlug: slug,
+          limit: "4",
+        });
+        const relatedRes = await axiosInstance.get(`/blogs?${relatedParams.toString()}`, {
+          signal: controller.signal,
+        });
+        if (ignore) return;
+        const related = Array.isArray(relatedRes.data?.blogs)
+          ? relatedRes.data.blogs
+          : [];
+        relatedPostsCache.set(cacheKey, related);
+        setRelatedPosts(related);
       } catch (error) {
-        console.error("Blog not found", error);
-      } finally {
+        if (error.code !== "ERR_CANCELED") {
+          console.error("Error fetching related posts:", error);
+        }
+      }
+    };
+
+    const fetchBlog = async () => {
+      if (initialBlog?.slug === slug) {
+        applyBlogData(initialBlog);
+
+        if (ssrData.relatedPosts?.length) {
+          setRelatedPosts(ssrData.relatedPosts);
+          relatedPostsCache.set(relatedCacheKey(initialBlog.category), ssrData.relatedPosts);
+          return;
+        }
+
+        await fetchRelatedPosts(initialBlog.category);
+        return;
+      }
+
+      const cachedBlog = blogDetailCache.get(slug);
+      if (cachedBlog) {
+        setBlog(cachedBlog);
+        setReadingTime(calculateReadingTime(cachedBlog.content));
+        setTableOfContents(generateTableOfContents(cachedBlog.content));
         setLoading(false);
+        await fetchRelatedPosts(cachedBlog.category);
+        return;
+      }
+
+      try {
+        if (!blogDetailCache.has(slug)) {
+          setLoading((currentLoading) => currentLoading || !blog);
+        }
+
+        const res = await axiosInstance.get(`/blogs/${slug}`, {
+          signal: controller.signal,
+        });
+        if (ignore) return;
+
+        const blogData = res.data;
+        applyBlogData(blogData);
+        await fetchRelatedPosts(blogData?.category);
+      } catch (error) {
+        if (error.code !== "ERR_CANCELED") {
+          console.error("Blog not found", error);
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
       }
     };
 
     fetchBlog();
+
+    return () => {
+      ignore = true;
+      controller.abort();
+    };
   }, [slug, parseHtmlContent]);
 
   useEffect(() => {
+    if (ssrData.authorProfile) {
+      authorProfileCache = ssrData.authorProfile;
+      setAuthorProfile(ssrData.authorProfile);
+      return;
+    }
+
+    if (authorProfileCache) {
+      setAuthorProfile(authorProfileCache);
+      return;
+    }
+
     const fetchAuthorProfile = async () => {
       try {
         const res = await axiosInstance.get("/author-profile");
-        setAuthorProfile(res.data || DEFAULT_AUTHOR_PROFILE);
+        authorProfileCache = res.data || DEFAULT_AUTHOR_PROFILE;
+        setAuthorProfile(authorProfileCache);
       } catch (error) {
         console.error("Error fetching author profile", error);
       }

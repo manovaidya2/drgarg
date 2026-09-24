@@ -8,7 +8,7 @@ const publicBlogFilter = {
 };
 
 const publicBlogFields =
-  "title slug category date image shortDescription createdAt metaTitle metaDescription content publishedDate modifiedDate";
+  "title slug category date shortDescription createdAt metaTitle metaDescription publishedDate modifiedDate";
 
 const normalizePage = (value) => {
   const page = Number.parseInt(value, 10);
@@ -58,7 +58,8 @@ export const createBlog = async (req, res) => {
 // GET ALL
 export const getBlogs = async (req, res) => {
   try {
-    const { category } = req.query;
+    res.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
+    const { category, excludeSlug } = req.query;
     const page = normalizePage(req.query.page);
     const limit = normalizeLimit(req.query.limit);
     const filter = { ...publicBlogFilter };
@@ -67,23 +68,26 @@ export const getBlogs = async (req, res) => {
       filter.category = category;
     }
 
+    if (excludeSlug) {
+      filter.slug = { $ne: excludeSlug };
+    }
+
     const query = Blog.find(filter)
       .select(publicBlogFields)
       .sort({ createdAt: -1 })
-      .allowDiskUse(true)
       .lean();
 
     if (limit) {
       query.skip((page - 1) * limit).limit(limit);
     }
 
-    const [blogs, total, allCategories] = await Promise.all([
-      query,
-      Blog.countDocuments(filter),
-      Blog.distinct("category", publicBlogFilter),
-    ]);
+    // This Atlas connection can stall when multiple collection reads are
+    // started together. These small indexed reads are faster sequentially.
+    const blogs = await query;
+    const total = await Blog.countDocuments(filter);
+    const allCategories = await Blog.distinct("category", publicBlogFilter);
 
-    if (category || req.query.page) {
+    if (category || excludeSlug || req.query.page || limit) {
       return res.status(200).json({
         blogs,
         categories: allCategories.filter(Boolean).sort(),
@@ -109,27 +113,32 @@ export const getBlogs = async (req, res) => {
 // GET BY SLUG (with ID detection)
 export const getBlogBySlug = async (req, res) => {
   try {
+    res.set("Cache-Control", "public, max-age=120, stale-while-revalidate=600");
     const { slug } = req.params;
     
     // Check if the parameter is a valid MongoDB ObjectId
     if (mongoose.Types.ObjectId.isValid(slug)) {
       // If it's a valid ID, try to find by ID first
-      const blogById = await Blog.findOne({ _id: slug, ...publicBlogFilter });
+      const blogById = await Blog.findOne({ _id: slug, ...publicBlogFilter }).lean();
       if (blogById) {
         // Increment view count
-        await Blog.findByIdAndUpdate(slug, { $inc: { views: 1 } });
+        Blog.findByIdAndUpdate(slug, { $inc: { views: 1 } }).catch((error) =>
+          console.error("View count update failed:", error)
+        );
         return res.json(blogById);
       }
     }
     
     // If not a valid ID or no blog found by ID, try to find by slug
-    const blog = await Blog.findOne({ slug: slug, ...publicBlogFilter });
+    const blog = await Blog.findOne({ slug: slug, ...publicBlogFilter }).lean();
     if (!blog) {
       return res.status(404).json({ message: "Blog not found" });
     }
     
     // Increment view count
-    await Blog.findOneAndUpdate({ slug: slug }, { $inc: { views: 1 } });
+    Blog.findOneAndUpdate({ slug: slug }, { $inc: { views: 1 } }).catch((error) =>
+      console.error("View count update failed:", error)
+    );
     
     res.json(blog);
   } catch (error) {
