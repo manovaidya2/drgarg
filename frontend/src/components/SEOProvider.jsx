@@ -16,7 +16,7 @@ const defaultSEO = {
   robots: "index, follow",
 };
 
-export const GlobalSEO = ({ seo = {}, includeAnalytics = false }) => {
+export const GlobalSEO = ({ seo = {} }) => {
   const meta = { ...defaultSEO, ...seo };
   const structuredData = Array.isArray(meta.jsonLd)
     ? meta.jsonLd
@@ -68,21 +68,6 @@ export const GlobalSEO = ({ seo = {}, includeAnalytics = false }) => {
         </script>
       ))}
 
-      {includeAnalytics && (
-        <>
-          {/* Google Analytics (GA4) */}
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-2KLEJ7N8WS"
-          />
-          <script>{`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){window.dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-2KLEJ7N8WS');
-          `}</script>
-        </>
-      )}
     </Helmet>
   );
 };

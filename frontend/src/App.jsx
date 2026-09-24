@@ -33,7 +33,7 @@ import ThankYou from "./pages/ThankYou";
 export default function App() {
   return (
     <div className="font-sans">
-      <GlobalSEO includeAnalytics /> {/* Default global SEO */}
+      <GlobalSEO /> {/* Default global SEO */}
       <Header />
       <ScrollToTop />
       <main className="min-h-screen">
