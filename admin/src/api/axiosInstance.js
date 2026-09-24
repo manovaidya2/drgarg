@@ -1,10 +1,16 @@
 import axios from "axios";
 
-const API_BASE_URL =
+const normalizeApiBaseUrl = (value) => {
+  const baseUrl = value.replace(/\/+$/, "");
+  return /\/api$/i.test(baseUrl) ? baseUrl : `${baseUrl}/api`;
+};
+
+const API_BASE_URL = normalizeApiBaseUrl(
   import.meta.env.VITE_API_URL ||
-  (import.meta.env.DEV
-    ? "http://localhost:5003/api"
-    : "https://api.drankushgarg.com/api");
+    (import.meta.env.DEV
+      ? "http://localhost:5003"
+      : "https://api.drankushgarg.com"),
+);
 
 // Axios instance for API calls
 const axiosInstance = axios.create({
