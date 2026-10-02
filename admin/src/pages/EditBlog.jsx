@@ -24,12 +24,27 @@ const EditBlog = () => {
     faq: [{ question: '', answer: '' }],
     published: false,
     status: 'draft',
+    metaTitle: '',
+    metaDescription: '',
+    metaKeywords: '',
+    canonicalUrl: '',
+    publishedDate: '',
+    ogTitle: '',
+    ogDescription: '',
+    ogImage: '',
+    twitterTitle: '',
+    twitterDescription: '',
+    twitterImage: '',
+    noIndex: false,
+    noFollow: false,
   });
   const [loading, setLoading] = useState(true);
   const [contentLoading, setContentLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [existingImageUrl, setExistingImageUrl] = useState('');
+  const [showSEOSection, setShowSEOSection] = useState(true);
+  const [showAdvancedSEO, setShowAdvancedSEO] = useState(false);
 
   // Image link states
   const [selectedImage, setSelectedImage] = useState(null);
@@ -70,6 +85,9 @@ const EditBlog = () => {
       // Format date for input
       if (blog.date) {
         blog.date = new Date(blog.date).toISOString().split('T')[0];
+      }
+      if (blog.publishedDate) {
+        blog.publishedDate = new Date(blog.publishedDate).toISOString().split('T')[0];
       }
 
       setExistingImageUrl(blog.imagePreviewUrl || '');
@@ -338,13 +356,56 @@ const EditBlog = () => {
 
   // Handle input changes
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
       // Auto-generate slug from title
-      ...(name === 'title' && { slug: slugify(value, { lower: true, strict: true }) })
+      ...(name === 'title' && { slug: slugify(value, { lower: true, strict: true }) }),
+      ...(name === 'title' && !prev.metaTitle && { metaTitle: value }),
+      ...(name === 'shortDescription' && !prev.metaDescription && {
+        metaDescription: value.length > 160 ? `${value.substring(0, 157)}...` : value,
+      }),
     }));
+  };
+
+  const handleAutoGenerateSEO = () => {
+    setFormData(prev => ({
+      ...prev,
+      metaTitle: prev.title,
+      metaDescription: prev.shortDescription?.length > 160
+        ? `${prev.shortDescription.substring(0, 157)}...`
+        : prev.shortDescription,
+      canonicalUrl: `https://drankushgarg.in/blog/${prev.slug}`,
+      ogTitle: prev.title,
+      ogDescription: prev.shortDescription,
+      ogImage: prev.image || prev.ogImage,
+      twitterTitle: prev.title,
+      twitterDescription: prev.shortDescription,
+      twitterImage: prev.image || prev.twitterImage,
+    }));
+  };
+
+  const validateSEO = () => {
+    const errors = [];
+
+    if (formData.metaTitle && formData.metaTitle.length > 60) {
+      errors.push(`Meta title should be less than 60 characters (currently: ${formData.metaTitle.length})`);
+    }
+
+    if (formData.metaDescription && formData.metaDescription.length > 160) {
+      errors.push(`Meta description should be less than 160 characters (currently: ${formData.metaDescription.length})`);
+    }
+
+    if (!formData.metaTitle && formData.title) {
+      errors.push('Meta title is recommended for better SEO');
+    }
+
+    if (!formData.metaDescription && formData.shortDescription) {
+      errors.push('Meta description is recommended for better SEO');
+    }
+
+    return errors;
   };
 
   // FAQ handlers
@@ -533,7 +594,12 @@ const removeFaq = (index) => {
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      setFormData({ ...formData, image: event.target.result });
+      setFormData({
+        ...formData,
+        image: event.target.result,
+        ogImage: event.target.result,
+        twitterImage: event.target.result,
+      });
     };
     reader.readAsDataURL(file);
   };
@@ -543,6 +609,13 @@ const removeFaq = (index) => {
     e.preventDefault();
     const action = e.nativeEvent.submitter?.value || formData.status || 'draft';
     const isDraft = action === 'draft';
+
+    const seoErrors = isDraft ? [] : validateSEO();
+    if (seoErrors.length > 0) {
+      if (!window.confirm(`SEO Recommendations:\n${seoErrors.join('\n')}\n\nDo you want to continue anyway?`)) {
+        return;
+      }
+    }
     
     // Remove selection class and resize handles before saving
     if (selectedImage) {
@@ -559,6 +632,10 @@ const removeFaq = (index) => {
       content: htmlContent,
       published: !isDraft,
       status: isDraft ? 'draft' : 'published',
+      publishedDate: isDraft
+        ? null
+        : formData.publishedDate || formData.date || new Date(),
+      modifiedDate: new Date(),
     };
 
     try {
@@ -690,6 +767,200 @@ const removeFaq = (index) => {
             onChange={handleChange}
             className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
           />
+
+          {/* SEO Section Toggle */}
+          <div className="border rounded-xl overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setShowSEOSection(!showSEOSection)}
+              className="w-full px-4 py-3 bg-blue-50 hover:bg-blue-100 font-semibold text-left flex justify-between items-center"
+            >
+              <span>SEO Settings (Meta Tags & Social Media)</span>
+              <span>{showSEOSection ? 'Hide' : 'Show'}</span>
+            </button>
+
+            {showSEOSection && (
+              <div className="p-4 space-y-4">
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={handleAutoGenerateSEO}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                  >
+                    Auto-generate from content
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Meta Title
+                      <span className="text-xs text-gray-500 ml-2">({formData.metaTitle?.length || 0}/60 chars)</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="metaTitle"
+                      value={formData.metaTitle || ''}
+                      onChange={handleChange}
+                      placeholder="SEO Title (leave blank to use blog title)"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                    />
+                    {formData.metaTitle && formData.metaTitle.length > 60 && (
+                      <p className="text-xs text-red-500 mt-1">Meta title is too long. Keep under 60 characters.</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Meta Description
+                      <span className="text-xs text-gray-500 ml-2">({formData.metaDescription?.length || 0}/160 chars)</span>
+                    </label>
+                    <textarea
+                      name="metaDescription"
+                      value={formData.metaDescription || ''}
+                      onChange={handleChange}
+                      placeholder="SEO Description (leave blank to use short description)"
+                      rows="2"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                    />
+                    {formData.metaDescription && formData.metaDescription.length > 160 && (
+                      <p className="text-xs text-red-500 mt-1">Meta description is too long. Keep under 160 characters.</p>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Meta Keywords</label>
+                  <input
+                    type="text"
+                    name="metaKeywords"
+                    value={formData.metaKeywords || ''}
+                    onChange={handleChange}
+                    placeholder="keyword1, keyword2, keyword3"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Separate keywords with commas</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Canonical URL</label>
+                  <input
+                    type="url"
+                    name="canonicalUrl"
+                    value={formData.canonicalUrl || ''}
+                    onChange={handleChange}
+                    placeholder="https://drankushgarg.in/blog/your-slug"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Published Date</label>
+                  <input
+                    type="date"
+                    name="publishedDate"
+                    value={formData.publishedDate || ''}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setShowAdvancedSEO(!showAdvancedSEO)}
+                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  {showAdvancedSEO ? 'Hide' : 'Show'} Social Media & Advanced Settings
+                </button>
+
+                {showAdvancedSEO && (
+                  <div className="space-y-4 pt-2">
+                    <div className="border-t pt-4">
+                      <h4 className="font-semibold text-gray-800 mb-3">Open Graph (Facebook, LinkedIn)</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">OG Title</label>
+                          <input
+                            type="text"
+                            name="ogTitle"
+                            value={formData.ogTitle || ''}
+                            onChange={handleChange}
+                            placeholder="Social Media Title"
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">OG Description</label>
+                          <textarea
+                            name="ogDescription"
+                            value={formData.ogDescription || ''}
+                            onChange={handleChange}
+                            placeholder="Social Media Description"
+                            rows="2"
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="border-t pt-4">
+                      <h4 className="font-semibold text-gray-800 mb-3">Twitter Card</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Twitter Title</label>
+                          <input
+                            type="text"
+                            name="twitterTitle"
+                            value={formData.twitterTitle || ''}
+                            onChange={handleChange}
+                            placeholder="Twitter Card Title"
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Twitter Description</label>
+                          <textarea
+                            name="twitterDescription"
+                            value={formData.twitterDescription || ''}
+                            onChange={handleChange}
+                            placeholder="Twitter Card Description"
+                            rows="2"
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="border-t pt-4">
+                      <h4 className="font-semibold text-gray-800 mb-3">Indexing Options</h4>
+                      <div className="flex flex-col gap-3 md:flex-row md:gap-6">
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="noIndex"
+                            checked={Boolean(formData.noIndex)}
+                            onChange={handleChange}
+                            className="rounded"
+                          />
+                          <span className="text-sm">No Index (hide from search engines)</span>
+                        </label>
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="noFollow"
+                            checked={Boolean(formData.noFollow)}
+                            onChange={handleChange}
+                            className="rounded"
+                          />
+                          <span className="text-sm">No Follow (do not follow links)</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* FAQ Section */}
 <div className="border rounded-xl p-4 bg-gray-50">
