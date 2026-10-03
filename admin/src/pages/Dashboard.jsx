@@ -48,6 +48,8 @@ import {
 import axiosInstance from "../api/axiosInstance";
 import { format, formatDistance } from "date-fns";
 import { toast } from "react-hot-toast";
+import ContentTracker from "../components/ContentTracker";
+import { buildContentDays, dateKey, isPublishedBlog } from "../utils/contentTracker";
 
 // Register ChartJS components
 ChartJS.register(
@@ -66,6 +68,9 @@ ChartJS.register(
 const Dashboard = () => {
   const [role, setRole] = useState("admin");
   const [refreshing, setRefreshing] = useState(false);
+  const [contentRecords, setContentRecords] = useState({ blogs: [], caseStudies: [] });
+  const [contentError, setContentError] = useState(false);
+  const [contentLoaded, setContentLoaded] = useState(false);
   const [stats, setStats] = useState({
     appointments: { total: 0, today: 0, upcoming: 0, completed: 0, growth: 0 },
     blogs: { total: 0, published: 0, drafts: 0, growth: 0 },
@@ -95,7 +100,7 @@ const Dashboard = () => {
       const [appointmentsResult, blogsResult, caseStudiesResult] =
         await Promise.allSettled([
           axiosInstance.get("/appointments/admin/all"),
-          axiosInstance.get("/blogs?admin=true&limit=50&page=1"),
+          axiosInstance.get("/blogs?admin=true"),
           axiosInstance.get("/case-studies?summary=true"),
         ]);
 
@@ -113,6 +118,11 @@ const Dashboard = () => {
         Array.isArray(caseStudiesResult.value.data)
           ? caseStudiesResult.value.data
           : [];
+
+      const contentFailed = blogsResult.status === "rejected" || caseStudiesResult.status === "rejected";
+      setContentError(contentFailed);
+      setContentLoaded(true);
+      if (!contentFailed) setContentRecords({ blogs, caseStudies });
 
       if (
         [appointmentsResult, blogsResult, caseStudiesResult].some(
@@ -159,15 +169,13 @@ const Dashboard = () => {
         },
         blogs: {
           total: blogs.length,
-          published: blogs.filter(b => b.published !== false).length,
-          drafts: blogs.filter(b => b.published === false).length,
-          growth: ((blogs.length - (blogs.length * 0.8)) / (blogs.length || 1) * 100).toFixed(1)
+          published: blogs.filter(isPublishedBlog).length,
+          drafts: blogs.filter(b => !isPublishedBlog(b)).length,
         },
         caseStudies: {
           total: caseStudies.length,
           published: caseStudies.filter(c => c.published !== false).length,
           drafts: caseStudies.filter(c => c.published === false).length,
-          growth: ((caseStudies.length - (caseStudies.length * 0.9)) / (caseStudies.length || 1) * 100).toFixed(1)
         },
         users: {
           total: 1250,
@@ -231,6 +239,8 @@ const Dashboard = () => {
       });
 
     } catch (error) {
+      setContentError(true);
+      setContentLoaded(true);
       console.error("Error fetching dashboard data:", error);
       toast.error("Failed to load dashboard data");
     } finally {
@@ -269,11 +279,14 @@ const Dashboard = () => {
   };
 
   const barChartData = {
-    labels: ['Blogs', 'Case Studies', 'Appointments'],
+    labels: ['Blogs', 'Case Studies'],
     datasets: [
       {
         label: 'Current Month',
-        data: [stats.blogs.total, stats.caseStudies.total, stats.appointments.total],
+        data: (() => {
+          const days = buildContentDays(contentRecords.blogs, contentRecords.caseStudies, dateKey(new Date()).slice(0, 7));
+          return [days.reduce((sum, day) => sum + day.blogs.length, 0), days.reduce((sum, day) => sum + day.caseStudies.length, 0)];
+        })(),
         backgroundColor: [
           'rgba(34, 197, 94, 0.8)',
           'rgba(168, 85, 247, 0.8)',
@@ -551,6 +564,8 @@ const Dashboard = () => {
           subtitle={`${stats.users.new} new this week`}
         />
       </div>
+
+      <ContentTracker blogs={contentRecords.blogs} caseStudies={contentRecords.caseStudies} loading={refreshing || !contentLoaded} error={contentError} onRetry={fetchDashboardData} />
 
       {/* Charts Row */}
       <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
