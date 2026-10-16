@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useParams } from "react-router-dom";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -30,6 +30,8 @@ import TestimonialsPage from "./pages/TestimonialsPage";
 import TestimonialVideosPage from "./pages/TestimonialVideosPage";
 import ThankYou from "./pages/ThankYou";
 
+function BlogRoute() { const { slug } = useParams(); return <BlogDetails key={slug} />; }
+
 export default function App() {
   return (
     <div className="font-sans">
@@ -41,7 +43,7 @@ export default function App() {
           <Route path="/" element={<Homepage />} />
           <Route path="/about" element={<About />} />
           <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:slug" element={<BlogDetails />} />
+          <Route path="/blog/:slug" element={<BlogRoute />} />
           <Route path="/treatments" element={<Treatments />} />
           <Route path="/appointment" element={<Appointment />} />
           <Route path="/mindwellness" element={<MindwellnessPage />} />

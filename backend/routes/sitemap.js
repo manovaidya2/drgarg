@@ -18,9 +18,10 @@ router.get("/sitemap.xml", async (req, res) => {
     const blogs = await Blog.find(
       {
         published: { $ne: false },
-        status: { $nin: ["draft", "unpublished"] },
+        status: { $nin: ["draft", "archived", "unpublished", "ongoing", "Ongoing", "ONGOING"] },
+        noIndex: { $ne: true },
       },
-      "slug updatedAt createdAt"
+      "slug modifiedDate updatedAt createdAt"
     );
 
     const staticPages = [
@@ -58,7 +59,7 @@ router.get("/sitemap.xml", async (req, res) => {
       if (!blog.slug) return;
 
       const safeSlug = encodeURIComponent(blog.slug);
-      const lastmod = blog.updatedAt || blog.createdAt || new Date();
+      const lastmod = blog.modifiedDate || blog.updatedAt || blog.createdAt || new Date();
 
       xml += `
   <url>
@@ -71,6 +72,7 @@ router.get("/sitemap.xml", async (req, res) => {
     xml += `\n</urlset>`;
 
     res.set("Content-Type", "application/xml; charset=utf-8");
+    res.set('Cache-Control', 'no-cache');
     res.send(xml);
   } catch (err) {
     console.log(err);

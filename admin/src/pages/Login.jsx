@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
@@ -13,12 +13,8 @@ import {
   User,
 } from "lucide-react";
 
-const users = [
-  { username: "manovaidya", password: "manovaidya@123" },
-  { email: "abhi@123", password: "123" },
-  { email: "teacher@example.com", password: "123456" },
-  { email: "admin@example.com", password: "123456" },
-];
+import api from '../api/axiosInstance';
+import { clearCmsSession } from '../auth';
 
 const highlights = [
   "Secure access for content and appointments",
@@ -31,9 +27,33 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [sampleAvailable, setSampleAvailable] = useState(false);
   const [errors, setErrors] = useState({ username: "", password: "" });
-  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
+  useEffect(() => {
+    let active = true;
+    api.get('/cms-auth/options').then(({ data }) => {
+      if (active) setSampleAvailable(data.demoLoginEnabled === true);
+    }).catch(() => {});
+    return () => { active = false; };
+  }, []);
+  const finishLogin = (data) => {
+    sessionStorage.setItem('cms-token', data.token);
+    sessionStorage.setItem('cms-user', JSON.stringify(data.user));
+    toast.success('Login successful');
+    navigate(data.user.scopes.includes('clinic:admin') ? '/dashboard' : '/blog-list');
+  };
+  const handleSampleLogin = async () => {
+    setErrors({ username: '', password: '' });
+    setIsLoading(true);
+    clearCmsSession();
+    try { const { data } = await api.post('/cms-auth/demo-login'); finishLogin(data); }
+    catch (error) {
+      const message = error.response?.data?.message || 'Sample login is unavailable.';
+      setErrors({ username: message, password: '' });
+      toast.error(message);
+    } finally { setIsLoading(false); }
+  };
 
   const validateForm = () => {
     let isValid = true;
@@ -59,36 +79,19 @@ const Login = () => {
     return isValid;
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
-
     setIsLoading(true);
-
-    setTimeout(() => {
-      const user = users.find(
-        (u) => (u.username === username || u.email === username) && u.password === password
-      );
-
-      if (user) {
-        localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("username", username);
-        if (rememberMe) {
-          localStorage.setItem("rememberMe", "true");
-        }
-
-        toast.success("Login successful");
-        navigate("/dashboard");
-      } else {
-        setErrors({
-          username: "Invalid credentials",
-          password: "Invalid credentials",
-        });
-        toast.error("Invalid username or password");
-        setIsLoading(false);
-      }
-    }, 900);
+    clearCmsSession();
+    try {
+      const { data } = await api.post('/cms-auth/login', { username: username.trim(), password });
+      finishLogin(data);
+    } catch (error) {
+      const message = error.response?.data?.message || 'Unable to sign in.';
+      setErrors({ username: message, password: '' });
+      toast.error(message);
+    } finally { setIsLoading(false); }
   };
 
   const clearFieldError = (field) => {
@@ -251,19 +254,6 @@ const Login = () => {
                   )}
                 </div>
 
-                <div className="flex items-center justify-between gap-4">
-                  <label className="flex cursor-pointer items-center gap-3 text-sm font-semibold text-slate-600">
-                    <input
-                      type="checkbox"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
-                      className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
-                    />
-                    Remember me
-                  </label>
-                  <span className="text-sm font-semibold text-emerald-700">Contact admin</span>
-                </div>
-
                 <button
                   type="submit"
                   disabled={isLoading}
@@ -276,25 +266,14 @@ const Login = () => {
                     </>
                   ) : (
                     <>
-                      Sign in to dashboard
+                      Sign In
                       <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
                     </>
                   )}
                 </button>
+                {sampleAvailable && <button id="sample-admin-login" type="button" disabled={isLoading} onClick={handleSampleLogin} className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-5 text-sm font-semibold text-emerald-800 hover:bg-emerald-100 disabled:opacity-60"><ShieldCheck className="h-4 w-4" />Sample Admin Login</button>}
               </form>
 
-              <div className="mt-7 rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4">
-                <div className="flex items-start gap-3">
-                  <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-700" />
-                  <div>
-                    <p className="text-sm font-bold text-slate-800">Main account</p>
-                    <p className="mt-1 text-xs font-medium leading-5 text-slate-600">
-                      Username: <span className="font-bold text-slate-900">manovaidya</span> | Password:{" "}
-                      <span className="font-bold text-slate-900">manovaidya@123</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </section>

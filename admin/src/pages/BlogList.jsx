@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance";
 import toast from "react-hot-toast";
+import { canAccess } from '../auth';
 import {
   PencilIcon,
   TrashIcon,
@@ -18,6 +19,8 @@ const isDraftBlog = (blog) =>
 const BlogList = () => {
   const [blogs, setBlogs] = useState(blogListCache || []);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
   const [loading, setLoading] = useState(!blogListCache);
   const [error, setError] = useState("");
   const [deleteModal, setDeleteModal] = useState({
@@ -28,20 +31,21 @@ const BlogList = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetchBlogs(controller.signal);
-    return () => controller.abort();
-  }, []);
+    const timer = setTimeout(() => fetchBlogs(controller.signal), 250);
+    return () => { clearTimeout(timer); controller.abort(); };
+  }, [page, search]);
 
   const fetchBlogs = async (signal) => {
     try {
       setError("");
       const res = await axiosInstance.get(
-        "/blogs?admin=true&limit=50&page=1",
-        { signal }
+        '/blogs/cms',
+        { signal, params: { page, ...(/^[a-f0-9]{24}$/i.test(search) ? { id: search } : { q: search }) } }
       );
       const nextBlogs = Array.isArray(res.data) ? res.data : res.data.blogs || [];
       blogListCache = nextBlogs;
       setBlogs(nextBlogs);
+      setPagination(res.data.pagination);
     } catch (err) {
       if (err.code === "ERR_CANCELED") return;
       console.error("Failed to fetch blogs", err);
@@ -72,9 +76,7 @@ const BlogList = () => {
     }
   };
 
-  const filteredBlogs = blogs.filter((blog) =>
-    blog.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredBlogs = blogs;
 
   const formatDate = (date) =>
     new Date(date).toLocaleDateString("en-US", {
@@ -113,7 +115,7 @@ const BlogList = () => {
           </div>
           <div>
             <p className="text-gray-500 text-sm">Total Blogs</p>
-            <h2 className="text-2xl font-bold">{blogs.length}</h2>
+            <h2 className="text-2xl font-bold">{pagination.total}</h2>
           </div>
         </div>
 
@@ -159,10 +161,11 @@ const BlogList = () => {
         <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
         <input
           type="text"
-          placeholder="Search blogs..."
+          id="blog-search"
+          placeholder="Search by title, slug or post ID"
           className="w-full outline-none"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => { setSearch(e.target.value); setPage(1); }}
         />
       </div>
 
@@ -247,18 +250,21 @@ const BlogList = () => {
 
                 <td className="p-4 flex gap-3">
                   <Link
+                    data-testid={`edit-blog-${blog._id}`}
+                    title="Edit blog"
                     to={`/blogs/edit/${blog._id}`}
                     className="p-2 rounded-lg bg-indigo-100 hover:bg-indigo-200"
                   >
                     <PencilIcon className="h-4 w-4 text-indigo-600" />
                   </Link>
 
-                  <button
+                  {canAccess('clinic:admin') && <button
                     onClick={() => handleDeleteClick(blog)}
+                    title="Delete blog"
                     className="p-2 rounded-lg bg-red-100 hover:bg-red-200"
                   >
                     <TrashIcon className="h-4 w-4 text-red-600" />
-                  </button>
+                  </button>}
                 </td>
               </tr>
             ))}
@@ -276,6 +282,7 @@ const BlogList = () => {
       </div>
 
       {/* DELETE MODAL */}
+      <div className="mt-4 flex items-center justify-between gap-3"><button id="blogs-previous-page" type="button" disabled={page <= 1} onClick={() => setPage(page - 1)} className="cms-button">Previous</button><span className="text-sm">Page {page} of {pagination.totalPages}</span><button id="blogs-next-page" type="button" disabled={page >= pagination.totalPages} onClick={() => setPage(page + 1)} className="cms-button">Next</button></div>
       {deleteModal.isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
 

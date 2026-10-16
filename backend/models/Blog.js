@@ -5,9 +5,23 @@ const blogSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
+    previousSlugs: { type: [String], default: [] },
     category: String,
     date: { type: Date, default: Date.now },
     image: String,
+    imageAlt: String,
+    imageMediaId: String,
+    primaryKeyword: String,
+    authorName: String,
+    authorProfileUrl: String,
+    authorCredentials: String,
+    reviewedDate: Date,
+    medicalDisclaimer: String,
+    schemaEnabled: { type: Boolean, default: true },
+    revision: { type: Number, default: 0 },
+    currentRevisionId: mongoose.Schema.Types.ObjectId,
+    draftContent: mongoose.Schema.Types.Mixed,
+    lastVerification: mongoose.Schema.Types.Mixed,
     shortDescription: String,
     content: String,
     faq: [
@@ -30,8 +44,8 @@ const blogSchema = new mongoose.Schema(
     twitterTitle: { type: String },
     twitterDescription: { type: String },
     twitterImage: { type: String },
-    published: { type: Boolean, default: true },
-    status: { type: String, default: "published" },
+    published: { type: Boolean, default: false },
+    status: { type: String, enum: ['draft', 'published', 'archived'], default: "draft" },
     // For search engine indexing
     noIndex: { type: Boolean, default: false },
     noFollow: { type: Boolean, default: false }
@@ -69,7 +83,7 @@ blogSchema.pre('save', function(next) {
   }
   
   // Set modifiedDate to current date
-  this.modifiedDate = new Date();
+  if (!this.modifiedDate) this.modifiedDate = new Date();
   
   // Set canonicalUrl to blog URL if not provided
   if (!this.canonicalUrl && this.slug) {

@@ -7,6 +7,11 @@ import fs from "fs";
 import { fileURLToPath, pathToFileURL } from "url";
 
 import blogRoutes from "./routes/blogRoutes.js";
+import cmsAuthRoutes from './routes/cmsAuthRoutes.js';
+import blogMediaRoutes from './routes/blogMediaRoutes.js';
+import { requireScope } from './middleware/cmsAuth.js';
+import { readPreview } from './controllers/blogCmsController.js';
+import { normalizeContent } from './utils/blogValidation.js';
 import authorProfileRoutes from "./routes/authorProfileRoutes.js";
 import caseStudyRoutes from "./routes/caseStudyRoutes.js";
 import appointmentRoutes from "./routes/appointmentRoutes.js";
@@ -75,7 +80,7 @@ const truncateDescription = (value = "") => {
 
 const publicBlogFilter = {
   published: { $ne: false },
-  status: { $nin: ["draft", "unpublished", "ongoing", "Ongoing", "ONGOING"] },
+  status: { $nin: ["draft", "archived", "unpublished", "ongoing", "Ongoing", "ONGOING"] },
 };
 
 const publicBlogFields =
@@ -199,10 +204,11 @@ const buildInitialData = async (reqPath) => {
   const blogMatch = normalizedPath.match(/^\/blog\/([^/]+)$/);
   if (blogMatch) {
     const slug = decodeURIComponent(blogMatch[1]);
-    const blog = await Blog.findOne({ slug, ...publicBlogFilter }).lean();
+    const token = parsedUrl.searchParams.get('preview');
+    const blog = token ? await readPreview(token) : await Blog.findOne({ slug, ...publicBlogFilter }).select('-draftContent -currentRevisionId').lean();
     const authorProfile = await getCentralAuthorProfile();
 
-    return { blog, relatedPosts: [], authorProfile };
+    return { blog: blog?.slug === slug ? { ...blog, content: normalizeContent(blog.content), draftContent: undefined } : null, relatedPosts: [], authorProfile, preview: Boolean(token) };
   }
 
   if (normalizedPath === "/case-study") {
@@ -231,13 +237,13 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 app.use(
   "/uploads",
-  express.static("uploads", {
+  express.static(process.env.CMS_UPLOAD_DIR || path.join(__dirname, 'uploads'), {
     maxAge: "30d",
     immutable: true,
   })
 );
 
-mongoose
+if (path.resolve(process.argv[1] || '') === __filename) mongoose
   .connect(process.env.MONGODB_URI, {
     // Indexes are managed separately. Re-checking them during startup was
     // blocking the first Blog model query even though the indexes exist.
@@ -248,6 +254,13 @@ mongoose
   .catch((err) => console.error("❌ MongoDB Error:", err.message));
 
 /* API Routes */
+app.use('/api/cms-auth', cmsAuthRoutes);
+app.use('/api/media', blogMediaRoutes);
+app.use('/api', (req, res, next) => {
+  const privateRead = /^\/appointments\/admin(?:\/|$)/.test(req.path);
+  const unrelatedWrite = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method) && /^\/(case-studies|gallery|author-profile)(?:\/|$)/.test(req.path);
+  return privateRead || unrelatedWrite ? requireScope('clinic:admin')(req, res, next) : next();
+});
 app.use("/api/blogs", blogRoutes);
 app.use("/api/author-profile", authorProfileRoutes);
 app.use("/api/case-studies", caseStudyRoutes);
@@ -300,7 +313,17 @@ if (fs.existsSync(frontendDist)) {
         initialData = await buildInitialData(req.originalUrl);
       } catch (dataError) {
         console.error("SSR initial data failed:", dataError.message);
+        return res.status(503).set('Cache-Control', 'no-store').send('Content is temporarily unavailable.');
       }
+      const detailPath = /^\/blog\/[^/]+$/.test(normalizedPath);
+      const preview = Boolean(new URL(req.originalUrl, siteUrl).searchParams.get('preview'));
+      if (detailPath && !initialData.blog && !preview) {
+        const previousSlug = decodeURIComponent(normalizedPath.slice('/blog/'.length));
+        const renamed = await Blog.findOne({ previousSlugs: previousSlug, ...publicBlogFilter }).select('slug').lean();
+        if (renamed) return res.redirect(301, `/blog/${encodeURIComponent(renamed.slug)}`);
+      }
+      if (detailPath && !initialData.blog) return res.status(404).set('X-Robots-Tag', 'noindex').send('Article not found.');
+      if (preview) res.set({ 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow', 'Referrer-Policy': 'no-referrer' });
       let renderedHtml;
 
       try {
@@ -313,6 +336,7 @@ if (fs.existsSync(frontendDist)) {
             initialData,
           });
         } else {
+          if (detailPath) return res.status(503).set('Cache-Control', 'no-store').send('Article rendering is temporarily unavailable.');
           renderedHtml = renderHtmlWithSeo(
             indexHtml,
             await buildRequestSeo(normalizedPath)
@@ -320,6 +344,7 @@ if (fs.existsSync(frontendDist)) {
         }
       } catch (ssrError) {
         console.error("SSR render failed:", ssrError.message);
+        if (detailPath) return res.status(503).set('Cache-Control', 'no-store').send('Article rendering is temporarily unavailable.');
         renderedHtml = renderHtmlWithSeo(
           indexHtml,
           await buildRequestSeo(normalizedPath)
@@ -327,7 +352,7 @@ if (fs.existsSync(frontendDist)) {
       }
 
       if (spaRouteRegex.some((rx) => rx.test(normalizedPath))) {
-        res.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
+        if (!preview) res.set("Cache-Control", detailPath ? 'no-cache' : "public, max-age=60, stale-while-revalidate=300");
         return res.status(200).send(renderedHtml);
       }
 
@@ -355,6 +380,7 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5003;
 
-app.listen(PORT, () => {
+export { app };
+if (path.resolve(process.argv[1] || '') === __filename) app.listen(PORT, () => {
   console.log(`🚀 Backend running on http://localhost:${PORT}`);
 });

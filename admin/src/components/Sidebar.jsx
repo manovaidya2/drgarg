@@ -14,6 +14,8 @@ import {
 } from "react-icons/fa";
 import { MdHealthAndSafety } from "react-icons/md";
 import toast from "react-hot-toast";
+import { canAccess, clearCmsSession } from '../auth';
+import api from '../api/axiosInstance';
 
 const navItems = [
   { to: "/dashboard", icon: FaTachometerAlt, label: "Dashboard" },
@@ -29,7 +31,9 @@ const navItems = [
 const Sidebar = ({ collapsed = false, onToggle, isMobile = false, onNavigate }) => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await api.post('/cms-auth/logout').catch(() => {});
+    clearCmsSession();
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("username");
     localStorage.removeItem("rememberMe");
@@ -68,7 +72,7 @@ const Sidebar = ({ collapsed = false, onToggle, isMobile = false, onNavigate }) 
         )}
 
         <nav className="space-y-1.5">
-          {navItems.map((item) => {
+          {navItems.filter((item) => canAccess(item.to === '/blog-list' ? 'blog:read' : item.to === '/add-blog' ? 'blog:write' : 'clinic:admin')).map((item) => {
             const Icon = item.icon;
 
             return (

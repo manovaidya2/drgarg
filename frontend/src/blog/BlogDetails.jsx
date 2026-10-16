@@ -5,6 +5,8 @@ import { Helmet } from "react-helmet-async";
 import axiosInstance from "../api/axiosInstance";
 import doctorImage from "../images/sirimg.webp";
 import { useSsrData } from "../ssrData";
+import { articleContent } from './articleContent';
+import { buildBlogSchema, blogRobots, absoluteImage, schemaJson } from '../../../shared/blogSeo.mjs';
 import {
   Calendar,
   ArrowLeft,
@@ -54,19 +56,13 @@ const getReadingMinutes = (content) => {
   return Math.max(1, Math.ceil(words / wordsPerMinute));
 };
 
-const removeOngoingPhdText = (value = "") =>
-  String(value)
-    .replace(/\bongoing\s+ph\.?\s*d\.?\b/gi, "PhD")
-    .replace(/\bongoing\s+doctoral\s+research\b/gi, "doctoral research")
-    .replace(/\bongoing\s+phd\s+research\b/gi, "PhD research")
-    .replace(/\s{2,}/g, " ")
-    .trim();
+const removeOngoingPhdText = (value = '') => String(value).trim();
 
 export default function BlogDetails() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const ssrData = useSsrData();
-  const initialBlog = ssrData.blog || null;
+  const initialBlog = ssrData.blog?.slug === slug ? { ...ssrData.blog, content: articleContent(ssrData.blog.content).html } : null;
   const initialAuthorProfile = ssrData.authorProfile || DEFAULT_AUTHOR_PROFILE;
 
   const [blog, setBlog] = useState(initialBlog);
@@ -80,7 +76,7 @@ export default function BlogDetails() {
   const [readingTime, setReadingTime] = useState(
     initialBlog?.content ? getReadingMinutes(initialBlog.content) : 0
   );
-  const [tableOfContents, setTableOfContents] = useState([]);
+  const [tableOfContents, setTableOfContents] = useState(() => initialBlog ? articleContent(initialBlog.content).toc : []);
 
   const sidebarRef = useRef(null);
   const mainContentRef = useRef(null);
@@ -90,14 +86,14 @@ export default function BlogDetails() {
   const authorBio = removeOngoingPhdText(
     authorProfile?.biography || DEFAULT_AUTHOR_PROFILE.biography
   );
-  const authorName = authorProfile?.name || DEFAULT_AUTHOR_PROFILE.name;
+  const authorName = blog?.authorName || authorProfile?.name || DEFAULT_AUTHOR_PROFILE.name;
   const authorTitle = authorProfile?.title || DEFAULT_AUTHOR_PROFILE.title;
   const authorCredentials =
     removeOngoingPhdText(
-      authorProfile?.credentials || DEFAULT_AUTHOR_PROFILE.credentials
+      blog?.authorCredentials || authorProfile?.credentials || DEFAULT_AUTHOR_PROFILE.credentials
     );
   const authorProfileUrl =
-    authorProfile?.profileUrl || DEFAULT_AUTHOR_PROFILE.profileUrl;
+    blog?.authorProfileUrl || authorProfile?.profileUrl || DEFAULT_AUTHOR_PROFILE.profileUrl;
   const authorImage = authorProfile?.image || DEFAULT_AUTHOR_PROFILE.image;
   const authorEmail = authorProfile?.email || DEFAULT_AUTHOR_PROFILE.email;
   const isOngoingCategory = (category = "") =>
@@ -108,60 +104,8 @@ export default function BlogDetails() {
     return getReadingMinutes(content);
   };
 
-  // Generate table of contents from headings
-  const generateTableOfContents = (htmlContent) => {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = htmlContent;
-    const headings = tempDiv.querySelectorAll('h2, h3');
-    const toc = Array.from(headings).map((heading, index) => ({
-      id: `heading-${index}`,
-      text: heading.textContent,
-      level: heading.tagName.toLowerCase(),
-      top: 0
-    }));
-    return toc;
-  };
-
-  // Parse and clean HTML content
-  const parseHtmlContent = useCallback((htmlContent) => {
-    if (!htmlContent) return "";
-
-    try {
-      let cleanedContent = htmlContent
-        .replace(/&lt;/g, "<")
-        .replace(/&gt;/g, ">")
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'")
-        .replace(/&amp;/g, "&")
-        .replace(/[\u0000-\u001F\u007F-\u009F]/g, "")
-        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
-        .replace(/on\w+="[^"]*"/g, "")
-        .replace(/on\w+='[^']*'/g, "")
-        .replace(/javascript:/gi, "")
-        .replace(/<p>\s*<\/p>/gi, "")
-        .replace(/<div>\s*<\/div>/gi, "")
-        .replace(/(<br\s*\/?>\s*){2,}/gi, "<br/>")
-        .replace(/<p>\s*(<img[^>]+>)\s*<\/p>/gi, "$1")
-        .replace(/(<img[^>]+>)\s*(<p>\s*<\/p>|<br\s*\/?>|\s)*/gi, "$1")
-        .replace(/<\/figure>\s*(<p>\s*<\/p>|<br\s*\/?>|\s)*/gi, "</figure>")
-        .trim();
-
-      // Add IDs to headings for table of contents
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = cleanedContent;
-      const headings = tempDiv.querySelectorAll('h2, h3');
-      headings.forEach((heading, index) => {
-        heading.id = `heading-${index}`;
-        heading.setAttribute('data-toc', 'true');
-      });
-      cleanedContent = tempDiv.innerHTML;
-
-      return cleanedContent;
-    } catch (error) {
-      console.error("Error parsing HTML content:", error);
-      return "<p>Error loading content</p>";
-    }
-  }, []);
+  const generateTableOfContents = (html) => articleContent(html).toc;
+  const parseHtmlContent = useCallback((html) => articleContent(html).html, []);
 
   // Fetch blog data
   useEffect(() => {
@@ -248,11 +192,13 @@ export default function BlogDetails() {
         if (ignore) return;
 
         const blogData = res.data;
+        if (blogData.slug !== slug) throw new Error('API returned a different article.');
         applyBlogData(blogData);
         await fetchRelatedPosts(blogData?.category);
       } catch (error) {
-        if (error.code !== "ERR_CANCELED") {
+        if (error.code !== "ERR_CANCELED" && !ignore) {
           console.error("Blog not found", error);
+          setBlog(null);
         }
       } finally {
         if (!ignore) {
@@ -294,69 +240,6 @@ export default function BlogDetails() {
     fetchAuthorProfile();
   }, []);
 
-  // Update meta tags and document head
-  useEffect(() => {
-    if (blog) {
-      // Update document title with SEO meta title
-      document.title = `${blog.metaTitle || blog.title} | Dr. Ankush Garg`;
-      
-      // Update meta description
-      let metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', blog.metaDescription || blog.shortDescription);
-      }
-      
-      // Update meta keywords
-      if (blog.metaKeywords) {
-        let metaKeywords = document.querySelector('meta[name="keywords"]');
-        if (!metaKeywords) {
-          metaKeywords = document.createElement('meta');
-          metaKeywords.setAttribute('name', 'keywords');
-          document.head.appendChild(metaKeywords);
-        }
-        metaKeywords.setAttribute('content', blog.metaKeywords);
-      }
-      
-      // Update canonical URL
-      if (blog.canonicalUrl) {
-        let canonicalLink = document.querySelector('link[rel="canonical"]');
-        if (!canonicalLink) {
-          canonicalLink = document.createElement('link');
-          canonicalLink.setAttribute('rel', 'canonical');
-          document.head.appendChild(canonicalLink);
-        }
-        canonicalLink.setAttribute('href', normalizeSiteUrl(blog.canonicalUrl));
-      }
-      
-      // Update Open Graph tags
-      const updateMetaTag = (attribute, name, content) => {
-        if (!content) return;
-        let meta = document.querySelector(`meta[${attribute}="${name}"]`);
-        if (!meta) {
-          meta = document.createElement('meta');
-          meta.setAttribute(attribute, name);
-          document.head.appendChild(meta);
-        }
-        meta.setAttribute('content', content);
-      };
-      
-      updateMetaTag('property', 'og:title', blog.ogTitle || blog.metaTitle || blog.title);
-      updateMetaTag('property', 'og:description', blog.ogDescription || blog.metaDescription || blog.shortDescription);
-      updateMetaTag('property', 'og:image', blog.ogImage || blog.image);
-      updateMetaTag('property', 'og:url', `https://drankushgarg.in/blog/${blog.slug}`);
-      updateMetaTag('property', 'og:type', 'article');
-      
-      updateMetaTag('name', 'twitter:title', blog.twitterTitle || blog.metaTitle || blog.title);
-      updateMetaTag('name', 'twitter:description', blog.twitterDescription || blog.metaDescription || blog.shortDescription);
-      updateMetaTag('name', 'twitter:image', blog.twitterImage || blog.image);
-      
-      // Update robots meta
-      let robotsContent = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
-      if (blog.noIndex) robotsContent = `noindex, ${robotsContent}`;
-      if (blog.noFollow) robotsContent = robotsContent.replace('follow', 'nofollow');
-      updateMetaTag('name', 'robots', robotsContent);
-    }
-  }, [blog]);
 
   // Scroll progress tracking
   useEffect(() => {
@@ -448,242 +331,6 @@ export default function BlogDetails() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // ==================== AUTHOR SCHEMA (Person Schema) ====================
-  const generateAuthorSchema = () => {
-    return {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "@id": "https://drankushgarg.in/about#author",
-      "name": authorName,
-      "alternateName": `${authorName} - ${authorTitle}`,
-      "description": authorBio,
-      "url": authorProfileUrl,
-      "image": authorImage,
-      "email": authorEmail,
-      "telephone": authorProfile?.phone || undefined,
-      "jobTitle": `${authorTitle} & Founder`,
-      "worksFor": {
-        "@type": "MedicalOrganization",
-        "name": "Manovaidya",
-        "url": "https://drankushgarg.in",
-        "logo": "https://drankushgarg.in/logo.png",
-        "description": "Child development and mental wellness consultation clinic",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Gurgaon",
-          "addressRegion": "Haryana",
-          "addressCountry": "IN"
-        }
-      },
-      "alumniOf": {
-        "@type": "EducationalOrganization",
-        "name": "Ayurvedic Medical College",
-        "sameAs": "https://example.com/college"
-      },
-      "hasCredential": [
-        {
-          "@type": "EducationalOccupationalCredential",
-          "name": "BAMS - Bachelor of Ayurvedic Medicine and Surgery",
-          "credentialCategory": "Medical Degree"
-        },
-        {
-          "@type": "EducationalOccupationalCredential",
-          "name": "MPH - Master of Public Health",
-          "credentialCategory": "Postgraduate Degree"
-        },
-        {
-          "@type": "EducationalOccupationalCredential",
-          "name": "PhD Research - Gut-Brain Axis",
-          "credentialCategory": "Research"
-        },
-        {
-          "@type": "EducationalOccupationalCredential",
-          "name": "Ayurvedacharya",
-          "credentialCategory": "Specialist Certification"
-        }
-      ],
-      "knowsAbout": [
-        "Ayurvedic Neurology",
-        "Autism Treatment",
-        "ADHD Management",
-        "Gut-Brain Axis",
-        "Teen Mental Health",
-        "Anxiety Disorders",
-        "Depression",
-        "Neurodevelopmental Conditions",
-        "Brain-Gut-Behaviour Connection"
-      ],
-      "sameAs": [
-        "https://www.facebook.com/drankushgarg",
-        "https://www.instagram.com/drankushgarg",
-        "https://www.linkedin.com/in/drankushgarg",
-        "https://twitter.com/drankushgarg",
-        "https://www.youtube.com/c/drankushgarg"
-      ],
-      "award": [
-        "Neuro-Ayurveda System Development",
-        "Gut-Brain Axis Research",
-        "Autism, ADHD and Mental Health Education"
-      ],
-      "knowsLanguage": ["English", "Hindi"],
-      "specialty": "Child Development and Mental Wellness",
-      "medicalSpecialty": "Mental Health",
-      "availableService": [
-        "Autism Consultation",
-        "ADHD Treatment",
-        "Anxiety Management",
-        "Teen Mental Health Counseling",
-        "Neuro-Ayurveda Therapy"
-      ],
-      "honorificPrefix": "Dr.",
-      "gender": "Male",
-      "nationality": "Indian"
-    };
-  };
-
-  // Generate combined Author + Profile Page Schema
-  const generateProfilePageSchema = () => {
-    return {
-      "@context": "https://schema.org",
-      "@type": "ProfilePage",
-      "@id": "https://drankushgarg.in/about#profilepage",
-      "name": "Dr. Ankush Garg - Ayurvedacharya Profile",
-      "description": authorBio,
-      "author": {
-        "@id": "https://drankushgarg.in/about#author"
-      },
-      "mainEntity": {
-        "@id": "https://drankushgarg.in/about#author"
-      }
-    };
-  };
-
-  // Generate FAQ Schema
-  const generateFAQSchema = () => {
-    if (!blog?.faq || blog.faq.length === 0) return null;
-    
-    return {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": blog.faq.map(item => ({
-        "@type": "Question",
-        "name": item.question,
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": item.answer
-        }
-      }))
-    };
-  };
-
-  // Generate BlogPosting Schema with Author Reference
-  const generateBlogPostingSchema = () => {
-    if (!blog) return null;
-    const category = !isOngoingCategory(blog.category) ? blog.category : undefined;
-    
-    return {
-      "@context": "https://schema.org",
-      "@type": "BlogPosting",
-      "@id": `https://drankushgarg.in/blog/${slug}#article`,
-      "headline": blog.metaTitle || blog.title,
-      "description": blog.metaDescription || blog.shortDescription,
-      "image": blog.ogImage || blog.image ? [blog.ogImage || blog.image] : [],
-      "datePublished": blog.publishedDate || blog.date,
-      "dateModified": blog.modifiedDate || blog.updatedAt || blog.date,
-      "author": {
-        "@type": "Person",
-        "name": authorName,
-        "@id": "https://drankushgarg.in/about#author",
-        "url": authorProfileUrl,
-        "sameAs": [
-          "https://twitter.com/drankushgarg",
-          "https://linkedin.com/in/drankushgarg",
-          "https://facebook.com/drankushgarg",
-          "https://instagram.com/drankushgarg"
-        ]
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "Dr. Ankush Garg - Manovaidya",
-        "url": "https://drankushgarg.in",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://drankushgarg.in/logo.png"
-        },
-        "sameAs": [
-          "https://www.facebook.com/drankushgarg",
-          "https://www.instagram.com/drankushgarg",
-          "https://www.youtube.com/c/drankushgarg"
-        ]
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": normalizeSiteUrl(blog.canonicalUrl) || `https://drankushgarg.in/blog/${slug}`
-      },
-      "keywords": blog.metaKeywords,
-      "articleSection": category,
-      "inLanguage": "en-US",
-      "wordCount": blog.content?.length || 0,
-      "isAccessibleForFree": true,
-      "readingTime": `${readingTime} minutes`,
-      "about": {
-        "@type": "Thing",
-        "name": category || "Ayurvedic Mental Health"
-      }
-    };
-  };
-
-  // Generate Breadcrumb Schema
-  const generateBreadcrumbSchema = () => {
-    return {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "@id": `https://drankushgarg.in/blog/${slug}#breadcrumb`,
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://drankushgarg.in"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Blog",
-          "item": "https://drankushgarg.in/blog"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": blog?.title || "Article",
-          "item": `https://drankushgarg.in/blog/${slug}`
-        }
-      ]
-    };
-  };
-
-  // Generate WebSite Schema
-  const generateWebSiteSchema = () => {
-    return {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "@id": "https://drankushgarg.in#website",
-      "name": "Dr. Ankush Garg - Ayurvedacharya",
-      "description": "Articles on Autism, ADHD and mental health from Dr. Ankush Garg and the Neuro-Ayurveda System",
-      "url": "https://drankushgarg.in",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://drankushgarg.in/search?q={search_term_string}"
-        },
-        "query-input": "required name=search_term_string"
-      },
-      "publisher": {
-        "@id": "https://drankushgarg.in/about#author"
-      }
-    };
-  };
 
   if (loading) {
     return (
@@ -734,28 +381,28 @@ export default function BlogDetails() {
     <>
       <Helmet>
         {/* Primary Meta Tags */}
-        <title>{blog.metaTitle || blog.title} | Dr. Ankush Garg</title>
+        <title>{blog.metaTitle || blog.title}</title>
         <meta name="description" content={blog.metaDescription || blog.shortDescription} />
         {blog.metaKeywords && <meta name="keywords" content={blog.metaKeywords} />}
-        <meta name="author" content="Dr. Ankush Garg" />
+        <meta name="author" content={authorName} />
         
         {/* Canonical URL */}
         <link rel="canonical" href={canonicalUrl} />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://drankushgarg.in/blog/${slug}`} />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:title" content={blog.ogTitle || blog.metaTitle || blog.title} />
         <meta property="og:description" content={blog.ogDescription || blog.metaDescription || blog.shortDescription} />
-        <meta property="og:image" content={blog.ogImage || blog.image} />
+        <meta property="og:image" content={absoluteImage(blog.ogImage || blog.image)} />
         <meta property="og:site_name" content="Dr. Ankush Garg" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content={`https://drankushgarg.in/blog/${slug}`} />
+        <meta name="twitter:url" content={canonicalUrl} />
         <meta name="twitter:title" content={blog.twitterTitle || blog.metaTitle || blog.title} />
         <meta name="twitter:description" content={blog.twitterDescription || blog.metaDescription || blog.shortDescription} />
-        <meta name="twitter:image" content={blog.twitterImage || blog.image} />
+        <meta name="twitter:image" content={absoluteImage(blog.twitterImage || blog.ogImage || blog.image)} />
         
         {/* Article Specific Meta Tags */}
         <meta property="article:published_time" content={blog.publishedDate || blog.date} />
@@ -766,43 +413,9 @@ export default function BlogDetails() {
           <meta property="article:section" content={blog.category} />
         )}
         
-        {/* Robots Meta */}
-        <meta name="robots" content={blog.noIndex || blog.noFollow ? 
-          `${blog.noIndex ? 'noindex' : 'index'}, ${blog.noFollow ? 'nofollow' : 'follow'}, max-snippet:-1, max-image-preview:large, max-video-preview:-1` : 
-          'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'} />
-        
-        {/* Schema.org Structured Data */}
-        {/* Author Schema (Person) */}
-        <script type="application/ld+json">
-          {JSON.stringify(generateAuthorSchema())}
-        </script>
-        
-        {/* Profile Page Schema */}
-        <script type="application/ld+json">
-          {JSON.stringify(generateProfilePageSchema())}
-        </script>
-        
-        {/* Website Schema */}
-        <script type="application/ld+json">
-          {JSON.stringify(generateWebSiteSchema())}
-        </script>
-        
-        {/* Blog Posting Schema */}
-        <script type="application/ld+json">
-          {JSON.stringify(generateBlogPostingSchema())}
-        </script>
-        
-        {/* Breadcrumb Schema */}
-        <script type="application/ld+json">
-          {JSON.stringify(generateBreadcrumbSchema())}
-        </script>
-        
-        {/* FAQ Schema */}
-        {blog.faq && blog.faq.length > 0 && (
-          <script type="application/ld+json">
-            {JSON.stringify(generateFAQSchema())}
-          </script>
-        )}
+        <meta name="robots" content={blogRobots(blog, ssrData.preview)} />
+        <meta name="googlebot" content={blogRobots(blog, ssrData.preview)} />
+        {blog.schemaEnabled !== false && <script type="application/ld+json">{schemaJson(buildBlogSchema(blog, authorProfile))}</script>}
       </Helmet>
 
       {/* Scroll Progress Bar */}
@@ -841,7 +454,7 @@ export default function BlogDetails() {
           {blog.image && (
             <img
               src={blog.image}
-              alt={blog.metaTitle || blog.title}
+              alt={blog.imageAlt || blog.title}
               className="w-full h-full object-cover opacity-60"
               loading="eager"
             />
@@ -966,6 +579,8 @@ export default function BlogDetails() {
             </div>
 
             {/* FAQ Section */}
+            {blog.reviewedDate && <p className="mt-4 text-sm text-gray-600">Reviewed: <time dateTime={blog.reviewedDate}>{new Date(blog.reviewedDate).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time></p>}
+            {blog.medicalDisclaimer && <section className="mt-6 border-l-4 border-green-700 px-4 py-3 text-sm text-gray-600"><h2 className="font-semibold text-gray-900">Medical Disclaimer</h2><p>{blog.medicalDisclaimer}</p></section>}
             {blog.faq && blog.faq.length > 0 && (
               <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-sm border border-gray-100 mt-6">
                 <div className="flex items-center gap-3 mb-6">
@@ -1223,7 +838,7 @@ export default function BlogDetails() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .blog-content {
           font-size: 1.125rem;
           line-height: 1.75;
@@ -1264,15 +879,18 @@ export default function BlogDetails() {
 
         .blog-content img {
           display: block;
-          width: 100% !important;
-          max-width: 100% !important;
-          height: auto !important;
+          max-width: 100%;
+          height: auto;
           object-fit: contain;
           border-radius: 0.75rem;
           margin: 1rem auto !important;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
+        .blog-content img:not([width]) { width: 100%; }
+
+        .blog-content ul { list-style-type: disc; }
+        .blog-content ol { list-style-type: decimal; }
         .blog-content ul,
         .blog-content ol {
           margin: 1rem 0;

@@ -20,6 +20,11 @@ const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
+axiosInstance.interceptors.request.use((config) => {
+  const token = sessionStorage.getItem('cms-token');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
 // Optional: interceptors for error handling
 axiosInstance.interceptors.response.use(

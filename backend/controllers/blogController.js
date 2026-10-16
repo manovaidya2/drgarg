@@ -1,10 +1,11 @@
 // controllers/blogController.js
 import Blog from "../models/Blog.js";
 import mongoose from "mongoose";
+import { normalizeContent } from '../utils/blogValidation.js';
 
 const publicBlogFilter = {
   published: { $ne: false },
-  status: { $nin: ["draft", "unpublished", "ongoing", "Ongoing", "ONGOING"] },
+  status: { $nin: ["draft", "archived", "unpublished", "ongoing", "Ongoing", "ONGOING"] },
 };
 
 const publicBlogFields =
@@ -71,6 +72,8 @@ export const getBlogs = async (req, res) => {
     const page = normalizePage(req.query.page);
     const limit = normalizeLimit(req.query.limit);
     const filter = isAdmin ? {} : { ...publicBlogFilter };
+    if (req.query.slug) filter.slug = String(req.query.slug);
+    if (req.query.title) filter.title = String(req.query.title);
 
     if (isAdmin) {
       res.set("Cache-Control", "private, no-store");
@@ -202,19 +205,21 @@ export const getBlogBySlug = async (req, res) => {
     // Check if the parameter is a valid MongoDB ObjectId
     if (mongoose.Types.ObjectId.isValid(slug)) {
       // If it's a valid ID, try to find by ID first
-      const blogById = await Blog.findOne({ _id: slug, ...publicBlogFilter }).lean();
+      const blogById = await Blog.findOne({ _id: slug, ...publicBlogFilter }).select('-draftContent -currentRevisionId').lean();
       if (blogById) {
         // Increment view count
         Blog.findByIdAndUpdate(slug, { $inc: { views: 1 } }).catch((error) =>
           console.error("View count update failed:", error)
         );
-        return res.json(blogById);
+        return res.json({ ...blogById, content: normalizeContent(blogById.content) });
       }
     }
     
     // If not a valid ID or no blog found by ID, try to find by slug
-    const blog = await Blog.findOne({ slug: slug, ...publicBlogFilter }).lean();
+    const blog = await Blog.findOne({ slug: slug, ...publicBlogFilter }).select('-draftContent -currentRevisionId').lean();
     if (!blog) {
+      const renamed = await Blog.findOne({ previousSlugs: slug, ...publicBlogFilter }).select('slug').lean();
+      if (renamed) return res.redirect(301, `/api/blogs/${encodeURIComponent(renamed.slug)}`);
       return res.status(404).json({ message: "Blog not found" });
     }
     
@@ -223,7 +228,7 @@ export const getBlogBySlug = async (req, res) => {
       console.error("View count update failed:", error)
     );
     
-    res.json(blog);
+    res.json({ ...blog, content: normalizeContent(blog.content) });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
