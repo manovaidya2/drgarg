@@ -1,11 +1,10 @@
-const path = require('node:path');
-
-// Keep this file in the project root, outside backend's "type": "module" scope.
+// Run from backend with: pm2 start ecosystem.config.cjs
+// Use .cjs because backend/package.json declares "type": "module".
 module.exports = {
   apps: [
     {
       name: 'drgarg-api',
-      cwd: path.join(__dirname, 'backend'),
+      cwd: __dirname,
       script: './server.js',
       exec_mode: 'cluster',
       instances: 1, // Change to 'max' to use all available CPU cores.
