@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "test": "node --test tests/blog-cms.test.mjs tests/cms-demo.test.mjs tests/rate-limiter.test.mjs",
+    "test": "node --test tests/blog-cms.test.mjs tests/cms-demo.test.mjs tests/rate-limiter.test.mjs tests/server-startup.test.mjs",
     "test:browser": "node tests/cms-browser.mjs"
   },
   "dependencies": {

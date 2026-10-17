@@ -31,6 +31,10 @@ dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+// PM2 imports this module through a wrapper and identifies the entry via pm_exec_path.
+const isServerEntry = [process.argv[1], process.env.pm_exec_path].some(
+  (entry) => entry && path.resolve(entry) === __filename
+);
 const frontendClientDist = path.resolve(__dirname, "../frontend/dist/client");
 const legacyFrontendDist = path.resolve(__dirname, "../frontend/dist");
 const frontendDist = fs.existsSync(frontendClientDist)
@@ -243,7 +247,7 @@ app.use(
   })
 );
 
-if (path.resolve(process.argv[1] || '') === __filename) mongoose
+if (isServerEntry) mongoose
   .connect(process.env.MONGODB_URI, {
     // Indexes are managed separately. Re-checking them during startup was
     // blocking the first Blog model query even though the indexes exist.
@@ -381,6 +385,6 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5003;
 
 export { app };
-if (path.resolve(process.argv[1] || '') === __filename) app.listen(PORT, () => {
+if (isServerEntry) app.listen(PORT, () => {
   console.log(`🚀 Backend running on http://localhost:${PORT}`);
 });
