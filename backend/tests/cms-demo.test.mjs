@@ -1,14 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import bcrypt from 'bcryptjs';
-import { ipKeyGenerator } from 'express-rate-limit';
+import { ipKeyGenerator } from '../middleware/rateLimiter.js';
 import { getCmsAccounts } from '../middleware/cmsAuth.js';
 
 const request = (address = '::1', host = 'localhost:5003', origin = 'http://localhost:5173') => ({
   socket: { remoteAddress: address }, get: () => host, headers: { origin },
 });
 
-test('IPv6 localhost and mapped IPv4 rate-limit keys work with the installed dependency', () => {
+test('IPv6 localhost and mapped IPv4 rate-limit keys work with the local middleware', () => {
   for (const address of ['::1', '::ffff:127.0.0.1', '127.0.0.1', '2001:db8::1']) {
     assert.equal(typeof ipKeyGenerator(address), 'string');
   }

@@ -22,7 +22,7 @@
 
 // routes/blogRoutes.js
 import express from "express";
-import { rateLimit } from 'express-rate-limit';
+import { rateLimit } from '../middleware/rateLimiter.js';
 import { requireScope } from '../middleware/cmsAuth.js';
 import { saveBlog, readBlog, findBlogs, listRevisions, rollbackBlog, previewBlog, verifyBlog } from '../controllers/blogCmsController.js';
 import { normalizeContent } from '../utils/blogValidation.js';

@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import { randomBytes } from "node:crypto";
-import { rateLimit } from "express-rate-limit";
+import { rateLimit } from "../middleware/rateLimiter.js";
 import CmsSession from "../models/CmsSession.js";
 import { getLocalDemoAccount } from '../utils/cmsDemoAccount.js';
 import {
